@@ -94,8 +94,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\FX\color.fx">
+    <CustomBuild Include="FX\color.fx">
       <Filter>Effects</Filter>
-    </FxCompile>
+    </CustomBuild>
   </ItemGroup>
 </Project>
