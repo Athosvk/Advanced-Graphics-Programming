@@ -11,6 +11,7 @@ private:
     ID3D11InputLayout* mInputLayout;
     ID3D11RasterizerState* mWireframeState;
     ID3D11RasterizerState* mRegularState;
+    ID3D11RasterizerState* mCurrentState;
 
     XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;

@@ -78,6 +78,11 @@ void BoxApp::UpdateScene(float dt)
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
+
+    if(GetAsyncKeyState('1') & 0x8000)
+    {
+        mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
+    }
 }
 
 void BoxApp::DrawScene()
@@ -105,7 +110,7 @@ void BoxApp::DrawScene()
     mTech->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
-        md3dImmediateContext->RSSetState(mWireframeState);
+        md3dImmediateContext->RSSetState(mCurrentState);
 
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
@@ -278,4 +283,5 @@ void BoxApp::CreateRasterizerStates()
 
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
+    mCurrentState = mRegularState;
 }
