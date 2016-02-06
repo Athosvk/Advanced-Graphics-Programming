@@ -11,70 +11,8 @@
 #include "d3dApp.h"
 #include "d3dx11Effect.h"
 #include "MathHelper.h"
-
-struct Vertex
-{
-	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
-};
-
-class BoxApp : public D3DApp
-{
-public:
-	BoxApp(HINSTANCE hInstance);
-	~BoxApp();
-
-	bool Init();
-	void OnResize();
-	void UpdateScene(float dt);
-	void DrawScene(); 
-
-	void OnMouseDown(WPARAM btnState, int x, int y);
-	void OnMouseUp(WPARAM btnState, int x, int y);
-	void OnMouseMove(WPARAM btnState, int x, int y);
-
-private:
-	void BuildGeometryBuffers();
-	void BuildFX();
-	void BuildVertexLayout();
-
-private:
-	ID3D11Buffer* mBoxVB;
-	ID3D11Buffer* mBoxIB;
-
-	ID3DX11Effect* mFX;
-	ID3DX11EffectTechnique* mTech;
-	ID3DX11EffectMatrixVariable* mfxWorldViewProj;
-
-	ID3D11InputLayout* mInputLayout;
-
-	XMFLOAT4X4 mWorld;
-	XMFLOAT4X4 mView;
-	XMFLOAT4X4 mProj;
-
-	float mTheta;
-	float mPhi;
-	float mRadius;
-
-	POINT mLastMousePos;
-};
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
-				   PSTR cmdLine, int showCmd)
-{
-	// Enable run-time memory check for debug builds.
-#if defined(DEBUG) | defined(_DEBUG)
-	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-#endif
-
-	BoxApp theApp(hInstance);
-	
-	if( !theApp.Init() )
-		return 0;
-	
-	return theApp.Run();
-}
- 
+#include "Vertex.h"
+#include "BoxDemo.h"
 
 BoxApp::BoxApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
@@ -102,8 +40,10 @@ BoxApp::~BoxApp()
 
 bool BoxApp::Init()
 {
-	if(!D3DApp::Init())
-		return false;
+    if(!D3DApp::Init())
+    {
+        return false;
+    }
 
 	BuildGeometryBuffers();
 	BuildFX();
@@ -129,9 +69,9 @@ void BoxApp::UpdateScene(float dt)
 	float y = mRadius*cosf(mPhi);
 
 	// Build the view matrix.
-	XMVECTOR pos    = XMVectorSet(x, y, z, 1.0f);
+	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
 	XMVECTOR target = XMVectorZero();
-	XMVECTOR up     = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
@@ -221,13 +161,13 @@ void BoxApp::BuildGeometryBuffers()
 	// Create vertex buffer
     Vertex vertices[] =
     {
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White   },
-		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), (const float*)&Colors::Black   },
-		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), (const float*)&Colors::Red     },
-		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green   },
-		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue    },
-		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), (const float*)&Colors::Yellow  },
-		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), (const float*)&Colors::Cyan    },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White },
+		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), (const float*)&Colors::Black },
+		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), (const float*)&Colors::Red },
+		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green },
+		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue },
+		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), (const float*)&Colors::Yellow },
+		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), (const float*)&Colors::Cyan },
 		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta }
     };
 
@@ -242,9 +182,7 @@ void BoxApp::BuildGeometryBuffers()
     vinitData.pSysMem = vertices;
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
-
 	// Create the index buffer
-
 	UINT indices[] = {
 		// front face
 		0, 1, 2,
@@ -315,7 +253,7 @@ void BoxApp::BuildFX()
 	// Done with compiled shader.
 	ReleaseCOM(compiledShader);
 
-	mTech    = mFX->GetTechniqueByName("ColorTech");
+	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
@@ -325,7 +263,7 @@ void BoxApp::BuildVertexLayout()
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	// Create the input layout
@@ -334,4 +272,3 @@ void BoxApp::BuildVertexLayout()
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }
- 
