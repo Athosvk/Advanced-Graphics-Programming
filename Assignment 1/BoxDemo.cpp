@@ -162,13 +162,10 @@ void BoxApp::BuildGeometryBuffers()
     Vertex vertices[] =
     {
 		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White },
-		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), (const float*)&Colors::Black },
-		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), (const float*)&Colors::Red },
 		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green },
 		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue },
-		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), (const float*)&Colors::Yellow },
-		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), (const float*)&Colors::Cyan },
-		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta }
+		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta },
+        { XMFLOAT3(0.0f, +1.0f, 0.0f), (const float*)&Colors::Black }
     };
 
     D3D11_BUFFER_DESC vbd;
@@ -184,29 +181,21 @@ void BoxApp::BuildGeometryBuffers()
 
 	// Create the index buffer
 	UINT indices[] = {
+        // bottom face
+        0, 1, 2,
+        3, 2, 1,
+
 		// front face
-		0, 1, 2,
-		0, 2, 3,
+		2, 3, 4,
 
 		// back face
-		4, 6, 5,
-		4, 7, 6,
+		1, 0, 4,
 
 		// left face
-		4, 5, 1,
-		4, 1, 0,
+		0, 2, 4,
 
 		// right face
-		3, 2, 6,
-		3, 6, 7,
-
-		// top face
-		1, 5, 6,
-		1, 6, 2,
-
-		// bottom face
-		4, 0, 3, 
-		4, 3, 7
+		3, 1, 4
 	};
 
 	D3D11_BUFFER_DESC ibd;

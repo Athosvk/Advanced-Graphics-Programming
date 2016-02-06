@@ -163,7 +163,6 @@
     <ClCompile Include="..\Common\xnacollision.cpp" />
     <ClCompile Include="BoxDemo.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Primitive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Camera.h" />
@@ -179,7 +178,6 @@
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
     <ClInclude Include="BoxDemo.h" />
-    <ClInclude Include="Primitive.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
