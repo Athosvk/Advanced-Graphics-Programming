@@ -36,6 +36,8 @@ BoxApp::~BoxApp()
 	ReleaseCOM(mBoxIB);
 	ReleaseCOM(mFX);
 	ReleaseCOM(mInputLayout);
+    ReleaseCOM(mWireframeState);
+    ReleaseCOM(mRegularState);
 }
 
 bool BoxApp::Init()
@@ -45,6 +47,7 @@ bool BoxApp::Init()
         return false;
     }
 
+    CreateRasterizerStates();
 	BuildGeometryBuffers();
 	BuildFX();
 	BuildVertexLayout();
@@ -102,9 +105,10 @@ void BoxApp::DrawScene()
     mTech->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
+        md3dImmediateContext->RSSetState(mWireframeState);
+
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
-		// 36 indices for the box.
 		md3dImmediateContext->DrawIndexed(18, 0, 0);
     }
 
@@ -260,4 +264,18 @@ void BoxApp::BuildVertexLayout()
     mTech->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
+}
+
+void BoxApp::CreateRasterizerStates()
+{
+    D3D11_RASTERIZER_DESC rasterizerDescription;
+    ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
+    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDescription.FrontCounterClockwise = false;
+    rasterizerDescription.DepthClipEnable = true;
+    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));
+
+    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
 }

@@ -9,6 +9,8 @@ private:
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
 
     ID3D11InputLayout* mInputLayout;
+    ID3D11RasterizerState* mWireframeState;
+    ID3D11RasterizerState* mRegularState;
 
     XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;
@@ -37,4 +39,5 @@ private:
     void BuildGeometryBuffers();
     void BuildFX();
     void BuildVertexLayout();
+    void CreateRasterizerStates();
 };
