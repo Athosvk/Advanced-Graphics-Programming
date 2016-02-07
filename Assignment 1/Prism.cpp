@@ -37,6 +37,16 @@ float Prism::getHeight() const
     return mHeight;
 }
 
+unsigned Prism::getMaxIndexCount()
+{
+    return MaximumSlices * 12;
+}
+
+unsigned Prism::getMaxVertexCount()
+{
+    return MaximumSlices * 2 + 2;
+}
+
 void Prism::Construct()
 {
     ConstructBase(mHeight / 2, 1.0f);

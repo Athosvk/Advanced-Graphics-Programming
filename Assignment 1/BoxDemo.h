@@ -24,7 +24,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Prism mPrism = Prism(90, 3.0f);
+    Prism mPrism = Prism(5, 3.0f);
 
 public:
     BoxApp(HINSTANCE hInstance);
@@ -44,4 +44,5 @@ private:
     void BuildFX();
     void BuildVertexLayout();
     void CreateRasterizerStates();
+    void UpdateGeometry();
 };

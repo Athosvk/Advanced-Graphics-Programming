@@ -24,6 +24,8 @@ public:
     std::vector<UINT>& getIndices();
     unsigned getSliceCount() const;
     float getHeight() const;
+    static unsigned getMaxVertexCount();
+    static unsigned getMaxIndexCount();
 private:
     void Construct();
     void ConstructBase(float aYPosition, float aYNormal);
