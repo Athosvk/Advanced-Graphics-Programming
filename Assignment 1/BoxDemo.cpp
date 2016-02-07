@@ -167,16 +167,6 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 void BoxApp::BuildGeometryBuffers()
 {
-	// Create vertex buffer
-  //  Vertex vertices[] =
-  //  {
-		//{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White },
-		//{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green },
-		//{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue },
-		//{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta },
-  //      { XMFLOAT3(0.0f, +1.0f, 0.0f), (const float*)&Colors::Black }
-  //  };
-
     D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
     vbd.ByteWidth = sizeof(Vertex) * mPrism.getVertices().size();
@@ -187,25 +177,6 @@ void BoxApp::BuildGeometryBuffers()
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = mPrism.getVertices().data();
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
-
-	//// Create the index buffer
-	//UINT indices[] = {
- //       // bottom face
- //       0, 1, 2,
- //       3, 2, 1,
-
-	//	// front face
-	//	2, 3, 4,
-
-	//	// back face
-	//	1, 0, 4,
-
-	//	// left face
-	//	0, 2, 4,
-
-	//	// right face
-	//	3, 1, 4
-	//};
 
 	D3D11_BUFFER_DESC ibd;
     ibd.Usage = D3D11_USAGE_IMMUTABLE;
