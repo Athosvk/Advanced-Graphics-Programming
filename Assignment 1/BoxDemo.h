@@ -24,7 +24,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Prism mPrism = Prism(90);
+    Prism mPrism = Prism(90, 3.0f);
 
 public:
     BoxApp(HINSTANCE hInstance);

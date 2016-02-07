@@ -1,6 +1,7 @@
 #include "Prism.h"
 
-Prism::Prism(unsigned aSlices)
+Prism::Prism(unsigned aSlices, float aHeight)
+    : mHeight(aHeight)
 {
     const unsigned MinimalVertices = 3;
     if(aSlices >= MinimalVertices)
@@ -25,8 +26,8 @@ const std::vector<UINT>& Prism::getIndices() const
 
 void Prism::Construct(unsigned aSlices)
 {
-    ConstructBase(aSlices, 1.0f);
-    ConstructBase(aSlices, -1.0f);
+    ConstructBase(aSlices, mHeight / 2);
+    ConstructBase(aSlices, -mHeight / 2);
     ConstructSides(aSlices);
 }
 

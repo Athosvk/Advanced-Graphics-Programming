@@ -10,9 +10,10 @@ class Prism
 private:
     std::vector<Vertex> mVertices;
     std::vector<UINT> mIndices;
+    float mHeight;
 
 public:
-    Prism(unsigned aBaseVertices);
+    Prism(unsigned aBaseVertices, float aHeight);
 
     const std::vector<Vertex>& getVertices() const;
     const std::vector<UINT>& getIndices() const;
