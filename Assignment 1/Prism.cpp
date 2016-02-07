@@ -1,26 +1,28 @@
 #include "Prism.h"
 
+const unsigned Prism::MinimumSlices = 3;
+const unsigned Prism::MaximumSlices = 3600;
+
 Prism::Prism(unsigned aSlices, float aHeight)
     : mHeight(aHeight),
     mSlices(aSlices)
 {
-    const unsigned MinimalVertices = 3;
-    if(aSlices >= MinimalVertices)
+    if(aSlices >= MinimumSlices && aSlices <= MaximumSlices)
     {
         Construct();
     }
     else
     {
-        throw std::out_of_range("Less vertices than possible");
+        throw std::out_of_range("Vertices exceed maximum/minimum vertices");
     }
 }
 
-const std::vector<Vertex>& Prism::getVertices() const
+std::vector<Vertex>& Prism::getVertices()
 {
     return mVertices;
 }
 
-const std::vector<UINT>& Prism::getIndices() const
+std::vector<UINT>& Prism::getIndices()
 {
     return mIndices;
 }
