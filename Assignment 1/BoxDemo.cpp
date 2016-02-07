@@ -114,7 +114,7 @@ void BoxApp::DrawScene()
 
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
-		md3dImmediateContext->DrawIndexed(18, 0, 0);
+		md3dImmediateContext->DrawIndexed(mPrism.getIndices().size(), 0, 0);
     }
 
 	HR(mSwapChain->Present(0, 0));
@@ -168,54 +168,54 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 void BoxApp::BuildGeometryBuffers()
 {
 	// Create vertex buffer
-    Vertex vertices[] =
-    {
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White },
-		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green },
-		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue },
-		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta },
-        { XMFLOAT3(0.0f, +1.0f, 0.0f), (const float*)&Colors::Black }
-    };
+  //  Vertex vertices[] =
+  //  {
+		//{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White },
+		//{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green },
+		//{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue },
+		//{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta },
+  //      { XMFLOAT3(0.0f, +1.0f, 0.0f), (const float*)&Colors::Black }
+  //  };
 
     D3D11_BUFFER_DESC vbd;
     vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(Vertex) * 8;
+    vbd.ByteWidth = sizeof(Vertex) * mPrism.getVertices().size();
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vbd.CPUAccessFlags = 0;
     vbd.MiscFlags = 0;
 	vbd.StructureByteStride = 0;
     D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = vertices;
+    vinitData.pSysMem = mPrism.getVertices().data();
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
-	// Create the index buffer
-	UINT indices[] = {
-        // bottom face
-        0, 1, 2,
-        3, 2, 1,
+	//// Create the index buffer
+	//UINT indices[] = {
+ //       // bottom face
+ //       0, 1, 2,
+ //       3, 2, 1,
 
-		// front face
-		2, 3, 4,
+	//	// front face
+	//	2, 3, 4,
 
-		// back face
-		1, 0, 4,
+	//	// back face
+	//	1, 0, 4,
 
-		// left face
-		0, 2, 4,
+	//	// left face
+	//	0, 2, 4,
 
-		// right face
-		3, 1, 4
-	};
+	//	// right face
+	//	3, 1, 4
+	//};
 
 	D3D11_BUFFER_DESC ibd;
     ibd.Usage = D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(UINT) * 36;
+    ibd.ByteWidth = sizeof(UINT) * mPrism.getIndices().size();
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ibd.CPUAccessFlags = 0;
     ibd.MiscFlags = 0;
 	ibd.StructureByteStride = 0;
     D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = indices;
+    iinitData.pSysMem = mPrism.getIndices().data();
     HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
 }
  
@@ -276,7 +276,7 @@ void BoxApp::CreateRasterizerStates()
     D3D11_RASTERIZER_DESC rasterizerDescription;
     ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rasterizerDescription.FrontCounterClockwise = false;
     rasterizerDescription.DepthClipEnable = true;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));
