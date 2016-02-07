@@ -1,7 +1,7 @@
 #include "Prism.h"
 
 const unsigned Prism::MinimumSlices = 3;
-const unsigned Prism::MaximumSlices = 3600;
+const unsigned Prism::MaximumSlices = 360;
 
 Prism::Prism(unsigned aSlices, float aHeight)
     : mHeight(aHeight),

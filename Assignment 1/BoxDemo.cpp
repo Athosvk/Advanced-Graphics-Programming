@@ -14,6 +14,8 @@
 #include "Vertex.h"
 #include "BoxDemo.h"
 
+const float BoxApp::PrismUpdateInterval = 0.4f;
+
 BoxApp::BoxApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
   mfxWorldViewProj(0), mInputLayout(0), 
@@ -84,20 +86,23 @@ void BoxApp::UpdateScene(float dt)
     {
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
     }
-    if(GetAsyncKeyState(VK_UP) & 0x8000)
+    if(GetAsyncKeyState(VK_UP) & 0x8000 && mPrismUpdateTimer >= PrismUpdateInterval)
     {
+        mPrismUpdateTimer -= PrismUpdateInterval;
         auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight());
         mPrism.getHeight();
         UpdateGeometry();
     }
-    else if(GetAsyncKeyState(VK_DOWN) & 0x8000)
+    else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mPrismUpdateTimer >= PrismUpdateInterval)
     {
+        mPrismUpdateTimer -= PrismUpdateInterval;
         auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight());
         mPrism.getHeight();
         UpdateGeometry();
     }
+    mPrismUpdateTimer += dt;
 }
 
 void BoxApp::DrawScene()
