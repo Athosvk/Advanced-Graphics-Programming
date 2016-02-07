@@ -25,6 +25,11 @@ const std::vector<UINT>& Prism::getIndices() const
     return mIndices;
 }
 
+unsigned Prism::getSliceCount() const
+{
+    return mSlices;
+}
+
 void Prism::Construct()
 {
     ConstructBase(mHeight / 2, 1.0f);

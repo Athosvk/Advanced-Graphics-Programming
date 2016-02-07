@@ -18,7 +18,7 @@ public:
 
     const std::vector<Vertex>& getVertices() const;
     const std::vector<UINT>& getIndices() const;
-
+    unsigned getSliceCount() const;
 private:
     void Construct();
     void ConstructBase(float aYPosition, float aYNormal);
