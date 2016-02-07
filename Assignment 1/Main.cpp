@@ -1,4 +1,5 @@
 #include <d3dapp.h>
+#include "Prism.h"
 
 #include "BoxDemo.h"
 
