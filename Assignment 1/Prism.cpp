@@ -1,12 +1,13 @@
 #include "Prism.h"
 
 Prism::Prism(unsigned aSlices, float aHeight)
-    : mHeight(aHeight)
+    : mHeight(aHeight),
+    mSlices(aSlices)
 {
     const unsigned MinimalVertices = 3;
     if(aSlices >= MinimalVertices)
     {
-        Construct(aSlices);
+        Construct();
     }
     else
     {
@@ -24,19 +25,19 @@ const std::vector<UINT>& Prism::getIndices() const
     return mIndices;
 }
 
-void Prism::Construct(unsigned aSlices)
+void Prism::Construct()
 {
-    ConstructBase(aSlices, mHeight / 2, 1.0f);
-    ConstructBase(aSlices, -mHeight / 2, -1.0f);
-    ConstructSides(aSlices);
+    ConstructBase(mHeight / 2, 1.0f);
+    ConstructBase(-mHeight / 2, -1.0f);
+    ConstructSides();
 }
 
-void Prism::ConstructBase(unsigned aSlices, float aYPosition, float aYNormal)
+void Prism::ConstructBase(float aYPosition, float aYNormal)
 {
     const auto BaseIndex = mVertices.size();
-    const auto RotationDelta = XM_2PI / aSlices;
+    const auto RotationDelta = XM_2PI / mSlices;
 
-    for(auto i = 0u; i < aSlices; i++)
+    for(auto i = 0u; i < mSlices; i++)
     {
         float x = cosf(i * RotationDelta);
         float z = sinf(i * RotationDelta);
@@ -47,27 +48,27 @@ void Prism::ConstructBase(unsigned aSlices, float aYPosition, float aYNormal)
     mVertices.emplace_back(XMFLOAT3(0.0f, aYPosition, 0.0f));
     const auto CenterIndex = mVertices.size() - 1;
 
-    for(auto i = 0u; i < aSlices; i++)
+    for(auto i = 0u; i < mSlices; i++)
     {
         mIndices.push_back(CenterIndex);
         if(aYNormal < 0.0f)
         {
             mIndices.push_back(BaseIndex + i);
-            mIndices.push_back((i + 1) % aSlices + BaseIndex);
+            mIndices.push_back((i + 1) % mSlices + BaseIndex);
         }
         else
         {
-            mIndices.push_back((i + 1) % aSlices + BaseIndex);
+            mIndices.push_back((i + 1) % mSlices + BaseIndex);
             mIndices.push_back(BaseIndex + i);
         }
     }
 }
 
-void Prism::ConstructSides(unsigned aSlices)
+void Prism::ConstructSides()
 {
-    const auto IndicesPerBase = aSlices * 3;
     const auto IndicesPerSlice = 3;
-    for(auto i = 0u; i < aSlices; i++)
+    const auto IndicesPerBase = mSlices * IndicesPerSlice;
+    for(auto i = 0u; i < mSlices; i++)
     {
         const auto Offset = IndicesPerSlice * i;
         mIndices.push_back(mIndices[2 + IndicesPerBase + Offset]);

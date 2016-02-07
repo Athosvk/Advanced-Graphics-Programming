@@ -11,15 +11,16 @@ private:
     std::vector<Vertex> mVertices;
     std::vector<UINT> mIndices;
     float mHeight;
+    unsigned mSlices;
 
 public:
-    Prism(unsigned aBaseVertices, float aHeight);
+    Prism(unsigned aSlices, float aHeight);
 
     const std::vector<Vertex>& getVertices() const;
     const std::vector<UINT>& getIndices() const;
 
 private:
-    void Construct(unsigned aBaseVertices);
-    void ConstructBase(unsigned aBaseVertices, float aYPosition, float aYNormal);
-    void ConstructSides(unsigned aBaseVertices);
+    void Construct();
+    void ConstructBase(float aYPosition, float aYNormal);
+    void ConstructSides();
 };
