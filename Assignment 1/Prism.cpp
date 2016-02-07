@@ -26,20 +26,20 @@ const std::vector<UINT>& Prism::getIndices() const
 
 void Prism::Construct(unsigned aSlices)
 {
-    ConstructBase(aSlices, mHeight / 2);
-    ConstructBase(aSlices, -mHeight / 2);
+    ConstructBase(aSlices, mHeight / 2, 1.0f);
+    ConstructBase(aSlices, -mHeight / 2, -1.0f);
     ConstructSides(aSlices);
 }
 
-void Prism::ConstructBase(unsigned aSlices, float aYPosition)
+void Prism::ConstructBase(unsigned aSlices, float aYPosition, float aYNormal)
 {
     const auto BaseIndex = mVertices.size();
     const auto RotationDelta = XM_2PI / aSlices;
 
     for(auto i = 0u; i < aSlices; i++)
     {
-        float x = cosf(i * RotationDelta) * 0.5f;
-        float z = sinf(i * RotationDelta) * 0.5f;
+        float x = cosf(i * RotationDelta);
+        float z = sinf(i * RotationDelta);
 
         mVertices.emplace_back(XMFLOAT3(x, aYPosition, z));
     }
@@ -50,8 +50,16 @@ void Prism::ConstructBase(unsigned aSlices, float aYPosition)
     for(auto i = 0u; i < aSlices; i++)
     {
         mIndices.push_back(CenterIndex);
-        mIndices.push_back(BaseIndex + i);
-        mIndices.push_back((i + 1) % aSlices + BaseIndex);
+        if(aYNormal < 0.0f)
+        {
+            mIndices.push_back(BaseIndex + i);
+            mIndices.push_back((i + 1) % aSlices + BaseIndex);
+        }
+        else
+        {
+            mIndices.push_back((i + 1) % aSlices + BaseIndex);
+            mIndices.push_back(BaseIndex + i);
+        }
     }
 }
 
@@ -61,11 +69,13 @@ void Prism::ConstructSides(unsigned aSlices)
     const auto IndicesPerSlice = 3;
     for(auto i = 0u; i < aSlices; i++)
     {
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 1]);
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 1 + IndicesPerBase]);
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 2]);
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 1 + IndicesPerBase]);
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 2 + IndicesPerBase]);
-        mIndices.push_back(mIndices[i * IndicesPerSlice + 2]);
+        const auto Offset = IndicesPerSlice * i;
+        mIndices.push_back(mIndices[2 + IndicesPerBase + Offset]);
+        mIndices.push_back(mIndices[1 + IndicesPerBase + Offset]);
+        mIndices.push_back(mIndices[2 + Offset]);
+
+        mIndices.push_back(mIndices[1 + Offset]);
+        mIndices.push_back(mIndices[2 + IndicesPerBase + Offset]);
+        mIndices.push_back(mIndices[2 + Offset]);
     }
 }

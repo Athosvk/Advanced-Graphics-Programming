@@ -276,7 +276,7 @@ void BoxApp::CreateRasterizerStates()
     D3D11_RASTERIZER_DESC rasterizerDescription;
     ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rasterizerDescription.FrontCounterClockwise = false;
     rasterizerDescription.DepthClipEnable = true;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));

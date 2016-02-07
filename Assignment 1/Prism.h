@@ -20,6 +20,6 @@ public:
 
 private:
     void Construct(unsigned aBaseVertices);
-    void ConstructBase(unsigned aBaseVertices, float aYPosition);
+    void ConstructBase(unsigned aBaseVertices, float aYPosition, float aYNormal);
     void ConstructSides(unsigned aBaseVertices);
 };
