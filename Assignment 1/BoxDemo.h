@@ -3,7 +3,7 @@
 class BoxApp : public D3DApp
 {
 private:
-    static const float PrismUpdateInterval;
+    static const float KeyProcessInterval;
 
     ID3D11Buffer* mBoxVB;
     ID3D11Buffer* mBoxIB;
@@ -28,7 +28,7 @@ private:
     POINT mLastMousePos;
     Prism mPrism = Prism(5, 3.0f);
 
-    float mPrismUpdateTimer = 0.0f;
+    float mKeyTimer = 0.0f;
 
 public:
     BoxApp(HINSTANCE hInstance);

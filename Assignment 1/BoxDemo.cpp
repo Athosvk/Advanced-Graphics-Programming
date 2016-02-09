@@ -14,7 +14,7 @@
 #include "Vertex.h"
 #include "BoxDemo.h"
 
-const float BoxApp::PrismUpdateInterval = 0.4f;
+const float BoxApp::KeyProcessInterval = 0.4f;
 
 BoxApp::BoxApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
@@ -82,27 +82,29 @@ void BoxApp::UpdateScene(float dt)
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
-    if(GetAsyncKeyState('1') & 0x8000)
+    if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
+        mKeyTimer -= KeyProcessInterval;
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
+        md3dImmediateContext->RSSetState(mCurrentState);
     }
-    if(GetAsyncKeyState(VK_UP) & 0x8000 && mPrismUpdateTimer >= PrismUpdateInterval)
+    if(GetAsyncKeyState(VK_UP) & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
-        mPrismUpdateTimer -= PrismUpdateInterval;
+        mKeyTimer = 0;
         auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight());
         mPrism.getHeight();
         UpdateGeometry();
     }
-    else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mPrismUpdateTimer >= PrismUpdateInterval)
+    else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
-        mPrismUpdateTimer -= PrismUpdateInterval;
+        mKeyTimer = 0;
         auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight());
         mPrism.getHeight();
         UpdateGeometry();
     }
-    mPrismUpdateTimer += dt;
+    mKeyTimer += dt;
 }
 
 void BoxApp::DrawScene()
@@ -130,8 +132,6 @@ void BoxApp::DrawScene()
     mTech->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
-        md3dImmediateContext->RSSetState(mCurrentState);
-
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
 		md3dImmediateContext->DrawIndexed(mPrism.getIndices().size(), 0, 0);
