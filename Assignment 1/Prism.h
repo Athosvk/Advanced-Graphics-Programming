@@ -7,6 +7,10 @@
 
 class Prism
 {
+public:
+    static const unsigned MinimumSlices;
+    static const unsigned MaximumSlices;
+
 private:
     std::vector<Vertex> mVertices;
     std::vector<UINT> mIndices;
@@ -16,10 +20,12 @@ private:
 public:
     Prism(unsigned aSlices, float aHeight);
 
-    const std::vector<Vertex>& getVertices() const;
-    const std::vector<UINT>& getIndices() const;
+    std::vector<Vertex>& getVertices();
+    std::vector<UINT>& getIndices();
     unsigned getSliceCount() const;
     float getHeight() const;
+    static unsigned getMaxVertexCount();
+    static unsigned getMaxIndexCount();
 private:
     void Construct();
     void ConstructBase(float aYPosition, float aYNormal);

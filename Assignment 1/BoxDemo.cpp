@@ -14,6 +14,8 @@
 #include "Vertex.h"
 #include "BoxDemo.h"
 
+const float BoxApp::KeyProcessInterval = 0.4f;
+
 BoxApp::BoxApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
   mfxWorldViewProj(0), mInputLayout(0), 
@@ -28,6 +30,7 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	XMStoreFloat4x4(&mWorld, I);
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
+    mEnable4xMsaa = true;
 }
 
 BoxApp::~BoxApp()
@@ -79,10 +82,29 @@ void BoxApp::UpdateScene(float dt)
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
 
-    if(GetAsyncKeyState('1') & 0x8000)
+    if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
+        mKeyTimer -= KeyProcessInterval;
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
+        md3dImmediateContext->RSSetState(mCurrentState);
     }
+    if(GetAsyncKeyState(VK_UP) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    {
+        mKeyTimer = 0;
+        auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
+        mPrism = Prism(sliceCount, mPrism.getHeight());
+        mPrism.getHeight();
+        UpdateGeometry();
+    }
+    else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    {
+        mKeyTimer = 0;
+        auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
+        mPrism = Prism(sliceCount, mPrism.getHeight());
+        mPrism.getHeight();
+        UpdateGeometry();
+    }
+    mKeyTimer += dt;
 }
 
 void BoxApp::DrawScene()
@@ -110,8 +132,6 @@ void BoxApp::DrawScene()
     mTech->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
-        md3dImmediateContext->RSSetState(mCurrentState);
-
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
 		md3dImmediateContext->DrawIndexed(mPrism.getIndices().size(), 0, 0);
@@ -168,10 +188,10 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 void BoxApp::BuildGeometryBuffers()
 {
     D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(Vertex) * mPrism.getVertices().size();
+    vbd.Usage = D3D11_USAGE_DYNAMIC;
+    vbd.ByteWidth = sizeof(Vertex) * Prism::getMaxVertexCount();
     vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
+    vbd.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
     vbd.MiscFlags = 0;
 	vbd.StructureByteStride = 0;
     D3D11_SUBRESOURCE_DATA vinitData;
@@ -179,10 +199,10 @@ void BoxApp::BuildGeometryBuffers()
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
 
 	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(UINT) * mPrism.getIndices().size();
+    ibd.Usage = D3D11_USAGE_DYNAMIC;
+    ibd.ByteWidth = sizeof(UINT) * Prism::getMaxIndexCount();
     ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
+    ibd.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
     ibd.MiscFlags = 0;
 	ibd.StructureByteStride = 0;
     D3D11_SUBRESOURCE_DATA iinitData;
@@ -255,4 +275,19 @@ void BoxApp::CreateRasterizerStates()
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
     mCurrentState = mRegularState;
+}
+
+void BoxApp::UpdateGeometry()
+{
+    D3D11_MAPPED_SUBRESOURCE vertexBuffer;
+    ZeroMemory(&vertexBuffer, sizeof(D3D11_MAPPED_SUBRESOURCE));
+    md3dImmediateContext->Map(mBoxVB, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &vertexBuffer);
+    memcpy(vertexBuffer.pData, mPrism.getVertices().data(), mPrism.getVertices().size() * sizeof(Vertex));
+    md3dImmediateContext->Unmap(mBoxVB, 0);
+
+    D3D11_MAPPED_SUBRESOURCE indexBuffer;
+    ZeroMemory(&indexBuffer, sizeof(D3D11_MAPPED_SUBRESOURCE));
+    md3dImmediateContext->Map(mBoxIB, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &indexBuffer);
+    memcpy(indexBuffer.pData, mPrism.getIndices().data(), mPrism.getIndices().size() * sizeof(UINT));
+    md3dImmediateContext->Unmap(mBoxIB, 0);
 }

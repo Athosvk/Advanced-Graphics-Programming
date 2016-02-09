@@ -3,6 +3,8 @@
 class BoxApp : public D3DApp
 {
 private:
+    static const float KeyProcessInterval;
+
     ID3D11Buffer* mBoxVB;
     ID3D11Buffer* mBoxIB;
 
@@ -24,7 +26,9 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Prism mPrism = Prism(90, 3.0f);
+    Prism mPrism = Prism(5, 3.0f);
+
+    float mKeyTimer = 0.0f;
 
 public:
     BoxApp(HINSTANCE hInstance);
@@ -44,4 +48,5 @@ private:
     void BuildFX();
     void BuildVertexLayout();
     void CreateRasterizerStates();
+    void UpdateGeometry();
 };
