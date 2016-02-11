@@ -30,6 +30,6 @@ public:
     static unsigned getMaxIndexCount();
 private:
     void Construct();
-    void ConstructBase(float aYPosition, float aYNormal);
+    void ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor);
     void ConstructSides();
 };
