@@ -93,7 +93,6 @@ void BoxApp::UpdateScene(float dt)
         mKeyTimer = 0;
         auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-        mPrism.getHeight();
         UpdateGeometry();
     }
     else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mKeyTimer >= KeyProcessInterval)
@@ -101,7 +100,6 @@ void BoxApp::UpdateScene(float dt)
         mKeyTimer = 0;
         auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-        mPrism.getHeight();
         UpdateGeometry();
     }
     mKeyTimer += dt;
