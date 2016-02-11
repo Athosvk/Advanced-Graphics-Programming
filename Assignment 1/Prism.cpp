@@ -3,10 +3,11 @@
 const unsigned Prism::MinimumSlices = 3;
 const unsigned Prism::MaximumSlices = 360;
 
-Prism::Prism(unsigned aSlices, float aHeight)
+Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
     : mHeight(aHeight),
     mSlices(aSlices)
 {
+    XMStoreFloat3(&mPosition, aPosition);
     if(aSlices >= MinimumSlices && aSlices <= MaximumSlices)
     {
         Construct();
@@ -35,6 +36,11 @@ unsigned Prism::getSliceCount() const
 float Prism::getHeight() const
 {
     return mHeight;
+}
+
+XMVECTOR Prism::getPosition() const
+{
+    return XMLoadFloat3(&mPosition);
 }
 
 unsigned Prism::getMaxIndexCount()

@@ -26,7 +26,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Prism mPrism = Prism(5, 3.0f);
+    Prism mPrism = Prism(5, 3.0f, XMVectorSet(0.5f, 0.0f, 0.0f, 0.0f));
 
     float mKeyTimer = 0.0f;
 

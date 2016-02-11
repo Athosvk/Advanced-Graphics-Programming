@@ -92,7 +92,7 @@ void BoxApp::UpdateScene(float dt)
     {
         mKeyTimer = 0;
         auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
-        mPrism = Prism(sliceCount, mPrism.getHeight());
+        mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
         mPrism.getHeight();
         UpdateGeometry();
     }
@@ -100,7 +100,7 @@ void BoxApp::UpdateScene(float dt)
     {
         mKeyTimer = 0;
         auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
-        mPrism = Prism(sliceCount, mPrism.getHeight());
+        mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
         mPrism.getHeight();
         UpdateGeometry();
     }

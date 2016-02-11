@@ -16,14 +16,16 @@ private:
     std::vector<UINT> mIndices;
     float mHeight;
     unsigned mSlices;
+    XMFLOAT3 mPosition;
 
 public:
-    Prism(unsigned aSlices, float aHeight);
+    Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition);
 
     std::vector<Vertex>& getVertices();
     std::vector<UINT>& getIndices();
     unsigned getSliceCount() const;
     float getHeight() const;
+    XMVECTOR getPosition() const;
     static unsigned getMaxVertexCount();
     static unsigned getMaxIndexCount();
 private:
