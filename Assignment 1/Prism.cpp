@@ -70,10 +70,11 @@ void Prism::ConstructBase(float aYPosition, float aYNormal)
         float x = cosf(i * RotationDelta);
         float z = sinf(i * RotationDelta);
 
-        mVertices.emplace_back(XMFLOAT3(x, aYPosition, z));
+        mVertices.emplace_back(XMVectorSet(x, aYPosition, z, 0.0f) + XMLoadFloat3(&mPosition));
     }
 
-    mVertices.emplace_back(XMFLOAT3(0.0f, aYPosition, 0.0f));
+    XMVECTOR center = XMVectorSet(0.0f, aYPosition, 0.0f, 0.0f) + XMLoadFloat3(&mPosition);
+    mVertices.emplace_back(center);
     const auto CenterIndex = mVertices.size() - 1;
 
     for(auto i = 0u; i < mSlices; i++)
