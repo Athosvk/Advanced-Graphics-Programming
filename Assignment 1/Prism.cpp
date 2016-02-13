@@ -56,7 +56,7 @@ unsigned Prism::getMaxVertexCount()
 void Prism::Construct()
 {
     ConstructBase(mHeight / 2, 1.0f, Colors::Black);
-    ConstructBase(-mHeight / 2, -1.0f, Colors::White);
+    ConstructBase(-mHeight / 2, -1.0f, Colors::Green);
     ConstructSides();
 }
 
@@ -67,10 +67,12 @@ void Prism::ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
 
     for(auto i = 0u; i < mSlices; i++)
     {
-        float x = cosf(i * RotationDelta);
-        float z = sinf(i * RotationDelta);
+        float x = cos(i * RotationDelta);
+        float z = sin(i * RotationDelta);
 
-        mVertices.emplace_back(XMVectorSet(x, aYPosition, z, 0.0f) + XMLoadFloat3(&mPosition), aColor);
+        float RBColor = i * (1.0f / mSlices);
+        mVertices.emplace_back(XMVectorSet(x, aYPosition, z, 0.0f) + XMLoadFloat3(&mPosition), 
+            aColor + XMVectorSet(RBColor, 0.0f, RBColor, 0.0f));
     }
 
     XMVECTOR center = XMVectorSet(0.0f, aYPosition, 0.0f, 0.0f) + XMLoadFloat3(&mPosition);
