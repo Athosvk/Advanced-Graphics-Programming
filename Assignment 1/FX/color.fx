@@ -6,7 +6,9 @@
 
 cbuffer cbPerObject
 {
-	float4x4 gWorldViewProj; 
+    //In radians
+    float gRotation = 10.0f;
+	float4x4 gWorldViewProj;
 };
 
 struct VertexIn
@@ -44,9 +46,9 @@ Patch ConstantHS(InputPatch<VertexOut, 3> a_InputPatch, uint a_PatchID : SV_Prim
     [unroll]
     for(int i = 0; i < 3; i++)
     {
-        patch.EdgeFactors[i] = 2;
+        patch.EdgeFactors[i] = 32;
     }
-    patch.InsideFactor = 2;
+    patch.InsideFactor = 32;
     return patch;
 }
 
@@ -84,10 +86,9 @@ DomainOutput DS(Patch a_InputPatch, float3 a_UVW : SV_DomainLocation, const Outp
     float3 vertexPosition = a_Triangle[0].Position * a_UVW.x + a_Triangle[1].Position * a_UVW.y +
         a_Triangle[2].Position * a_UVW.z;
     
-    
     float3 rotatedVertexPosition = vertexPosition;
-    float cosX = cos(vertexPosition.y * );
-    float sinZ = sin(vertexPosition.y * 1.0f);
+    float cosX = cos(vertexPosition.y * gRotation);
+    float sinZ = sin(vertexPosition.y * gRotation);
 
     rotatedVertexPosition.x = vertexPosition.x * cosX - vertexPosition.z * sinZ;
     rotatedVertexPosition.z = vertexPosition.z * cosX + vertexPosition.x * sinZ;
