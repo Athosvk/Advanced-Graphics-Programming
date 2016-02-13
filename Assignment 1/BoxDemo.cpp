@@ -54,6 +54,7 @@ bool BoxApp::Init()
 	BuildGeometryBuffers();
 	BuildFX();
 	BuildVertexLayout();
+    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 
 	return true;
 }
@@ -93,15 +94,25 @@ void BoxApp::UpdateScene(float dt)
         mKeyTimer = 0;
         auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-        UpdateGeometry();
     }
     else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
         mKeyTimer = 0;
         auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
         mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-        UpdateGeometry();
     }
+    else if(GetAsyncKeyState(VK_LEFT) & 0x8000)
+    {
+        auto height = mPrism.getHeight() - 0.02f;
+        mPrism = Prism(mPrism.getSliceCount(), height, mPrism.getPosition());
+    }
+    else if(GetAsyncKeyState(VK_RIGHT) & 0x8000)
+    {
+        auto height = mPrism.getHeight() + 0.02f;
+        mPrism = Prism(mPrism.getSliceCount(), height, mPrism.getPosition());
+    }
+
+    UpdateGeometry();
     mKeyTimer += dt;
 }
 
@@ -111,7 +122,6 @@ void BoxApp::DrawScene()
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	UINT stride = sizeof(Vertex);
     UINT offset = 0;
