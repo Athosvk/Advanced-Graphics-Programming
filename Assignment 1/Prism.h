@@ -17,14 +17,19 @@ private:
     float mHeight;
     unsigned mSlices;
     XMFLOAT3 mPosition;
+    float mSliceRotation = 0.0f;
+    float mDeltaRotation = 30.0f;
+    float mTotalRotation = mSliceRotation;
 
 public:
     Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition);
 
+    void update(float a_DeltaTime);
     std::vector<Vertex>& getVertices();
     std::vector<UINT>& getIndices();
     unsigned getSliceCount() const;
     float getHeight() const;
+    float getSliceRotation() const;
     XMVECTOR getPosition() const;
     static unsigned getMaxVertexCount();
     static unsigned getMaxIndexCount();

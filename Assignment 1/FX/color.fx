@@ -46,9 +46,9 @@ Patch ConstantHS(InputPatch<VertexOut, 3> a_InputPatch, uint a_PatchID : SV_Prim
     [unroll]
     for(int i = 0; i < 3; i++)
     {
-        patch.EdgeFactors[i] = 32;
+        patch.EdgeFactors[i] = 64;
     }
-    patch.InsideFactor = 32;
+    patch.InsideFactor = 64;
     return patch;
 }
 

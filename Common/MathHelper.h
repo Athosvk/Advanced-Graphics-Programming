@@ -9,6 +9,7 @@
 
 #include <Windows.h>
 #include <xnamath.h>
+#include <math.h>
 
 class MathHelper
 {
@@ -24,6 +25,17 @@ public:
 	{
 		return a + RandF()*(b-a);
 	}
+
+    static float PingPong(const float a_Value, const float a_Min, const float a_Max)
+    {
+        auto length = a_Max - a_Min;
+        auto wrappedValue = fmod(a_Value, length * 2) - a_Min;
+        if(wrappedValue > length)
+        {
+            wrappedValue = 2 * length - wrappedValue;
+        }
+        return wrappedValue + a_Min;
+    }
 
 	template<typename T>
 	static T Min(const T& a, const T& b)

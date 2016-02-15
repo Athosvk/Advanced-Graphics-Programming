@@ -111,7 +111,7 @@ void BoxApp::UpdateScene(float dt)
         auto height = mPrism.getHeight() + 0.02f;
         mPrism = Prism(mPrism.getSliceCount(), height, mPrism.getPosition());
     }
-
+    mPrism.update(dt);
     UpdateGeometry();
     mKeyTimer += dt;
 }
@@ -135,6 +135,7 @@ void BoxApp::DrawScene()
 	XMMATRIX worldViewProj = world*view*proj;
 
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+    mfxRotation->SetFloat(mPrism.getSliceRotation());
 
     D3DX11_TECHNIQUE_DESC techDesc;
     mTech->GetDesc( &techDesc );
@@ -252,6 +253,7 @@ void BoxApp::BuildFX()
 
 	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+    mfxRotation = mFX->GetVariableByName("gRotation")->AsScalar();
 }
 
 void BoxApp::BuildVertexLayout()

@@ -18,6 +18,12 @@ Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
     }
 }
 
+void Prism::update(float a_DeltaTime)
+{
+    mSliceRotation = XMConvertToRadians(MathHelper::PingPong(mTotalRotation, 0.0f, 90.0f));
+    mTotalRotation += mDeltaRotation * a_DeltaTime;
+}
+
 std::vector<Vertex>& Prism::getVertices()
 {
     return mVertices;
@@ -36,6 +42,11 @@ unsigned Prism::getSliceCount() const
 float Prism::getHeight() const
 {
     return mHeight;
+}
+
+float Prism::getSliceRotation() const
+{
+    return mSliceRotation;
 }
 
 XMVECTOR Prism::getPosition() const

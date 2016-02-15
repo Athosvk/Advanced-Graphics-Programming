@@ -11,6 +11,7 @@ private:
     ID3DX11Effect* mFX;
     ID3DX11EffectTechnique* mTech;
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
+    ID3DX11EffectScalarVariable* mfxRotation;
 
     ID3D11InputLayout* mInputLayout;
     ID3D11RasterizerState* mWireframeState;
