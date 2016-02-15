@@ -3,10 +3,11 @@
 const unsigned Prism::MinimumSlices = 3;
 const unsigned Prism::MaximumSlices = 360;
 
-Prism::Prism(unsigned aSlices, float aHeight)
+Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
     : mHeight(aHeight),
     mSlices(aSlices)
 {
+    XMStoreFloat3(&mPosition, aPosition);
     if(aSlices >= MinimumSlices && aSlices <= MaximumSlices)
     {
         Construct();
@@ -15,6 +16,12 @@ Prism::Prism(unsigned aSlices, float aHeight)
     {
         throw std::out_of_range("Vertices exceed maximum/minimum vertices");
     }
+}
+
+void Prism::update(float a_DeltaTime)
+{
+    mSliceRotation = XMConvertToRadians(MathHelper::PingPong(mTotalRotation, 0.0f, 90.0f));
+    mTotalRotation += mDeltaRotation * a_DeltaTime;
 }
 
 std::vector<Vertex>& Prism::getVertices()
@@ -37,6 +44,16 @@ float Prism::getHeight() const
     return mHeight;
 }
 
+float Prism::getSliceRotation() const
+{
+    return mSliceRotation;
+}
+
+XMVECTOR Prism::getPosition() const
+{
+    return XMLoadFloat3(&mPosition);
+}
+
 unsigned Prism::getMaxIndexCount()
 {
     return MaximumSlices * 12;
@@ -49,25 +66,28 @@ unsigned Prism::getMaxVertexCount()
 
 void Prism::Construct()
 {
-    ConstructBase(mHeight / 2, 1.0f);
-    ConstructBase(-mHeight / 2, -1.0f);
+    ConstructBase(mHeight / 2, 1.0f, Colors::Black);
+    ConstructBase(-mHeight / 2, -1.0f, Colors::Green);
     ConstructSides();
 }
 
-void Prism::ConstructBase(float aYPosition, float aYNormal)
+void Prism::ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
 {
     const auto BaseIndex = mVertices.size();
     const auto RotationDelta = XM_2PI / mSlices;
 
     for(auto i = 0u; i < mSlices; i++)
     {
-        float x = cosf(i * RotationDelta);
-        float z = sinf(i * RotationDelta);
+        float x = cos(i * RotationDelta);
+        float z = sin(i * RotationDelta);
 
-        mVertices.emplace_back(XMFLOAT3(x, aYPosition, z));
+        float RBColor = i * (1.0f / mSlices);
+        mVertices.emplace_back(XMVectorSet(x, aYPosition, z, 0.0f) + XMLoadFloat3(&mPosition), 
+            aColor + XMVectorSet(RBColor, 0.0f, RBColor, 0.0f));
     }
 
-    mVertices.emplace_back(XMFLOAT3(0.0f, aYPosition, 0.0f));
+    XMVECTOR center = XMVectorSet(0.0f, aYPosition, 0.0f, 0.0f) + XMLoadFloat3(&mPosition);
+    mVertices.emplace_back(center, aColor);
     const auto CenterIndex = mVertices.size() - 1;
 
     for(auto i = 0u; i < mSlices; i++)

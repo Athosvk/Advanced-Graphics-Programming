@@ -11,6 +11,7 @@ private:
     ID3DX11Effect* mFX;
     ID3DX11EffectTechnique* mTech;
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
+    ID3DX11EffectScalarVariable* mfxRotation;
 
     ID3D11InputLayout* mInputLayout;
     ID3D11RasterizerState* mWireframeState;
@@ -26,7 +27,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Prism mPrism = Prism(5, 3.0f);
+    Prism mPrism = Prism(3, 3.0f, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
     float mKeyTimer = 0.0f;
 
