@@ -2,8 +2,9 @@
 
 namespace AGPEngine
 {
-    bool Keyboard::m_CurrentlyPressed[SDL_NUM_SCANCODES];
-    bool Keyboard::m_PreviouslyPressed[SDL_NUM_SCANCODES];
+    const int Keyboard::KeyCount = 512;
+    bool Keyboard::m_CurrentlyPressed[KeyCount];
+    bool Keyboard::m_PreviouslyPressed[KeyCount];
 
     Keyboard::Keyboard()
     {
@@ -14,9 +15,12 @@ namespace AGPEngine
     {
     }
 
-    void Keyboard::process(WPARAM a_KeyEvent)
+    void Keyboard::process(KeyboardEvent a_KeyEvent)
     {
-        m_KeyboardEvents.push_back(a_KeyEvent);
+        if(a_KeyEvent.Key < KeyCount)
+        {
+            m_KeyboardEvents.push_back(a_KeyEvent);
+        }
     }
 
     bool Keyboard::isDown(const KeyCode& a_KeyCode)
@@ -42,7 +46,7 @@ namespace AGPEngine
 
     void Keyboard::clearPrevious()
     {
-        for(auto i = 0; i < SDL_NUM_SCANCODES; ++i)
+        for(auto i = 0; i < KeyCount; ++i)
         {
             m_PreviouslyPressed[i] = false;
         }
@@ -50,7 +54,7 @@ namespace AGPEngine
 
     void Keyboard::clearCurrent()
     {
-        for(auto i = 0; i < SDL_NUM_SCANCODES; ++i)
+        for(auto i = 0; i < KeyCount; ++i)
         {
             m_CurrentlyPressed[i] = false;
         }
@@ -58,14 +62,14 @@ namespace AGPEngine
 
     void Keyboard::updateKeystate()
     {
-        for(auto i = 0; i < SDL_NUM_SCANCODES; ++i)
+        for(auto i = 0; i < KeyCount; ++i)
         {
             m_PreviouslyPressed[i] = m_CurrentlyPressed[i];
         }
 
         for(auto& keyEvent : m_KeyboardEvents)
         {
-            m_CurrentlyPressed[keyEvent] = iterator->type != SDL_KEYUP;
+            m_CurrentlyPressed[keyEvent.Key] = keyEvent.Pressed;
         }
         m_KeyboardEvents.clear();
     }

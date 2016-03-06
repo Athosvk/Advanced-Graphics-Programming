@@ -5,7 +5,7 @@
 //
 cbuffer cbPerObject
 {
-    float   gRotation = 1;              // Offset:    0, size:    4
+    float   gRotation = 10;             // Offset:    0, size:    4
     float4x4 gWorldViewProj;            // Offset:   16, size:   64
 }
 
@@ -152,7 +152,7 @@ fxgroup
                 // {
                 //
                 //   float gRotation;                   // Offset:    0 Size:     4
-                //      = 0x3f800000 
+                //      = 0x41200000 
                 //   float4x4 gWorldViewProj;           // Offset:   16 Size:    64
                 //
                 // }

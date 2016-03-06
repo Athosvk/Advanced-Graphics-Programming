@@ -1,7 +1,7 @@
 #define NOMINMAX
 #include <Windows.h>
-#include "MathHelper.h"
 
+#include "MathHelper.h"
 #include "Game.h"
 
 namespace AGPEngine
@@ -9,16 +9,18 @@ namespace AGPEngine
     const double Game::FixedUpdateInterval = 0.015;
     const double Game::SpiralOfDeathThreshold = 0.075;
 
-    Game::Game(int a_ScreenWidth, int a_ScreenHeight, std::string a_WindowName)
+    Game::Game(int a_ScreenWidth, int a_ScreenHeight, std::wstring a_WindowName, HINSTANCE a_ApplicationHandle)
+        : m_Window(a_ScreenWidth, a_ScreenHeight, a_WindowName, a_ApplicationHandle)
     {
+        loadWorld<World>();
     }
 
-    void Game::run()
+    int Game::run()
     {
-        startGameLoop();
+        return startGameLoop();
     }
 
-    void Game::startGameLoop()
+    int Game::startGameLoop()
     {
         while(m_CurrentGameState == GameState::Play)
         {
@@ -28,6 +30,7 @@ namespace AGPEngine
             processFixedUpdates();
             m_Window.renderCurrentFrame();
         }
+        return 0;
     }
 
     void Game::update()

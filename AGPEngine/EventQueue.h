@@ -21,8 +21,9 @@ namespace AGPEngine
         std::queue<Event> m_CurrentEvents;
 
     public:
-        void handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, LPARAM a_Parameter2);
+        LRESULT CALLBACK handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, LPARAM a_Parameter2);
         Event dequeue();
         bool isEmpty() const;
+        void update();
     };
 }

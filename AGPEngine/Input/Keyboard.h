@@ -6,19 +6,27 @@
 
 namespace AGPEngine
 {
+    class KeyboardEvent
+    {
+    public:
+        bool Pressed;
+        WPARAM Key;
+    };
+
     class Keyboard
     {
     private:
-        std::vector<WPARAM> m_KeyboardEvents;
-
-        static bool m_PreviouslyPressed[SDL_NUM_SCANCODES];
-        static bool m_CurrentlyPressed[SDL_NUM_SCANCODES];
+        std::vector<KeyboardEvent> m_KeyboardEvents;
+        
+        static const int KeyCount;
+        static bool m_PreviouslyPressed[512];
+        static bool m_CurrentlyPressed[512];
 
     public:
         Keyboard();
         ~Keyboard();
 
-        void process(WPARAM a_KeyEvent);
+        void process(KeyboardEvent a_KeyEvent);
         void update();
 
         static bool isPressed(const KeyCode& a_KeyCode);

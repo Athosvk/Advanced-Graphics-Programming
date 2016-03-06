@@ -1,26 +1,18 @@
+#include <Windowsx.h>
+
 #include "InputSystem.h"
 #include "../Core/World.h"
-#include "../Rendering/Camera2D.h"
 
 namespace AGPEngine
 {
     InputSystem::InputSystem(EntitySystem& a_EntitySystem, MessagingSystem& a_MessagingSystem)
         : System(a_EntitySystem, a_MessagingSystem)
     {
-        auto cameras = m_EntitySystem.getComponentsOfType<Camera2D>();
-        if(!cameras.empty())
-        {
-            m_Mouse.onCameraChange(cameras[0]);
-        }
     }
 
     void InputSystem::registerListeners()
     {
-        m_MessagingSystem.registerListener<OnCameraChangedMessage>([this](const BadEngine::Message* a_Message)
-        {
-            m_Mouse.onCameraChange(static_cast<const OnCameraChangedMessage*>(a_Message)->getNewCamera());
-        });
-        m_MessagingSystem.registerListener<ProcessEventsMessage>([this](const BadEngine::Message* a_Message)
+        m_MessagingSystem.registerListener<ProcessEventsMessage>([this](const AGPEngine::Message* a_Message)
         {
             processEvents(static_cast<const ProcessEventsMessage*>(a_Message)->getEvents());
             updateInput();
@@ -35,20 +27,40 @@ namespace AGPEngine
             {
             case WM_KEYDOWN:
             case WM_KEYUP:
-                m_Keyboard.process(windowEvent.Parameter1);
+            {
+                KeyboardEvent keyboardEvent{ windowEvent.EventType == WM_KEYDOWN,
+                    windowEvent.Parameter1 };
+                m_Keyboard.process(keyboardEvent);
                 break;
+            }
             case WM_LBUTTONDOWN:
             case WM_LBUTTONUP:
+            {
+                MouseButtonEvent buttonEvent{ EMouseButton::Left, windowEvent.EventType == WM_LBUTTONDOWN };
+                m_Mouse.process(buttonEvent);
+                break;
+            }
             case WM_RBUTTONDOWN:
             case WM_RBUTTONUP:
-                m_Mouse.process(windowEvent.button);
+            {
+                MouseButtonEvent buttonEvent{ EMouseButton::Right, windowEvent.EventType == WM_RBUTTONDOWN };
+                m_Mouse.process(buttonEvent);
                 break;
+            }
+            case WM_MBUTTONDOWN:
+            case WM_MBUTTONUP:
+            {
+                MouseButtonEvent buttonEvent{ EMouseButton::Middle, windowEvent.EventType == WM_MBUTTONDOWN };
+                m_Mouse.process(buttonEvent);
+            }
             case WM_MOUSEMOVE:
-                m_Mouse.process(windowEvent.motion);
+            {
+                MouseMotionEvent motionEvent;
+                motionEvent.X = static_cast<int>(GET_X_LPARAM(windowEvent.Parameter2));
+                motionEvent.Y = static_cast<int>(GET_Y_LPARAM(windowEvent.Parameter2));
+                m_Mouse.process(motionEvent);
                 break;
-            case WM_MOUSEWHEEL:
-                m_Mouse.process(windowEvent.wheel);
-                break;
+            }
             }
         }
     }

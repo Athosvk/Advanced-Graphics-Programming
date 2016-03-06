@@ -2,7 +2,7 @@
 
 namespace AGPEngine
 {
-    MessageQueue::QueuedMessage::QueuedMessage(std::unique_ptr<BadEngine::Message>&& a_Message, 
+    MessageQueue::QueuedMessage::QueuedMessage(std::unique_ptr<Message>&& a_Message, 
         std::type_index a_Type, GameObject a_Target)
         : m_Message(std::move(a_Message)),
         m_MessageType(a_Type),
@@ -25,12 +25,12 @@ namespace AGPEngine
         return m_Target;
     }
 
-    auto MessageQueue::begin()->decltype(m_Messages.begin())
+    std::vector<MessageQueue::QueuedMessage>::iterator MessageQueue::begin()
     {
         return m_Messages.begin();
     }
 
-    auto MessageQueue::end()->decltype(m_Messages.end())
+    std::vector<MessageQueue::QueuedMessage>::iterator MessageQueue::end()
     {
         return m_Messages.end();
     }

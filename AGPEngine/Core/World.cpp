@@ -33,7 +33,6 @@ namespace AGPEngine
     void World::addDefaultSystems()
     {
         auto mainCamera = m_EntitySystem.createEntity();
-        broadcast<OnCameraChangedMessage>(mainCamera.addComponent<Camera2D>());
 
         addSystem<InputSystem>();
     }
@@ -48,7 +47,6 @@ namespace AGPEngine
     void World::fixedUpdate()
     {
         broadcast<FixedUpdateMessage>();
-        broadcast<PhysicsUpdateMessage>();
     }
 
     void World::processEvents(std::vector<Event>& a_Events)

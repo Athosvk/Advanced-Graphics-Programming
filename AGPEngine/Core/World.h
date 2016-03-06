@@ -39,7 +39,7 @@ namespace AGPEngine
         const std::vector<Event>& getEvents() const;
     };
 
-    class PhysicsUpdateMessage : public Message
+    class RenderMessage : public Message
     {
     };
 

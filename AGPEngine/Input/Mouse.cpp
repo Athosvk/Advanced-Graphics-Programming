@@ -5,32 +5,21 @@ namespace AGPEngine
     std::array<bool, Mouse::ButtonCount> Mouse::s_CurrentlyPressed;
     std::array<bool, Mouse::ButtonCount> Mouse::s_PreviouslyPressed;
     XMFLOAT2 Mouse::s_Position;
-    Camera2D* Mouse::s_CurrentCamera;
 
-    void Mouse::process(SDL_MouseButtonEvent a_ButtonEvent)
+    void Mouse::process(MouseButtonEvent a_ButtonEvent)
     {
         m_ButtonEvents.push_back(a_ButtonEvent);
     }
 
-    void Mouse::process(SDL_MouseMotionEvent a_MotionEvent)
+    void Mouse::process(MouseMotionEvent a_MotionEvent)
     {
         m_CurrentMotion = a_MotionEvent;
-    }
-
-    void Mouse::process(SDL_MouseWheelEvent)
-    {
-
     }
 
     void Mouse::update()
     {
         updatePosition();
         updateButtonStates();
-    }
-
-    void Mouse::onCameraChange(Camera2D* a_NewCamera)
-    {
-        s_CurrentCamera = a_NewCamera;
     }
 
     bool Mouse::isButtonPressed(EMouseButton a_MouseButton)
@@ -45,19 +34,13 @@ namespace AGPEngine
 
     XMVECTOR Mouse::getScreenPosition()
     {
-        return XMLoadFloat2(&s_Position) / static_cast<float>(Camera2D::PixelsPerMeter);
+        return XMLoadFloat2(&s_Position);
     }
-
-    XMVECTOR Mouse::getWorldPosition()
-    {
-        return s_CurrentCamera->screenToWorld(XMLoadFloat2(&s_Position));
-    }
-
 
     void Mouse::updatePosition()
     {
-        s_Position.x = static_cast<float>(m_CurrentMotion.x);
-        s_Position.y = static_cast<float>(m_CurrentMotion.y);
+        s_Position.x = static_cast<float>(m_CurrentMotion.X);
+        s_Position.y = static_cast<float>(m_CurrentMotion.Y);
     }
 
     void Mouse::updateButtonStates()
@@ -67,10 +50,9 @@ namespace AGPEngine
             s_PreviouslyPressed[i] = s_CurrentlyPressed[i];
         }
 
-        std::vector<SDL_MouseButtonEvent>::iterator iterator;
-        for(iterator = m_ButtonEvents.begin(); iterator != m_ButtonEvents.end(); ++iterator)
+        for(auto& buttonEvent : m_ButtonEvents)
         {
-            s_CurrentlyPressed[static_cast<int>(iterator->button)] = iterator->type == SDL_MOUSEBUTTONDOWN;
+            s_CurrentlyPressed[static_cast<int>(buttonEvent.Button)] = buttonEvent.Pressed;
         }
         m_ButtonEvents.clear();
     }

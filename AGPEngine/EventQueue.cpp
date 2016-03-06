@@ -6,9 +6,9 @@ namespace AGPEngine
     {
     }
 
-    void EventQueue::handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, LPARAM a_Parameter2)
+    LRESULT EventQueue::handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, LPARAM a_Parameter2)
     {
-        m_CurrentEvents.emplace(a_Parameter1, a_Parameter2, a_MessageType);
+        return DefWindowProc(a_Window, a_MessageType, a_Parameter1, a_Parameter2);
     }
 
     Event EventQueue::dequeue()
@@ -21,5 +21,15 @@ namespace AGPEngine
     bool EventQueue::isEmpty() const
     {
         return m_CurrentEvents.empty();
+    }
+
+    void EventQueue::update()
+    {
+        MSG message = {};
+        while(PeekMessage(&message, 0, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&message);
+            DispatchMessage(&message);
+        }
     }
 }
