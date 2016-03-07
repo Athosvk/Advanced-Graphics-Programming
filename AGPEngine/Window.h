@@ -19,6 +19,8 @@ namespace AGPEngine
         EventQueue m_EventQueue;
         int m_Width;
         int m_Height;
+        int m_MinimumWidth = 200;
+        int m_MinimumHeight = 200;
         std::wstring m_Title = L"";
         HINSTANCE m_ApplicationHandle;
         HWND m_WindowHandle;
@@ -39,6 +41,7 @@ namespace AGPEngine
         float getAspectRatio();
         void renderCurrentFrame();
         void clear();
+        EventQueue& getEventQueue();
     private:
         void initialiseWindow();
         void initialiseDirectx();

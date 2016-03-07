@@ -6,7 +6,7 @@
 
 namespace AGPEngine
 {
-    enum class GameState
+    enum class EGameState
     {
         Play, Exit
     };
@@ -19,21 +19,21 @@ namespace AGPEngine
     protected:
         static const double SpiralOfDeathThreshold;
 
-        GameState m_CurrentGameState = GameState::Play;
+        EGameState m_CurrentGameState = EGameState::Play;
         GameTime m_GameTime;
         std::unique_ptr<World> m_CurrentWorld;
-        EventQueue m_EventQueue;
         Window m_Window;
     private:
         double m_FixedUpdateTimer = 0.0;
 
     public:
-        Game(int a_ScreenWidth, int a_ScreenHeight, std::wstring a_WindowName, HINSTANCE a_ApplicationHandle);
+        Game(int a_ScreenWidth, int a_ScreenHeight, const std::wstring& a_WindowName, 
+            HINSTANCE a_ApplicationHandle);
     public:
         virtual ~Game() = default;
 
         int run();
-
+        void quit();
     protected:
         void update();
         void fixedUpdate();

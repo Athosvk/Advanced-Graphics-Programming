@@ -9,7 +9,8 @@ namespace AGPEngine
     const double Game::FixedUpdateInterval = 0.015;
     const double Game::SpiralOfDeathThreshold = 0.075;
 
-    Game::Game(int a_ScreenWidth, int a_ScreenHeight, std::wstring a_WindowName, HINSTANCE a_ApplicationHandle)
+    Game::Game(int a_ScreenWidth, int a_ScreenHeight, const std::wstring& a_WindowName, 
+        HINSTANCE a_ApplicationHandle)
         : m_Window(a_ScreenWidth, a_ScreenHeight, a_WindowName, a_ApplicationHandle)
     {
         loadWorld<World>();
@@ -20,9 +21,14 @@ namespace AGPEngine
         return startGameLoop();
     }
 
+    void Game::quit()
+    {
+        m_CurrentGameState = EGameState::Exit;
+    }
+
     int Game::startGameLoop()
     {
-        while(m_CurrentGameState == GameState::Play)
+        while(m_CurrentGameState == EGameState::Play)
         {
             m_Window.clear();
             processEvents();
@@ -58,14 +64,15 @@ namespace AGPEngine
 
     void Game::processEvents()
     {
+        m_Window.getEventQueue().update();
         std::vector<Event> unhandledEvents;
-        while(!m_EventQueue.isEmpty())
+        while(!m_Window.getEventQueue().isEmpty())
         {
-            auto windowEvent = m_EventQueue.dequeue();
+            auto windowEvent = m_Window.getEventQueue().dequeue();
             switch(windowEvent.EventType)
             {
-            case WM_QUIT:
-                m_CurrentGameState = GameState::Exit;
+            case WM_DESTROY:
+                quit();
                 break;
             default:
                 unhandledEvents.push_back(windowEvent);

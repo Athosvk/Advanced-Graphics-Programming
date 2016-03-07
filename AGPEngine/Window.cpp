@@ -42,6 +42,11 @@ namespace AGPEngine
         m_DeviceContext->ClearRenderTargetView(m_RenderTarget, backgroundColor);
     }
 
+    EventQueue& Window::getEventQueue()
+    {
+        return m_EventQueue;
+    }
+
     void Window::initialiseWindow()
     {
         WNDCLASS windowDefinition
@@ -77,7 +82,7 @@ namespace AGPEngine
         }
         SetWindowLongPtr(m_WindowHandle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
         ShowWindow(m_WindowHandle, SW_SHOW);
-        UpdateWindow(m_WindowHandle);
+      //  UpdateWindow(m_WindowHandle);
     }
 
     void Window::initialiseDirectx()
@@ -124,11 +129,11 @@ namespace AGPEngine
         swapChainDescription.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
         swapChainDescription.Flags = 0;
 
-        IDXGIDevice* dxgiDevice = 0;
+        IDXGIDevice* dxgiDevice = nullptr;
         HR(m_Device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice)));
-        IDXGIAdapter* dxgiAdapter = 0;
+        IDXGIAdapter* dxgiAdapter = nullptr;
         HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&dxgiAdapter)));
-        IDXGIFactory* dxgiFactory = 0;
+        IDXGIFactory* dxgiFactory = nullptr;
         HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&dxgiFactory)));
         HR(dxgiFactory->CreateSwapChain(m_Device, &swapChainDescription, &m_SwapChain));
 
@@ -223,13 +228,27 @@ namespace AGPEngine
         case WM_MENUCHAR:
             // Don't beep when we alt-enter.
             return MAKELRESULT(0, MNC_CLOSE);
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
+        case WM_GETMINMAXINFO:
+            (reinterpret_cast<MINMAXINFO*>(a_Parameter2))->ptMinTrackSize.x = m_MinimumWidth;
+            (reinterpret_cast<MINMAXINFO*>(a_Parameter2))->ptMinTrackSize.y = m_MinimumHeight;
+            return 0;
+        case WM_ACTIVATE:
+            return 0;
         }
         return m_EventQueue.handleWindowEvent(a_Window, a_MessageType, a_Parameter1, a_Parameter2);
     }
 
-    LRESULT Window::handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, LPARAM a_Parameter2)
+    LRESULT Window::handleWindowEvent(HWND a_Window, UINT a_MessageType, WPARAM a_Parameter1, 
+        LPARAM a_Parameter2)
     {
         auto windowInstance = reinterpret_cast<Window*>(GetWindowLongPtr(a_Window, GWLP_USERDATA));
-        return windowInstance->processEvent(a_Window, a_MessageType, a_Parameter1, a_Parameter2);
+        if(windowInstance != nullptr)
+        {
+            return windowInstance->processEvent(a_Window, a_MessageType, a_Parameter1, a_Parameter2);
+        }
+        return DefWindowProc(a_Window, a_MessageType, a_Parameter1, a_Parameter2);
     }
 }
