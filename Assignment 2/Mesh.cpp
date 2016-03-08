@@ -60,7 +60,7 @@ void Mesh::loadMeshdata(const std::string& a_Filepath)
     for(auto i = 0u; i < mesh->mNumFaces; ++i)
     {
         aiFace currentFace = mesh->mFaces[i];
-        for(auto j = 0; j < currentFace.mNumIndices; ++j)
+        for(auto j = 0u; j < currentFace.mNumIndices; ++j)
         {
             m_Indices.push_back(currentFace.mIndices[j]);
         }
