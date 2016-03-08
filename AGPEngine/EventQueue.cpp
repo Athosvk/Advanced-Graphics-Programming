@@ -20,7 +20,7 @@ namespace AGPEngine
         case WM_MBUTTONDOWN:
         case WM_RBUTTONDOWN:
         case WM_MOUSEMOVE:
-        case WM_QUIT:
+        case WM_DESTROY:
             m_CurrentEvents.emplace(a_Parameter1, a_Parameter2, a_MessageType);
             return 0;
         default:
