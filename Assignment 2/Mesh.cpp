@@ -31,9 +31,19 @@ void Mesh::bind(ID3D11DeviceContext* a_Context)
     a_Context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &vertexStride, &offset);
 }
 
+XMFLOAT2 Mesh::toXMFloat2(aiVector3D a_Vector)
+{
+    return XMFLOAT2(a_Vector.x, a_Vector.y);
+}
+
 XMFLOAT3 Mesh::toXMFloat3(aiVector3D a_Vector)
 {
     return XMFLOAT3(a_Vector.x, a_Vector.y, a_Vector.z);
+}
+
+XMFLOAT4 Mesh::toXMFloat4(aiColor4D a_Color)
+{
+    return XMFLOAT4(a_Color.r, a_Color.g, a_Color.b, a_Color.a);
 }
 
 void Mesh::loadMeshdata(const std::string& a_Filepath)
@@ -49,7 +59,9 @@ void Mesh::loadMeshdata(const std::string& a_Filepath)
     m_Vertices.reserve(mesh->mNumVertices);
     for(auto i = 0u; i < mesh->mNumVertices; i++)
     {
-        m_Vertices.emplace_back(toXMFloat3(mesh->mVertices[i]));
+        m_Vertices.emplace_back(toXMFloat3(mesh->mVertices[i]),
+            mesh->HasVertexColors(i) ? toXMFloat4(mesh->mColors[0][i]) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+            mesh->HasTextureCoords(i) ? toXMFloat2(mesh->mTextureCoords[0][i]) : XMFLOAT2(0.0f, 0.0f));
     }
     m_Indices.reserve(mesh->mNumFaces * 3);
     for(auto i = 0u; i < mesh->mNumFaces; ++i)
