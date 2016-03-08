@@ -26,7 +26,7 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, I);
+	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
     mEnable4xMsaa = true;
@@ -154,7 +154,7 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 		mRadius += dx - dy;
 
 		// Restrict the radius.
-		mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
+		mRadius = MathHelper::Clamp(mRadius, 3.0f, 35.0f);
 	}
 
 	mLastMousePos.x = x;
