@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <xnamath.h>
+#include <d3dUtil.h>
 
 struct Vertex
 {

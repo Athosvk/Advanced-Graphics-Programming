@@ -11,13 +11,12 @@
 #include "d3dApp.h"
 #include "d3dx11Effect.h"
 #include "MathHelper.h"
-#include "Vertex.h"
-#include "BoxDemo.h"
+#include "Assignment2.h"
 
-const float BoxApp::KeyProcessInterval = 0.4f;
+const float Assignment2::KeyProcessInterval = 0.4f;
 
-BoxApp::BoxApp(HINSTANCE hInstance)
-: D3DApp(hInstance), mBoxVB(0), mBoxIB(0), mFX(0), mTech(0),
+Assignment2::Assignment2(HINSTANCE hInstance)
+: D3DApp(hInstance), mFX(0), mTech(0),
   mfxWorldViewProj(0), mInputLayout(0), 
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
 {
@@ -27,23 +26,21 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, I);
+	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
     mEnable4xMsaa = true;
 }
 
-BoxApp::~BoxApp()
+Assignment2::~Assignment2()
 {
-	ReleaseCOM(mBoxVB);
-	ReleaseCOM(mBoxIB);
 	ReleaseCOM(mFX);
 	ReleaseCOM(mInputLayout);
     ReleaseCOM(mWireframeState);
     ReleaseCOM(mRegularState);
 }
 
-bool BoxApp::Init()
+bool Assignment2::Init()
 {
     if(!D3DApp::Init())
     {
@@ -51,15 +48,14 @@ bool BoxApp::Init()
     }
 
     CreateRasterizerStates();
-	BuildGeometryBuffers();
 	BuildFX();
 	BuildVertexLayout();
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-
+    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
 	return true;
 }
 
-void BoxApp::OnResize()
+void Assignment2::OnResize()
 {
 	D3DApp::OnResize();
 
@@ -68,7 +64,7 @@ void BoxApp::OnResize()
 	XMStoreFloat4x4(&mProj, P);
 }
 
-void BoxApp::UpdateScene(float dt)
+void Assignment2::UpdateScene(float dt)
 {
 	// Convert Spherical to Cartesian coordinates.
 	float x = mRadius*sinf(mPhi)*cosf(mTheta);
@@ -89,44 +85,16 @@ void BoxApp::UpdateScene(float dt)
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
         md3dImmediateContext->RSSetState(mCurrentState);
     }
-    if(GetAsyncKeyState(VK_UP) & 0x8000 && mKeyTimer >= KeyProcessInterval)
-    {
-        mKeyTimer = 0;
-        auto sliceCount = XMMin(mPrism.getSliceCount() + 1, Prism::MaximumSlices);
-        mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-    }
-    else if(GetAsyncKeyState(VK_DOWN) & 0x8000 && mKeyTimer >= KeyProcessInterval)
-    {
-        mKeyTimer = 0;
-        auto sliceCount = XMMax(mPrism.getSliceCount() - 1, Prism::MinimumSlices);
-        mPrism = Prism(sliceCount, mPrism.getHeight(), mPrism.getPosition());
-    }
-    else if(GetAsyncKeyState(VK_LEFT) & 0x8000)
-    {
-        auto height = mPrism.getHeight() - 0.02f;
-        mPrism = Prism(mPrism.getSliceCount(), height, mPrism.getPosition());
-    }
-    else if(GetAsyncKeyState(VK_RIGHT) & 0x8000)
-    {
-        auto height = mPrism.getHeight() + 0.02f;
-        mPrism = Prism(mPrism.getSliceCount(), height, mPrism.getPosition());
-    }
-    mPrism.update(dt);
-    UpdateGeometry();
     mKeyTimer += dt;
 }
 
-void BoxApp::DrawScene()
+void Assignment2::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
-
-	UINT stride = sizeof(Vertex);
-    UINT offset = 0;
-    md3dImmediateContext->IASetVertexBuffers(0, 1, &mBoxVB, &stride, &offset);
-	md3dImmediateContext->IASetIndexBuffer(mBoxIB, DXGI_FORMAT_R32_UINT, 0);
+    m_Mesh->bind(md3dImmediateContext);
 
 	// Set constants
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
@@ -135,7 +103,6 @@ void BoxApp::DrawScene()
 	XMMATRIX worldViewProj = world*view*proj;
 
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
-    mfxRotation->SetFloat(mPrism.getSliceRotation());
 
     D3DX11_TECHNIQUE_DESC techDesc;
     mTech->GetDesc( &techDesc );
@@ -143,13 +110,13 @@ void BoxApp::DrawScene()
     {
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
         
-		md3dImmediateContext->DrawIndexed(mPrism.getIndices().size(), 0, 0);
+        m_Mesh->draw(md3dImmediateContext);
     }
 
 	HR(mSwapChain->Present(0, 0));
 }
 
-void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
+void Assignment2::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
@@ -157,12 +124,12 @@ void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
 	SetCapture(mhMainWnd);
 }
 
-void BoxApp::OnMouseUp(WPARAM btnState, int x, int y)
+void Assignment2::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	ReleaseCapture();
 }
 
-void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
+void Assignment2::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
@@ -187,39 +154,14 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 		mRadius += dx - dy;
 
 		// Restrict the radius.
-		mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
+		mRadius = MathHelper::Clamp(mRadius, 3.0f, 35.0f);
 	}
 
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
 }
 
-void BoxApp::BuildGeometryBuffers()
-{
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_DYNAMIC;
-    vbd.ByteWidth = sizeof(Vertex) * Prism::getMaxVertexCount();
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
-    vbd.MiscFlags = 0;
-	vbd.StructureByteStride = 0;
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = mPrism.getVertices().data();
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB));
-
-	D3D11_BUFFER_DESC ibd;
-    ibd.Usage = D3D11_USAGE_DYNAMIC;
-    ibd.ByteWidth = sizeof(UINT) * Prism::getMaxIndexCount();
-    ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
-    ibd.MiscFlags = 0;
-	ibd.StructureByteStride = 0;
-    D3D11_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = mPrism.getIndices().data();
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mBoxIB));
-}
- 
-void BoxApp::BuildFX()
+void Assignment2::BuildFX()
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -253,26 +195,26 @@ void BoxApp::BuildFX()
 
 	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
-    mfxRotation = mFX->GetVariableByName("gRotation")->AsScalar();
 }
 
-void BoxApp::BuildVertexLayout()
+void Assignment2::BuildVertexLayout()
 {
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"UVCOORDINATES", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 	// Create the input layout
     D3DX11_PASS_DESC passDesc;
     mTech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature, 
+	HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }
 
-void BoxApp::CreateRasterizerStates()
+void Assignment2::CreateRasterizerStates()
 {
     D3D11_RASTERIZER_DESC rasterizerDescription;
     ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
@@ -285,19 +227,4 @@ void BoxApp::CreateRasterizerStates()
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
     mCurrentState = mRegularState;
-}
-
-void BoxApp::UpdateGeometry()
-{
-    D3D11_MAPPED_SUBRESOURCE vertexBuffer;
-    ZeroMemory(&vertexBuffer, sizeof(D3D11_MAPPED_SUBRESOURCE));
-    md3dImmediateContext->Map(mBoxVB, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &vertexBuffer);
-    memcpy(vertexBuffer.pData, mPrism.getVertices().data(), mPrism.getVertices().size() * sizeof(Vertex));
-    md3dImmediateContext->Unmap(mBoxVB, 0);
-
-    D3D11_MAPPED_SUBRESOURCE indexBuffer;
-    ZeroMemory(&indexBuffer, sizeof(D3D11_MAPPED_SUBRESOURCE));
-    md3dImmediateContext->Map(mBoxIB, 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &indexBuffer);
-    memcpy(indexBuffer.pData, mPrism.getIndices().data(), mPrism.getIndices().size() * sizeof(UINT));
-    md3dImmediateContext->Unmap(mBoxIB, 0);
 }

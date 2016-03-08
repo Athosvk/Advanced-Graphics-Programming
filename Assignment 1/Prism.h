@@ -2,8 +2,7 @@
 #include <Windows.h>
 #include <vector>
 #include <xnamath.h>
-
-#include "Vertex.h"
+#include <Vertex.h>
 
 class Prism
 {

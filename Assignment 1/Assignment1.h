@@ -1,15 +1,19 @@
-#include <memory>
+#include <d3dApp.h>
 
-#include "Mesh.h"
+#include "Prism.h"
 
-class BoxApp : public D3DApp
+class Assignment1 : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
 
+    ID3D11Buffer* mBoxVB;
+    ID3D11Buffer* mBoxIB;
+
     ID3DX11Effect* mFX;
     ID3DX11EffectTechnique* mTech;
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
+    ID3DX11EffectScalarVariable* mfxRotation;
 
     ID3D11InputLayout* mInputLayout;
     ID3D11RasterizerState* mWireframeState;
@@ -25,13 +29,13 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
+    Prism mPrism = Prism(3, 3.0f, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
     float mKeyTimer = 0.0f;
-    std::unique_ptr<Mesh> m_Mesh = nullptr;
 
 public:
-    BoxApp(HINSTANCE hInstance);
-    ~BoxApp();
+    Assignment1(HINSTANCE hInstance);
+    ~Assignment1();
 
     bool Init();
     void OnResize();
@@ -43,7 +47,9 @@ public:
     void OnMouseMove(WPARAM btnState, int x, int y);
 
 private:
+    void BuildGeometryBuffers();
     void BuildFX();
     void BuildVertexLayout();
     void CreateRasterizerStates();
+    void UpdateGeometry();
 };

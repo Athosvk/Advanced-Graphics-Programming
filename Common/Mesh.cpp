@@ -1,8 +1,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <d3dUtil.h>
 
+#include "d3dUtil.h"
 #include "Mesh.h"
 
 Mesh::Mesh(const std::string& a_Filepath, ID3D11Device* a_Device)
