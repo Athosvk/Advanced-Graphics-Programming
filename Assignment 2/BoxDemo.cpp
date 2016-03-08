@@ -50,8 +50,8 @@ bool BoxApp::Init()
     CreateRasterizerStates();
 	BuildFX();
 	BuildVertexLayout();
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/Sphere.obj", md3dDevice);
+    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
 	return true;
 }
 
