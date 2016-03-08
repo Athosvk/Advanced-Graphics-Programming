@@ -1,8 +1,9 @@
 #include <memory>
+#include <d3dApp.h>
 
 #include "Mesh.h"
 
-class BoxApp : public D3DApp
+class Assignmen4 : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
@@ -30,8 +31,8 @@ private:
     std::unique_ptr<Mesh> m_Mesh = nullptr;
 
 public:
-    BoxApp(HINSTANCE hInstance);
-    ~BoxApp();
+    Assignmen4(HINSTANCE hInstance);
+    ~Assignmen4();
 
     bool Init();
     void OnResize();

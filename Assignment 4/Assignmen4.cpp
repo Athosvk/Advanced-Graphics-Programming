@@ -11,11 +11,11 @@
 #include "d3dApp.h"
 #include "d3dx11Effect.h"
 #include "MathHelper.h"
-#include "BoxDemo.h"
+#include "Assignmen4.h"
 
-const float BoxApp::KeyProcessInterval = 0.4f;
+const float Assignmen4::KeyProcessInterval = 0.4f;
 
-BoxApp::BoxApp(HINSTANCE hInstance)
+Assignmen4::Assignmen4(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0),
   mfxWorldViewProj(0), mInputLayout(0), 
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
@@ -32,7 +32,7 @@ BoxApp::BoxApp(HINSTANCE hInstance)
     mEnable4xMsaa = true;
 }
 
-BoxApp::~BoxApp()
+Assignmen4::~Assignmen4()
 {
 	ReleaseCOM(mFX);
 	ReleaseCOM(mInputLayout);
@@ -40,7 +40,7 @@ BoxApp::~BoxApp()
     ReleaseCOM(mRegularState);
 }
 
-bool BoxApp::Init()
+bool Assignmen4::Init()
 {
     if(!D3DApp::Init())
     {
@@ -55,7 +55,7 @@ bool BoxApp::Init()
 	return true;
 }
 
-void BoxApp::OnResize()
+void Assignmen4::OnResize()
 {
 	D3DApp::OnResize();
 
@@ -64,7 +64,7 @@ void BoxApp::OnResize()
 	XMStoreFloat4x4(&mProj, P);
 }
 
-void BoxApp::UpdateScene(float dt)
+void Assignmen4::UpdateScene(float dt)
 {
 	// Convert Spherical to Cartesian coordinates.
 	float x = mRadius*sinf(mPhi)*cosf(mTheta);
@@ -88,7 +88,7 @@ void BoxApp::UpdateScene(float dt)
     mKeyTimer += dt;
 }
 
-void BoxApp::DrawScene()
+void Assignmen4::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -116,7 +116,7 @@ void BoxApp::DrawScene()
 	HR(mSwapChain->Present(0, 0));
 }
 
-void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
+void Assignmen4::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
@@ -124,12 +124,12 @@ void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
 	SetCapture(mhMainWnd);
 }
 
-void BoxApp::OnMouseUp(WPARAM btnState, int x, int y)
+void Assignmen4::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	ReleaseCapture();
 }
 
-void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
+void Assignmen4::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
@@ -161,7 +161,7 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.y = y;
 }
 
-void BoxApp::BuildFX()
+void Assignmen4::BuildFX()
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -197,7 +197,7 @@ void BoxApp::BuildFX()
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
-void BoxApp::BuildVertexLayout()
+void Assignmen4::BuildVertexLayout()
 {
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -214,7 +214,7 @@ void BoxApp::BuildVertexLayout()
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }
 
-void BoxApp::CreateRasterizerStates()
+void Assignmen4::CreateRasterizerStates()
 {
     D3D11_RASTERIZER_DESC rasterizerDescription;
     ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));

@@ -1,6 +1,6 @@
 #include <d3dapp.h>
 
-#include "BoxDemo.h"
+#include "Assignmen4.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     PSTR cmdLine, int showCmd)
@@ -10,7 +10,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    BoxApp theApp(hInstance);
+    Assignmen4 theApp(hInstance);
 
     if(!theApp.Init())
     {
