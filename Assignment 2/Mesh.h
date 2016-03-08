@@ -21,7 +21,6 @@ public:
     void draw(ID3D11DeviceContext* a_Contex);
     void bind(ID3D11DeviceContext* a_Context);
 private:
-    XMFLOAT2 toXMFloat2(aiVector2D a_Vector);
     XMFLOAT3 toXMFloat3(aiVector3D a_Vector);
     void loadMeshdata(const std::string& a_Filepath);
     void buildIndexBuffer(ID3D11Device* a_Device);

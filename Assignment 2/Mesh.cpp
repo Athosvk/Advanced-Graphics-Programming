@@ -31,11 +31,6 @@ void Mesh::bind(ID3D11DeviceContext* a_Context)
     a_Context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &vertexStride, &offset);
 }
 
-XMFLOAT2 Mesh::toXMFloat2(aiVector2D a_Vector)
-{
-    return XMFLOAT2(a_Vector.x, a_Vector.y);
-}
-
 XMFLOAT3 Mesh::toXMFloat3(aiVector3D a_Vector)
 {
     return XMFLOAT3(a_Vector.x, a_Vector.y, a_Vector.z);
