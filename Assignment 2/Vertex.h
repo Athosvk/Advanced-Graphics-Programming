@@ -6,6 +6,7 @@ struct Vertex
 {
     XMFLOAT3 Pos;
     XMFLOAT4 Color;
+    XMFLOAT2 UVCoordinates = XMFLOAT2(0.0f, 0.0f);
 
     Vertex() = default;
 

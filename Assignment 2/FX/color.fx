@@ -13,12 +13,14 @@ struct VertexIn
 {
 	float3 PosL  : POSITION;
     float4 Color : COLOR;
+    float2 UVCoordinates : UVCOORDINATES;
 };
 
 struct VertexOut
 {
 	float4 PosH  : SV_POSITION;
     float4 Color : COLOR;
+    float2 UVCoordinates : UVCOORDINATES;
 };
 
 VertexOut VS(VertexIn vin)
@@ -27,6 +29,7 @@ VertexOut VS(VertexIn vin)
 	
     vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
     vout.Color = vin.Color;
+    vout.UVCoordinates = vin.UVCoordinates;
     
     return vout;
 }
