@@ -26,7 +26,8 @@ Assignmen4::Assignmen4(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
+	XMStoreFloat4x4(&mWorld, XMMatrixTranslationFromVector(XMVectorSet(0.0f, -150.0f, 1000.0f, 0.0f)) * 
+        XMMatrixScalingFromVector(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
     mEnable4xMsaa = true;
