@@ -104,6 +104,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;assimp.lib;d3dx11d.lib;D3DCompiler.lib;Effects11d.lib;dxerr.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;AGPEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>WinMainCRTStartup </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,6 +136,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;assimp.lib;d3dx11.lib;D3DCompiler.lib;Effects11.lib;dxerr.lib;dxgi.lib;dxguid.lib;AGPEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>WinMainCRTStartup </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -162,12 +164,13 @@
     <ClCompile Include="..\Common\GeometryGenerator.cpp" />
     <ClCompile Include="..\Common\LightHelper.cpp" />
     <ClCompile Include="..\Common\MathHelper.cpp" />
+    <ClCompile Include="..\Common\Mesh.cpp" />
     <ClCompile Include="..\Common\TextureMgr.cpp" />
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
-    <ClCompile Include="BoxDemo.cpp" />
+    <ClCompile Include="Assignmen4.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Camera.h" />
@@ -179,15 +182,16 @@
     <ClInclude Include="..\Common\GeometryGenerator.h" />
     <ClInclude Include="..\Common\LightHelper.h" />
     <ClInclude Include="..\Common\MathHelper.h" />
+    <ClInclude Include="..\Common\Mesh.h" />
     <ClInclude Include="..\Common\TextureMgr.h" />
+    <ClInclude Include="..\Common\Vertex.h" />
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
-    <ClInclude Include="BoxDemo.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="Assignmen4.h" />
+    <ClInclude Include="MeshRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\color.fx">
+    <CustomBuild Include="FX\Lighting.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
@@ -196,6 +200,11 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">fxc compile for release: %(FullPath)</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)\%(Filename).fxo</Outputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FX\LightHelper.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -51,13 +51,16 @@
     <ClCompile Include="..\Common\xnacollision.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="BoxDemo.cpp">
+    <ClCompile Include="Assignmen4.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Mesh.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="MeshRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,19 +101,27 @@
     <ClInclude Include="..\Common\xnacollision.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="Assignmen4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoxDemo.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\Common\Mesh.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
+    <ClInclude Include="..\Common\Vertex.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\color.fx">
+    <CustomBuild Include="FX\Lighting.fx">
       <Filter>Effects</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="FX\LightHelper.fx">
+      <Filter>Effects</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

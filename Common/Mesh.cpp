@@ -61,6 +61,7 @@ void Mesh::loadMeshdata(const std::string& a_Filepath)
     {
         m_Vertices.emplace_back(toXMFloat3(mesh->mVertices[i]),
             mesh->HasVertexColors(i) ? toXMFloat4(mesh->mColors[0][i]) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+            mesh->HasNormals() ? toXMFloat3(mesh->mNormals[i]) : XMFLOAT3(0.0f, 0.0f, 1.0f),
             mesh->HasTextureCoords(i) ? toXMFloat2(mesh->mTextureCoords[0][i]) : XMFLOAT2(0.0f, 0.0f));
     }
     m_Indices.reserve(mesh->mNumFaces * 3);
