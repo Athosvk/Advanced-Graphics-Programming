@@ -50,8 +50,6 @@ struct Material
     float4 Reflect;
 };
 
-float ComputeEffectiveIntensity(float a_Intensity);
-
 //---------------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a directional light.  We need to output the terms separately because
@@ -79,15 +77,12 @@ void ComputeDirectionalLight(Material mat, DirectionalLight L,
 
     float diffuseFactor = dot(lightVec, normal);
 
-    diffuseFactor = ComputeEffectiveIntensity(diffuseFactor);
-
     // Flatten to avoid dynamic branching.
     [flatten]
     if(diffuseFactor > 0.0f)
     {
         float3 v = reflect(-lightVec, normal);
         float specFactor = pow(max(dot(v, toEye), 0.0f), mat.Specular.w);
-        specFactor = ComputeEffectiveIntensity(specFactor);
 
         diffuse = diffuseFactor * mat.Diffuse * L.Diffuse;
         spec = specFactor * mat.Specular * L.Specular;
@@ -127,7 +122,6 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
     // the line of site of the light.
 
     float diffuseFactor = dot(lightVec, normal);
-    diffuseFactor = ComputeEffectiveIntensity(diffuseFactor);
 
     // Flatten to avoid dynamic branching.
     [flatten]
@@ -135,7 +129,6 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
     {
         float3 v = reflect(-lightVec, normal);
         float specFactor = pow(max(dot(v, toEye), 0.0f), mat.Specular.w);
-        specFactor = ComputeEffectiveIntensity(specFactor);
 
         diffuse = diffuseFactor * mat.Diffuse * L.Diffuse;
         spec = specFactor * mat.Specular * L.Specular;
@@ -146,16 +139,6 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
 
     diffuse *= att;
     spec *= att;
-}
-
-float ComputeEffectiveIntensity(float a_Intensity)
-{
-    const int MaxStepSize = 256;
-    const int StepSize = 32;
-    const float Bias = 0.01f;
-
-    int intensityStep = int(a_Intensity * MaxStepSize + Bias) / (StepSize);
-    return intensityStep * (float(StepSize) / MaxStepSize);
 }
 
 //---------------------------------------------------------------------------------------
@@ -191,7 +174,6 @@ void ComputeSpotLight(Material mat, SpotLight L, float3 pos, float3 normal, floa
     // the line of site of the light.
 
     float diffuseFactor = dot(lightVec, normal);
-    diffuseFactor = ComputeEffectiveIntensity(diffuseFactor);
 
     // Flatten to avoid dynamic branching.
     [flatten]
@@ -199,7 +181,6 @@ void ComputeSpotLight(Material mat, SpotLight L, float3 pos, float3 normal, floa
     {
         float3 v = reflect(-lightVec, normal);
         float specFactor = pow(max(dot(v, toEye), 0.0f), mat.Specular.w);
-        specFactor = ComputeEffectiveIntensity(specFactor);
 
         diffuse = diffuseFactor * mat.Diffuse * L.Diffuse;
         spec = specFactor * mat.Specular * L.Specular;

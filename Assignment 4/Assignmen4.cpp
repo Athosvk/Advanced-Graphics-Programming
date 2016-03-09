@@ -88,17 +88,15 @@ void Assignmen4::UpdateScene(float dt)
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
         md3dImmediateContext->RSSetState(mCurrentState);
     }
-    else if(GetAsyncKeyState(VK_LEFT) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    else if(GetAsyncKeyState(VK_LEFT) & 0x8000)
     {
-        mKeyTimer -= KeyProcessInterval;
-        m_SpotLight.Spot += 15.0f;
+        m_SpotLight.Spot += 1.0f;
     }
-    else if(GetAsyncKeyState(VK_RIGHT) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    else if(GetAsyncKeyState(VK_RIGHT) & 0x8000)
     {
-        mKeyTimer -= KeyProcessInterval;
-        m_SpotLight.Spot -= 15.0f;
+        m_SpotLight.Spot -= 1.0f;
     }
-    m_SpotLight.Spot = MathHelper::Clamp(m_SpotLight.Spot, 0.001f, 128.0f);
+    m_SpotLight.Spot = MathHelper::Clamp(m_SpotLight.Spot, 20.0f, 256.0f);
     mKeyTimer += dt;
 
     // Convert Spherical to Cartesian coordinates.
@@ -274,7 +272,7 @@ void Assignmen4::CreateRasterizerStates()
     D3D11_RASTERIZER_DESC rasterizerDescription;
     ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
     rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
     rasterizerDescription.FrontCounterClockwise = false;
     rasterizerDescription.DepthClipEnable = true;
     HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));
