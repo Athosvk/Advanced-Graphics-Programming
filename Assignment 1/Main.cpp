@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     {
         return EXIT_FAILURE;
     }
-
+    theApp.Run();
 
     //AGPEngine::Game game(600, 400, L"Aaaaa", hInstance);
     //game.run();
