@@ -51,7 +51,23 @@ bool Assignmen4::Init()
 	BuildFX();
 	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
+    m_Mesh = std::make_unique<Mesh>("Assets/Models/City.obj", md3dDevice);
+    m_MeshRenderer.MeshData = m_Mesh.get();
+    Material material;
+    material.Ambient = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+    material.Diffuse = XMFLOAT4(0.48f, 0.77f, 1.f, 1.0f);
+    material.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
+
+    m_MeshRenderer.MeshMaterial = material;
+
+    m_SpotLight.Ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+    m_SpotLight.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+    m_SpotLight.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+    m_SpotLight.Att = XMFLOAT3(1.0f, 0.0f, 0.0f);
+    m_SpotLight.Spot = 120.0f;
+    m_SpotLight.Range = 10000.0f;
+    m_SpotLight.Position = XMFLOAT3(0.0f, -10.0f, 0.0f);
+    m_SpotLight.Direction = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	return true;
 }
 
@@ -66,26 +82,45 @@ void Assignmen4::OnResize()
 
 void Assignmen4::UpdateScene(float dt)
 {
-	// Convert Spherical to Cartesian coordinates.
-	float x = mRadius*sinf(mPhi)*cosf(mTheta);
-	float z = mRadius*sinf(mPhi)*sinf(mTheta);
-	float y = mRadius*cosf(mPhi);
-
-	// Build the view matrix.
-	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
-	XMStoreFloat4x4(&mView, V);
-
     if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
         mKeyTimer -= KeyProcessInterval;
         mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
         md3dImmediateContext->RSSetState(mCurrentState);
     }
+    else if(GetAsyncKeyState(VK_LEFT) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    {
+        mKeyTimer -= KeyProcessInterval;
+        m_SpotLight.Spot += 15.0f;
+    }
+    else if(GetAsyncKeyState(VK_RIGHT) & 0x8000 && mKeyTimer >= KeyProcessInterval)
+    {
+        mKeyTimer -= KeyProcessInterval;
+        m_SpotLight.Spot -= 15.0f;
+    }
+    m_SpotLight.Spot = MathHelper::Clamp(m_SpotLight.Spot, 0.001f, 128.0f);
     mKeyTimer += dt;
+
+    // Convert Spherical to Cartesian coordinates.
+    float x = mRadius*sinf(mPhi)*cosf(mTheta);
+    float z = mRadius*sinf(mPhi)*sinf(mTheta);
+    float y = mRadius*cosf(mPhi);
+
+    mEyePosW = XMFLOAT3(x, y, z);
+
+    // Build the view matrix.
+    XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
+    XMVECTOR target = XMVectorZero();
+    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+    XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
+    XMStoreFloat4x4(&mView, V);
+
+    // The spotlight takes on the camera position and is aimed in the
+    // same direction the camera is looking.  In this way, it looks
+    // like we are holding a flashlight.
+    m_SpotLight.Position = mEyePosW;
+    XMStoreFloat3(&m_SpotLight.Direction, XMVector3Normalize(target - pos));
 }
 
 void Assignmen4::DrawScene()
@@ -103,14 +138,27 @@ void Assignmen4::DrawScene()
 	XMMATRIX worldViewProj = world*view*proj;
 
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+    mfxSpotLight->SetRawValue(&m_SpotLight, 0, sizeof(m_SpotLight));
+    mfxEyePosW->SetRawValue(&mEyePosW, 0, sizeof(mEyePosW));
 
     D3DX11_TECHNIQUE_DESC techDesc;
-    mTech->GetDesc( &techDesc );
+    mTech->GetDesc(&techDesc);
+
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
+        m_MeshRenderer.MeshData->bind(md3dImmediateContext);
+
+        // Set per object constants.
+        XMMATRIX worldInvTranspose = MathHelper::InverseTranspose(world);
+        XMMATRIX worldViewProj = world*view*proj;
+
+        mfxWorld->SetMatrix(reinterpret_cast<float*>(&world));
+        mfxWorldInvTranspose->SetMatrix(reinterpret_cast<float*>(&worldInvTranspose));
+        mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+        mfxMaterial->SetRawValue(&mfxMaterial, 0, sizeof(m_MeshRenderer.MeshMaterial));
+
         mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-        
-        m_Mesh->draw(md3dImmediateContext);
+        m_MeshRenderer.MeshData->draw(md3dImmediateContext);
     }
 
 	HR(mSwapChain->Present(0, 0));
@@ -171,7 +219,7 @@ void Assignmen4::BuildFX()
  
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
-	HRESULT hr = D3DX11CompileFromFile(L"FX/color.fx", 0, 0, 0, "fx_5_0", shaderFlags, 
+	HRESULT hr = D3DX11CompileFromFile(L"FX/Lighting.fx", 0, 0, 0, "fx_5_0", shaderFlags, 
 		0, 0, &compiledShader, &compilationMsgs, 0);
 
 	// compilationMsgs can store errors or warnings.
@@ -195,6 +243,12 @@ void Assignmen4::BuildFX()
 
 	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+    mTech = mFX->GetTechniqueByName("LightTech");
+    mfxWorld = mFX->GetVariableByName("gWorld")->AsMatrix();
+    mfxWorldInvTranspose = mFX->GetVariableByName("gWorldInvTranspose")->AsMatrix();
+    mfxEyePosW = mFX->GetVariableByName("gEyePosW")->AsVector();
+    mfxSpotLight = mFX->GetVariableByName("gSpotLight");
+    mfxMaterial = mFX->GetVariableByName("gMaterial");
 }
 
 void Assignmen4::BuildVertexLayout()
@@ -202,15 +256,16 @@ void Assignmen4::BuildVertexLayout()
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"UVCOORDINATES", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, Position), D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Vertex, Color), D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT , 0, offsetof(Vertex, Normal), D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"UVCOORDINATES", 0, DXGI_FORMAT_R32G32_FLOAT, 0, offsetof(Vertex, UVCoordinates), D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 	// Create the input layout
     D3DX11_PASS_DESC passDesc;
     mTech->GetPassByIndex(0)->GetDesc(&passDesc);
-	HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature, 
+	HR(md3dDevice->CreateInputLayout(vertexDesc, 4, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }
 

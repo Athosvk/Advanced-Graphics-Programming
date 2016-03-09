@@ -2,6 +2,7 @@
 #include <d3dApp.h>
 
 #include "Mesh.h"
+#include "MeshRenderer.h"
 
 class Assignmen4 : public D3DApp
 {
@@ -11,6 +12,11 @@ private:
     ID3DX11Effect* mFX;
     ID3DX11EffectTechnique* mTech;
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
+    ID3DX11EffectMatrixVariable* mfxWorld;
+    ID3DX11EffectMatrixVariable* mfxWorldInvTranspose;
+    ID3DX11EffectVectorVariable* mfxEyePosW;
+    ID3DX11EffectVariable* mfxSpotLight;
+    ID3DX11EffectVariable* mfxMaterial;
 
     ID3D11InputLayout* mInputLayout;
     ID3D11RasterizerState* mWireframeState;
@@ -20,6 +26,7 @@ private:
     XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;
     XMFLOAT4X4 mProj;
+    XMFLOAT3 mEyePosW;
 
     float mTheta;
     float mPhi;
@@ -29,6 +36,8 @@ private:
 
     float mKeyTimer = 0.0f;
     std::unique_ptr<Mesh> m_Mesh = nullptr;
+    MeshRenderer m_MeshRenderer;
+    SpotLight m_SpotLight;
 
 public:
     Assignmen4(HINSTANCE hInstance);
