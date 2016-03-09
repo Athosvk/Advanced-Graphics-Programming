@@ -9,6 +9,31 @@ cbuffer cbPerObject
 }
 
 //
+// 1 local object(s)
+//
+BlendState AlphaBlend
+{
+    AlphaToCoverageEnable = bool(FALSE /* 0 */);
+    BlendEnable[0] = bool(TRUE /* 1 */);
+    SrcBlend[0] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[1] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[2] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[3] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[4] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[5] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[6] = uint(SRC_ALPHA /* 5 */);
+    SrcBlend[7] = uint(SRC_ALPHA /* 5 */);
+    DestBlend[0] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[1] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[2] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[3] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[4] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[5] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[6] = uint(INV_SRC_ALPHA /* 6 */);
+    DestBlend[7] = uint(INV_SRC_ALPHA /* 6 */);
+};
+
+//
 // 1 groups(s)
 //
 fxgroup
@@ -96,7 +121,7 @@ fxgroup
                 // Name                 Index   Mask Register SysValue  Format   Used
                 // -------------------- ----- ------ -------- -------- ------- ------
                 // SV_POSITION              0   xyzw        0      POS   float       
-                // COLOR                    0   xyzw        1     NONE   float   xyzw
+                // COLOR                    0   xyzw        1     NONE   float   xyz 
                 // UVCOORDINATES            0   xy          2     NONE   float       
                 //
                 //
@@ -108,13 +133,17 @@ fxgroup
                 //
                 ps_5_0
                 dcl_globalFlags refactoringAllowed | skipOptimization
-                dcl_input_ps linear v1.xyzw
+                dcl_input_ps linear v1.xyz
                 dcl_output o0.xyzw
-                mov o0.xyzw, v1.xyzw
+                mov o0.xyz, v1.xyzx
+                mov o0.w, l(0.700000)
                 ret 
-                // Approximately 2 instruction slots used
+                // Approximately 3 instruction slots used
                             
             };
+            AB_BlendFactor = float4(1, 1, 1, 1);
+            AB_SampleMask = uint(0xffffffff);
+            BlendState = AlphaBlend;
         }
 
     }
