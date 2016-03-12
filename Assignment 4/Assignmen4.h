@@ -35,7 +35,6 @@ private:
     POINT mLastMousePos;
 
     float mKeyTimer = 0.0f;
-    std::unique_ptr<Mesh> m_Mesh = nullptr;
     MeshRenderer m_MeshRenderer;
     SpotLight m_SpotLight;
 

@@ -52,8 +52,7 @@ bool Assignmen4::Init()
 	BuildFX();
 	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/City.obj", md3dDevice);
-    m_MeshRenderer.MeshData = m_Mesh.get();
+    m_MeshRenderer.MeshData = std::make_unique<Mesh>("Assets/Models/City.obj", md3dDevice);
     Material material;
     material.Ambient = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
     material.Diffuse = XMFLOAT4(0.48f, 0.77f, 1.f, 1.0f);
@@ -128,7 +127,7 @@ void Assignmen4::DrawScene()
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
-    m_Mesh->bind(md3dImmediateContext);
+    m_MeshRenderer.MeshData->bind(md3dImmediateContext);
 
 	// Set constants
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
