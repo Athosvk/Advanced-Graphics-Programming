@@ -17,8 +17,7 @@ const float Assignmen4::KeyProcessInterval = 0.4f;
 
 Assignmen4::Assignmen4(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0),
-  mfxWorldViewProj(0), mInputLayout(0), 
-  mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
+  mfxWorldViewProj(0), mInputLayout(0)
 {
 	mMainWndCaption = L"Box Demo";
 	
@@ -54,7 +53,7 @@ bool Assignmen4::Init()
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_MeshRenderer.MeshData = std::make_unique<Mesh>("Assets/Models/City.obj", md3dDevice);
     Material material;
-    material.Ambient = XMFLOAT4(0.48f, 0.77f, 0.46f, 1.0f);
+    material.Ambient = XMFLOAT4(0.4f, 0.77f, 0.46f, 1.0f);
     material.Diffuse = XMFLOAT4(0.48f, 0.77f, 1.f, 1.0f);
     material.Specular = XMFLOAT4(0.2f, 0.2f, 0.2f, 16.0f);
 
@@ -63,7 +62,7 @@ bool Assignmen4::Init()
     m_SpotLight.Ambient = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
     m_SpotLight.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     m_SpotLight.Specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-    m_SpotLight.Att = XMFLOAT3(1.0f, 0.0f, 0.0f);
+    m_SpotLight.Att = XMFLOAT3(1.0f, 0.001f, 0.0f);
     m_SpotLight.Spot = 120.0f;
     m_SpotLight.Range = 10000.0f;
     m_SpotLight.Position = XMFLOAT3(0.0f, -10.0f, 0.0f);
@@ -78,10 +77,13 @@ void Assignmen4::OnResize()
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
 	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 	XMStoreFloat4x4(&mProj, P);
+    m_Camera.SetLens(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 10000.0f);
 }
 
 void Assignmen4::UpdateScene(float dt)
 {
+    UpdateCamera();
+    mKeyTimer += dt;
     if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
     {
         mKeyTimer -= KeyProcessInterval;
@@ -96,29 +98,33 @@ void Assignmen4::UpdateScene(float dt)
     {
         m_SpotLight.Spot -= 1.0f;
     }
+}
+
+void Assignmen4::UpdateCamera()
+{
+    if(GetAsyncKeyState('W') & 0x8000)
+    {
+        m_Camera.Walk(0.1f);
+    }
+    else if(GetAsyncKeyState('S') & 0x8000)
+    {
+        m_Camera.Walk(-0.1f);
+    }
+    else if(GetAsyncKeyState('A') & 0x8000)
+    {
+        m_Camera.Strafe(-0.1f);
+    }
+    else if(GetAsyncKeyState('D') & 0x8000)
+    {
+        m_Camera.Strafe(0.1f);
+    }
     m_SpotLight.Spot = MathHelper::Clamp(m_SpotLight.Spot, 20.0f, 256.0f);
-    mKeyTimer += dt;
 
-    // Convert Spherical to Cartesian coordinates.
-    float x = mRadius*sinf(mPhi)*cosf(mTheta);
-    float z = mRadius*sinf(mPhi)*sinf(mTheta);
-    float y = mRadius*cosf(mPhi);
+    m_Camera.UpdateViewMatrix();
+    XMStoreFloat4x4(&mView, m_Camera.View());
 
-    mEyePosW = XMFLOAT3(x, y, z);
-
-    // Build the view matrix.
-    XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorZero();
-    XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-    XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
-    XMStoreFloat4x4(&mView, V);
-
-    // The spotlight takes on the camera position and is aimed in the
-    // same direction the camera is looking.  In this way, it looks
-    // like we are holding a flashlight.
-    m_SpotLight.Position = mEyePosW;
-    XMStoreFloat3(&m_SpotLight.Direction, XMVector3Normalize(target - pos));
+    m_SpotLight.Position = m_Camera.GetPosition();
+    XMStoreFloat3(&m_SpotLight.Direction, XMVector3Normalize(m_Camera.GetLookXM()));
 }
 
 void Assignmen4::DrawScene()
@@ -180,27 +186,14 @@ void Assignmen4::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+		float dx = XMConvertToRadians(static_cast<float>(x - mLastMousePos.x));
+		float dy = XMConvertToRadians(static_cast<float>(y - mLastMousePos.y));
 
 		// Update angles based on input to orbit camera around box.
-		mTheta += dx;
-		mPhi   += dy;
-
-		// Restrict the angle mPhi.
-		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi-0.1f);
-	}
-	else if( (btnState & MK_RBUTTON) != 0 )
-	{
-		// Make each pixel correspond to 0.005 unit in the scene.
-		float dx = 0.005f*static_cast<float>(x - mLastMousePos.x);
-		float dy = 0.005f*static_cast<float>(y - mLastMousePos.y);
-
-		// Update the camera radius based on input.
-		mRadius += dx - dy;
-
-		// Restrict the radius.
-		mRadius = MathHelper::Clamp(mRadius, 3.0f, 35.0f);
+        m_Camera.LookAt(m_Camera.GetPositionXM(), 
+            m_Camera.GetLookXM() + XMVectorSet(static_cast<float>(dx), static_cast<float>(dy), 
+                0.0f, 1.0f),
+            XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 	}
 
 	mLastMousePos.x = x;
@@ -239,7 +232,6 @@ void Assignmen4::BuildFX()
 	// Done with compiled shader.
 	ReleaseCOM(compiledShader);
 
-	mTech = mFX->GetTechniqueByName("ColorTech");
 	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
     mTech = mFX->GetTechniqueByName("LightTech");
     mfxWorld = mFX->GetVariableByName("gWorld")->AsMatrix();

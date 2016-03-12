@@ -1,5 +1,6 @@
 #include <memory>
 #include <d3dApp.h>
+#include <Camera.h>
 
 #include "Mesh.h"
 #include "MeshRenderer.h"
@@ -28,15 +29,13 @@ private:
     XMFLOAT4X4 mProj;
     XMFLOAT3 mEyePosW;
 
-    float mTheta;
-    float mPhi;
-    float mRadius;
-
     POINT mLastMousePos;
+
 
     float mKeyTimer = 0.0f;
     MeshRenderer m_MeshRenderer;
     SpotLight m_SpotLight;
+    Camera m_Camera;
 
 public:
     Assignmen4(HINSTANCE hInstance);
@@ -45,6 +44,7 @@ public:
     bool Init();
     void OnResize();
     void UpdateScene(float dt);
+    void UpdateCamera();
     void DrawScene();
 
     void OnMouseDown(WPARAM btnState, int x, int y);
