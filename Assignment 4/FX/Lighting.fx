@@ -4,8 +4,8 @@
 // Transforms and lights geometry.
 //=============================================================================
 
-#include "LightHelper.fx"
- 
+#define VARIABLE_BANDING
+#include "ToonLightHelper.fx"
 cbuffer cbPerFrame
 {
 	DirectionalLight gDirLight;
