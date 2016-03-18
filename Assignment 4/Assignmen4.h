@@ -31,7 +31,6 @@ private:
 
     POINT mLastMousePos;
 
-
     float mKeyTimer = 0.0f;
     MeshRenderer m_MeshRenderer;
     SpotLight m_SpotLight;

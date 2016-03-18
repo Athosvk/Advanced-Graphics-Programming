@@ -25,8 +25,7 @@ Assignmen4::Assignmen4(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, XMMatrixTranslationFromVector(XMVectorSet(0.0f, -150.0f, 1000.0f, 0.0f)) * 
-        XMMatrixScalingFromVector(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f)));
+	XMStoreFloat4x4(&mWorld, XMMatrixTranslationFromVector(XMVectorSet(0.0f, 0.0f, 10.0, 0.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
     mEnable4xMsaa = true;
@@ -51,7 +50,7 @@ bool Assignmen4::Init()
 	BuildFX();
 	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_MeshRenderer.MeshData = std::make_unique<Mesh>("Assets/Models/City.obj", md3dDevice);
+    m_MeshRenderer.MeshData = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
     Material material;
     material.Ambient = XMFLOAT4(0.4f, 0.77f, 0.46f, 1.0f);
     material.Diffuse = XMFLOAT4(0.48f, 0.77f, 1.f, 1.0f);
@@ -186,14 +185,12 @@ void Assignmen4::OnMouseMove(WPARAM btnState, int x, int y)
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
 		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(static_cast<float>(y - mLastMousePos.y));
+		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
 		// Update angles based on input to orbit camera around box.
-        m_Camera.LookAt(m_Camera.GetPositionXM(), 
-            m_Camera.GetLookXM() + XMVectorSet(static_cast<float>(dx), static_cast<float>(dy), 
-                0.0f, 1.0f),
-            XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+        m_Camera.RotateY(dx);
+        m_Camera.Pitch(dy);
 	}
 
 	mLastMousePos.x = x;
