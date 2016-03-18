@@ -158,7 +158,7 @@ float ComputeEffectiveIntensity(float a_Intensity)
     uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / (StepSize);
     return intensityStep * (float(StepSize) / MaxStepSize);
 #else
-    if(a_Intensity > 0.75)
+    if(a_Intensity > 0.8)
     {
         return 1.0f;
     }

@@ -4,7 +4,7 @@
 // Transforms and lights geometry.
 //=============================================================================
 
-#define VARIABLE_BANDING
+//#define VARIABLE_BANDING
 #include "ToonLightHelper.fx"
 cbuffer cbPerFrame
 {
@@ -41,7 +41,7 @@ VertexOut VS(VertexIn vin)
 {
 	VertexOut vout;
 	
-	// Transform to world space space.
+	// Transform to world space.
 	vout.PosW    = mul(float4(vin.PosL, 1.0f), gWorld).xyz;
 	vout.NormalW = mul(vin.NormalL, (float3x3)gWorldInvTranspose);
 		
@@ -49,6 +49,16 @@ VertexOut VS(VertexIn vin)
 	vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
 	
 	return vout;
+}
+
+VertexOut OutlineVS(VertexIn a_Input)
+{
+    VertexOut output = (VertexOut)0;
+    float3 normal = mul(a_Input.NormalL, (float3x3)gWorldInvTranspose);
+
+    output.PosH = mul(float4(a_Input.PosL + normal * 0.1f, 1.0f), gWorldViewProj);
+
+    return output;
 }
   
 float4 PS(VertexOut pin) : SV_Target
@@ -89,12 +99,33 @@ float4 PS(VertexOut pin) : SV_Target
     return litColor;
 }
 
+float4 OutlinePS(VertexOut a_Input) : SV_TARGET
+{
+    return float4(0.0f, 0.0f, 0.0f, 0.0f);
+}
+
+RasterizerState CullFront
+{
+    CullMode = FRONT;
+};
+
+RasterizerState CullBack
+{
+    CullMode = BACK;
+};
+
 technique11 LightTech
 {
     pass P0
     {
-        SetVertexShader( CompileShader( vs_5_0, VS() ) );
-		SetGeometryShader( NULL );
-        SetPixelShader( CompileShader( ps_5_0, PS() ) );
+        SetVertexShader(CompileShader(vs_5_0, OutlineVS()));
+        SetPixelShader(CompileShader(ps_5_0, OutlinePS()));
+        SetRasterizerState(CullFront);
+    }
+    pass P1
+    {
+        SetVertexShader(CompileShader(vs_5_0, VS()));
+        SetPixelShader(CompileShader(ps_5_0, PS()));
+        SetRasterizerState(CullBack);
     }
 }
