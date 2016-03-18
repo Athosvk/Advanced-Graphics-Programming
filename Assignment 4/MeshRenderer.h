@@ -1,11 +1,12 @@
 #pragma once
 #include <LightHelper.h>
+#include <memory>
 
 class Mesh;
 
 class MeshRenderer
 {
 public:
-    Mesh* MeshData;
+    std::unique_ptr<Mesh> MeshData;
     Material MeshMaterial;
 };

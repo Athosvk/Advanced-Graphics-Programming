@@ -123,5 +123,8 @@
     <FxCompile Include="FX\LightHelper.fx">
       <Filter>Effects</Filter>
     </FxCompile>
+    <FxCompile Include="FX\ToonLightHelper.fx">
+      <Filter>Effects</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
