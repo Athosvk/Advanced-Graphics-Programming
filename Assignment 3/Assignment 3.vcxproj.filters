@@ -112,5 +112,8 @@
     <CustomBuild Include="FX\color.fx">
       <Filter>Effects</Filter>
     </CustomBuild>
+    <CustomBuild Include="FX\Stenciled.fx">
+      <Filter>Effects</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>
