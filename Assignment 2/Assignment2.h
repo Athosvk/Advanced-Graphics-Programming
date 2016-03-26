@@ -1,6 +1,6 @@
 #include <memory>
 #include <Common/d3dApp.h>
-#include <Mesh.h>
+#include <Model.h>
 
 class Assignment2 : public D3DApp
 {
@@ -27,7 +27,7 @@ private:
     POINT mLastMousePos;
 
     float mKeyTimer = 0.0f;
-    std::unique_ptr<Mesh> m_Mesh = nullptr;
+    std::unique_ptr<Model> m_Mesh = nullptr;
 
 public:
     Assignment2(HINSTANCE hInstance);

@@ -3,27 +3,27 @@
 #include <assimp/postprocess.h>
 
 #include "d3dUtil.h"
-#include "Mesh.h"
+#include "Model.h"
 
-Mesh::Mesh(const std::string& a_Filepath, ID3D11Device* a_Device)
+Model::Model(const std::string& a_Filepath, ID3D11Device* a_Device)
 {
     loadMeshdata(a_Filepath);
     buildVertexBuffer(a_Device);
     buildIndexBuffer(a_Device);
 }
 
-Mesh::~Mesh()
+Model::~Model()
 {
     ReleaseCOM(m_VertexBuffer);
     ReleaseCOM(m_IndexBuffer);
 }
 
-void Mesh::draw(ID3D11DeviceContext* a_Context)
+void Model::draw(ID3D11DeviceContext* a_Context)
 {
     a_Context->DrawIndexed(m_Indices.size(), 0, 0);
 }
 
-void Mesh::bind(ID3D11DeviceContext* a_Context)
+void Model::bind(ID3D11DeviceContext* a_Context)
 {
     a_Context->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
     auto vertexStride = sizeof(Vertex);
@@ -31,22 +31,22 @@ void Mesh::bind(ID3D11DeviceContext* a_Context)
     a_Context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &vertexStride, &offset);
 }
 
-XMFLOAT2 Mesh::toXMFloat2(aiVector3D a_Vector)
+XMFLOAT2 Model::toXMFloat2(aiVector3D a_Vector)
 {
     return XMFLOAT2(a_Vector.x, a_Vector.y);
 }
 
-XMFLOAT3 Mesh::toXMFloat3(aiVector3D a_Vector)
+XMFLOAT3 Model::toXMFloat3(aiVector3D a_Vector)
 {
     return XMFLOAT3(a_Vector.x, a_Vector.y, a_Vector.z);
 }
 
-XMFLOAT4 Mesh::toXMFloat4(aiColor4D a_Color)
+XMFLOAT4 Model::toXMFloat4(aiColor4D a_Color)
 {
     return XMFLOAT4(a_Color.r, a_Color.g, a_Color.b, a_Color.a);
 }
 
-void Mesh::loadMeshdata(const std::string& a_Filepath)
+void Model::loadMeshdata(const std::string& a_Filepath)
 {
     Assimp::Importer importer;
     const auto scene = importer.ReadFile(a_Filepath, aiPostProcessSteps::aiProcess_CalcTangentSpace |
@@ -75,7 +75,7 @@ void Mesh::loadMeshdata(const std::string& a_Filepath)
     }
 }
 
-void Mesh::buildVertexBuffer(ID3D11Device* a_Device)
+void Model::buildVertexBuffer(ID3D11Device* a_Device)
 {
     D3D11_BUFFER_DESC vertexBufferDescription
     {
@@ -91,7 +91,7 @@ void Mesh::buildVertexBuffer(ID3D11Device* a_Device)
     HR(a_Device->CreateBuffer(&vertexBufferDescription, &vertexData, &m_VertexBuffer));
 }
 
-void Mesh::buildIndexBuffer(ID3D11Device* a_Device)
+void Model::buildIndexBuffer(ID3D11Device* a_Device)
 {
     D3D11_BUFFER_DESC indexBufferDescription =
     {

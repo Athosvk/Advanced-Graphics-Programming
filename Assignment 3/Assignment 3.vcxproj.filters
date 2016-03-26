@@ -57,7 +57,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Mesh.cpp">
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Model.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,10 +104,13 @@
     <ClInclude Include="BoxDemo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Mesh.h">
+    <ClInclude Include="..\Common\Vertex.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Vertex.h">
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Model.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

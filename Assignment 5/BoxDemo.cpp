@@ -51,7 +51,7 @@ bool BoxApp::Init()
 	BuildFX();
 	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
+    m_Mesh = std::make_unique<Model>("Assets/Models/Zombie.fbx", md3dDevice);
 	return true;
 }
 

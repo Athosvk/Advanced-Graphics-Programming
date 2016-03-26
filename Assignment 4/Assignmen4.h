@@ -2,7 +2,7 @@
 #include <d3dApp.h>
 #include <Camera.h>
 
-#include "Mesh.h"
+#include "Model.h"
 #include "MeshRenderer.h"
 
 class Assignmen4 : public D3DApp
