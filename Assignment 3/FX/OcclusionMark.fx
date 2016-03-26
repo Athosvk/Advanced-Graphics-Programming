@@ -47,6 +47,15 @@ BlendState AlphaBlend
     DestBlend = INV_SRC_ALPHA;
 };
 
+DepthStencilState MarkOcclusion
+{
+    StencilEnable = true;
+    FrontFaceStencilFail = KEEP;
+    FrontFaceStencilDepthFail = KEEP;
+    FrontFaceStencilPass = REPLACE;
+    FrontFaceStencilFunc = ALWAYS;
+};
+
 technique11 ColorTech
 {
     pass P0
@@ -54,5 +63,6 @@ technique11 ColorTech
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
         SetBlendState(AlphaBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetDepthStencilState(MarkOcclusion, 0x01);
     }
 }

@@ -109,11 +109,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\color.fx">
+    <FxCompile Include="FX\OcclusionMark.fx">
       <Filter>Effects</Filter>
-    </CustomBuild>
-    <CustomBuild Include="FX\Stenciled.fx">
+    </FxCompile>
+    <FxCompile Include="FX\Occluded.fx">
       <Filter>Effects</Filter>
-    </CustomBuild>
+    </FxCompile>
   </ItemGroup>
 </Project>

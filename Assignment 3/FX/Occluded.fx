@@ -47,18 +47,18 @@ BlendState AlphaBlend
     DestBlend = INV_SRC_ALPHA;
 };
 
-DepthStencilState Occlude
+BlendState NoBlend
 {
-    DepthEnable = true;
-    DepthWriteMask = WRITE_MASK_ALL;
-    DepthFunc = COMPARISON_LESS;
+    BlendEnable[0] = FALSE;
+};
+
+DepthStencilState TestMarkedArea
+{
     StencilEnable = true;
-    StencilReadMask = 0xff;
-    StencilWriteMask = 0xff;
-    FrontFaceStencilFail = OP_KEEP;
-    FrontFaceStencilDepthFailOp = OP_KEEP;
-    FrontFaceStencilPassOp = OP_KEEP;
-    FrontFaceStencilFunc = COMPARISION_EQUAL;
+    FrontFaceStencilFail = KEEP;
+    FrontFaceStencilDepthFail = KEEP;
+    FrontFaceStencilPass = KEEP;
+    FrontFaceStencilFunc = EQUAL;
 };
 
 technique11 ColorTech
@@ -68,5 +68,13 @@ technique11 ColorTech
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
         SetBlendState(AlphaBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetDepthStencilState(TestMarkedArea, 1);
+    }
+    pass P1
+    {
+        SetVertexShader(CompileShader(vs_5_0, VS()));
+        SetPixelShader(CompileShader(ps_5_0, PS()));
+        SetBlendState(NoBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetDepthStencilState(TestMarkedArea, 0);
     }
 }
