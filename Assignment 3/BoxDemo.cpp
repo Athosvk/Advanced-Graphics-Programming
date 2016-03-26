@@ -16,7 +16,7 @@
 const float BoxApp::KeyProcessInterval = 0.4f;
 
 BoxApp::BoxApp(HINSTANCE hInstance)
-: D3DApp(hInstance), mFX(0), mTech(0),
+: D3DApp(hInstance),
   mfxWorldViewProj(0), mInputLayout(0), 
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
 {
@@ -29,15 +29,13 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
-    mEnable4xMsaa = true;
 }
 
 BoxApp::~BoxApp()
 {
-	ReleaseCOM(mFX);
 	ReleaseCOM(mInputLayout);
-    ReleaseCOM(mWireframeState);
-    ReleaseCOM(mRegularState);
+    ReleaseCOM(m_OccludingShader);
+    ReleaseCOM(m_OccludedShader);
 }
 
 bool BoxApp::Init()
@@ -47,11 +45,11 @@ bool BoxApp::Init()
         return false;
     }
 
-    CreateRasterizerStates();
-	BuildFX();
+    m_OccludedShader = InitialiseShader(L"Occluded.fx");
+    m_OccludingShader = InitialiseShader(L"OcclusionMark.fx");
+    mfxWorldViewProj = m_OccludingShader->GetVariableByName("gWorldViewProj")->AsMatrix();
 	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
 	return true;
 }
 
@@ -78,13 +76,6 @@ void BoxApp::UpdateScene(float dt)
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
-
-    if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
-    {
-        mKeyTimer -= KeyProcessInterval;
-        mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
-        md3dImmediateContext->RSSetState(mCurrentState);
-    }
     mKeyTimer += dt;
 }
 
@@ -92,11 +83,8 @@ void BoxApp::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
-
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
-    m_Mesh->bind(md3dImmediateContext);
 
-	// Set constants
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
 	XMMATRIX view  = XMLoadFloat4x4(&mView);
 	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
@@ -104,15 +92,20 @@ void BoxApp::DrawScene()
 
 	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
 
+    ID3DX11EffectTechnique* technique = m_OccludingShader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;
-    mTech->GetDesc( &techDesc );
+    technique->GetDesc( &techDesc );
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
-        mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-        
-        m_Mesh->draw(md3dImmediateContext);
+        technique->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
     }
 
+    technique = m_OccludedShader->GetTechniqueByIndex(0);
+    technique->GetDesc(&techDesc);
+    for(UINT p = 0; p < techDesc.Passes; ++p)
+    {
+        technique->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
+    }
 	HR(mSwapChain->Present(0, 0));
 }
 
@@ -161,7 +154,7 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.y = y;
 }
 
-void BoxApp::BuildFX()
+ID3DX11Effect* BoxApp::InitialiseShader(const std::wstring& a_FilePath)
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -171,7 +164,8 @@ void BoxApp::BuildFX()
  
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
-	HRESULT hr = D3DX11CompileFromFile(L"FX/color.fx", 0, 0, 0, "fx_5_0", shaderFlags, 
+	HRESULT hr = D3DX11CompileFromFile(std::wstring(L"FX/" + a_FilePath).c_str(), 
+        0, 0, 0, "fx_5_0", shaderFlags, 
 		0, 0, &compiledShader, &compilationMsgs, 0);
 
 	// compilationMsgs can store errors or warnings.
@@ -186,15 +180,13 @@ void BoxApp::BuildFX()
 	{
 		DXTrace(__FILE__, (DWORD)__LINE__, hr, L"D3DX11CompileFromFile", true);
 	}
-
+    ID3DX11Effect* shader;
 	HR(D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 
-		0, md3dDevice, &mFX));
+		0, md3dDevice, &shader));
 
 	// Done with compiled shader.
 	ReleaseCOM(compiledShader);
-
-	mTech = mFX->GetTechniqueByName("ColorTech");
-	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+    return shader;
 }
 
 void BoxApp::BuildVertexLayout()
@@ -209,22 +201,7 @@ void BoxApp::BuildVertexLayout()
 
 	// Create the input layout
     D3DX11_PASS_DESC passDesc;
-    mTech->GetPassByIndex(0)->GetDesc(&passDesc);
+    m_OccludingShader->GetTechniqueByIndex(0)->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
-}
-
-void BoxApp::CreateRasterizerStates()
-{
-    D3D11_RASTERIZER_DESC rasterizerDescription;
-    ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
-    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-    rasterizerDescription.FrontCounterClockwise = false;
-    rasterizerDescription.DepthClipEnable = true;
-    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));
-
-    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
-    mCurrentState = mRegularState;
 }

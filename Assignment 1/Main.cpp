@@ -1,5 +1,4 @@
 #include <d3dapp.h>
-#include <AGPEngine/Game.h>
 
 #include "Assignment1.h"
 
@@ -19,7 +18,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     }
     theApp.Run();
 
-    //AGPEngine::Game game(600, 400, L"Aaaaa", hInstance);
-    //game.run();
     return 0;
 }

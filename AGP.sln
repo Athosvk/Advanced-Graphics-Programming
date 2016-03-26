@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment 1", "Assignment 1\Assignment 1.vcxproj", "{6A4FAD7E-8378-4E45-97A1-BAD51DD097BA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{30DFFDE1-1E71-493A-9624-A22548DF5288} = {30DFFDE1-1E71-493A-9624-A22548DF5288}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AGPEngine", "AGPEngine\AGPEngine.vcxproj", "{30DFFDE1-1E71-493A-9624-A22548DF5288}"
 EndProject

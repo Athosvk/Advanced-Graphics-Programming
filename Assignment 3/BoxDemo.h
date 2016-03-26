@@ -1,20 +1,15 @@
 #include <memory>
 
-#include "Mesh.h"
-
 class BoxApp : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
 
-    ID3DX11Effect* mFX;
-    ID3DX11EffectTechnique* mTech;
+    ID3DX11Effect* m_OccludingShader = nullptr;
+    ID3DX11Effect* m_OccludedShader = nullptr;
     ID3DX11EffectMatrixVariable* mfxWorldViewProj;
 
     ID3D11InputLayout* mInputLayout;
-    ID3D11RasterizerState* mWireframeState;
-    ID3D11RasterizerState* mRegularState;
-    ID3D11RasterizerState* mCurrentState;
 
     XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;
@@ -27,7 +22,6 @@ private:
     POINT mLastMousePos;
 
     float mKeyTimer = 0.0f;
-    std::unique_ptr<Mesh> m_Mesh = nullptr;
 
 public:
     BoxApp(HINSTANCE hInstance);
@@ -43,7 +37,6 @@ public:
     void OnMouseMove(WPARAM btnState, int x, int y);
 
 private:
-    void BuildFX();
+    ID3DX11Effect* InitialiseShader(const std::wstring& a_FilePath);
     void BuildVertexLayout();
-    void CreateRasterizerStates();
 };
