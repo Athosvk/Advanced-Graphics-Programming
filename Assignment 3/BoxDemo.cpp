@@ -17,7 +17,7 @@ const float BoxApp::KeyProcessInterval = 0.4f;
 
 BoxApp::BoxApp(HINSTANCE hInstance)
 : D3DApp(hInstance),
-  mfxWorldViewProj(0), mInputLayout(0), 
+  mInputLayout(0),
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
 {
 	mMainWndCaption = L"Box Demo";
@@ -26,7 +26,7 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
+	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 }
@@ -34,8 +34,6 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 BoxApp::~BoxApp()
 {
 	ReleaseCOM(mInputLayout);
-    ReleaseCOM(m_OccludingShader);
-    ReleaseCOM(m_OccludedShader);
 }
 
 bool BoxApp::Init()
@@ -45,11 +43,18 @@ bool BoxApp::Init()
         return false;
     }
 
-    m_OccludedShader = InitialiseShader(L"Occluded.fx");
-    m_OccludingShader = InitialiseShader(L"OcclusionMark.fx");
-    mfxWorldViewProj = m_OccludingShader->GetVariableByName("gWorldViewProj")->AsMatrix();
-	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_BlueTriangle.initialiseBuffers(md3dDevice);
+    m_RedTriangle.initialiseBuffers(md3dDevice);
+    m_OccludingTriangle.initialiseBuffers(md3dDevice);
+
+    auto occludedShader = InitialiseShader(L"Occluded.fx");
+    m_BlueTriangle.setShader(occludedShader);
+    m_RedTriangle.setShader(occludedShader);
+
+    m_OccludingTriangle.setShader(InitialiseShader(L"OcclusionMark.fx"));
+    BuildVertexLayout(occludedShader);
+    md3dImmediateContext->IASetInputLayout(mInputLayout);
 	return true;
 }
 
@@ -83,29 +88,15 @@ void BoxApp::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
-	md3dImmediateContext->IASetInputLayout(mInputLayout);
 
 	XMMATRIX world = XMLoadFloat4x4(&mWorld);
 	XMMATRIX view  = XMLoadFloat4x4(&mView);
 	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
 	XMMATRIX worldViewProj = world*view*proj;
 
-	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
-
-    ID3DX11EffectTechnique* technique = m_OccludingShader->GetTechniqueByIndex(0);
-    D3DX11_TECHNIQUE_DESC techDesc;
-    technique->GetDesc( &techDesc );
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        technique->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-    }
-
-    technique = m_OccludedShader->GetTechniqueByIndex(0);
-    technique->GetDesc(&techDesc);
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        technique->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-    }
+    m_RedTriangle.draw(md3dImmediateContext, worldViewProj);
+    m_BlueTriangle.draw(md3dImmediateContext, worldViewProj);
+    m_OccludingTriangle.draw(md3dImmediateContext, worldViewProj);
 	HR(mSwapChain->Present(0, 0));
 }
 
@@ -189,7 +180,7 @@ ID3DX11Effect* BoxApp::InitialiseShader(const std::wstring& a_FilePath)
     return shader;
 }
 
-void BoxApp::BuildVertexLayout()
+void BoxApp::BuildVertexLayout(ID3DX11Effect* a_ReferenceShader)
 {
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -201,7 +192,7 @@ void BoxApp::BuildVertexLayout()
 
 	// Create the input layout
     D3DX11_PASS_DESC passDesc;
-    m_OccludingShader->GetTechniqueByIndex(0)->GetPassByIndex(0)->GetDesc(&passDesc);
+    a_ReferenceShader->GetTechniqueByIndex(0)->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
 }

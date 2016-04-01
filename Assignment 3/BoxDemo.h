@@ -1,13 +1,9 @@
-#include <memory>
+#include "Triangle.h"
 
 class BoxApp : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
-
-    ID3DX11Effect* m_OccludingShader = nullptr;
-    ID3DX11Effect* m_OccludedShader = nullptr;
-    ID3DX11EffectMatrixVariable* mfxWorldViewProj;
 
     ID3D11InputLayout* mInputLayout;
 
@@ -22,6 +18,9 @@ private:
     POINT mLastMousePos;
 
     float mKeyTimer = 0.0f;
+    Triangle m_RedTriangle = Triangle(1.0f, Colors::Red);
+    Triangle m_BlueTriangle = Triangle(1.0f, Colors::Blue);
+    Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.1f));
 
 public:
     BoxApp(HINSTANCE hInstance);
@@ -38,5 +37,5 @@ public:
 
 private:
     ID3DX11Effect* InitialiseShader(const std::wstring& a_FilePath);
-    void BuildVertexLayout();
+    void BuildVertexLayout(ID3DX11Effect* a_ReferenceShader);
 };
