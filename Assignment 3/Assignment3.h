@@ -16,8 +16,8 @@ private:
 
     POINT mLastMousePos;
 
-    Triangle m_RedTriangle = Triangle(1.0f, Colors::Red);
-    Triangle m_BlueTriangle = Triangle(1.0f, Colors::Blue);
+    Triangle m_RedTriangle = Triangle(1.0f, XMVectorSet(1.0f, 0.0f, 0.0f, 0.5f));
+    Triangle m_BlueTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 1.0f, 0.5f));
     Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.1f));
 
 public:
