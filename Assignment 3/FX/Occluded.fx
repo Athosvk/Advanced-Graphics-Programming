@@ -54,10 +54,13 @@ BlendState NoBlend
 DepthStencilState TestMarkedArea
 {
     StencilEnable = true;
+    DepthEnable = false;
     FrontFaceStencilFail = KEEP;
-    FrontFaceStencilDepthFail = KEEP;
     FrontFaceStencilPass = KEEP;
     FrontFaceStencilFunc = EQUAL;
+    BackFaceStencilFail = KEEP;
+    BackFaceStencilPass = KEEP;
+    BackFaceStencilFunc = EQUAL;
 };
 
 RasterizerState NoCull

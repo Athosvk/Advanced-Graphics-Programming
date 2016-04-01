@@ -42,7 +42,7 @@ float4 PS(VertexOut a_Input) : SV_Target
 BlendState AlphaBlend
 {
     AlphaToCoverageEnable = FALSE;
-    BlendEnable[0] = FALSE;
+    BlendEnable[0] = TRUE;
     SrcBlend = SRC_ALPHA;
     DestBlend = INV_SRC_ALPHA;
 };
@@ -50,10 +50,15 @@ BlendState AlphaBlend
 DepthStencilState MarkOcclusion
 {
     StencilEnable = true;
+    DepthEnable = false;
     FrontFaceStencilFail = KEEP;
     FrontFaceStencilDepthFail = KEEP;
     FrontFaceStencilPass = REPLACE;
     FrontFaceStencilFunc = ALWAYS;
+    BackFaceStencilFail = KEEP;
+    BackFaceStencilDepthFail = KEEP;
+    BackFaceStencilPass = REPLACE;
+    BackFaceStencilFunc = ALWAYS;
 };
 
 RasterizerState NoCull
