@@ -36,7 +36,7 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4(a_Input.Color.xyz, 0.7f);
+    return float4(a_Input.Color);
 }
 
 BlendState AlphaBlend
@@ -68,13 +68,13 @@ technique11 ColorTech
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
         SetBlendState(AlphaBlend, float4(1, 1, 1, 1), 0xffffffff);
-        SetDepthStencilState(TestMarkedArea, 1);
-    }
-    pass P1
-    {
-        SetVertexShader(CompileShader(vs_5_0, VS()));
-        SetPixelShader(CompileShader(ps_5_0, PS()));
-        SetBlendState(NoBlend, float4(1, 1, 1, 1), 0xffffffff);
         SetDepthStencilState(TestMarkedArea, 0);
     }
+    //pass P1
+    //{
+    //    SetVertexShader(CompileShader(vs_5_0, VS()));
+    //    SetPixelShader(CompileShader(ps_5_0, PS()));
+    //    SetBlendState(NoBlend, float4(1, 1, 1, 1), 0xffffffff);
+    //    SetDepthStencilState(TestMarkedArea, 0);
+    //}
 }

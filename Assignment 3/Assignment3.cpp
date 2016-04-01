@@ -28,6 +28,8 @@ Assignment3::Assignment3(HINSTANCE hInstance)
 	XMStoreFloat4x4(&mProj, I);
     auto position = XMVectorSet(-0.5f, 0.0f, 0.01f, 0.0f);
     m_BlueTriangle.setPosition(position);
+    position = XMVectorSet(-0.3f, 0.0f, -0.01f, 0.0f);
+    m_OccludingTriangle.setPosition(position);
 }
 
 Assignment3::~Assignment3()
@@ -91,9 +93,9 @@ void Assignment3::DrawScene()
 	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
 	XMMATRIX viewProj = view*proj;
 
+    m_OccludingTriangle.draw(md3dImmediateContext, viewProj);
     m_RedTriangle.draw(md3dImmediateContext, viewProj);
     m_BlueTriangle.draw(md3dImmediateContext, viewProj);
-    m_OccludingTriangle.draw(md3dImmediateContext, viewProj);
 	HR(mSwapChain->Present(0, 0));
 }
 

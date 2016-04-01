@@ -36,7 +36,7 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4(a_Input.Color.xyz, 0.7f);
+    return float4(a_Input.Color);
 }
 
 BlendState AlphaBlend
