@@ -51,7 +51,7 @@ BlendState AdditiveBlend
     AlphaToCoverageEnable = FALSE;
     BlendEnable[0] = TRUE;
     SrcBlend = ONE;
-    DestBlend = ONE;
+    DestBlend = SRC_ALPHA;
 };
 
 BlendState NoBlend
