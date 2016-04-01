@@ -6,6 +6,7 @@ Triangle::Triangle(float a_Size, XMVECTOR a_Color)
 {
     XMStoreFloat4(&m_Color, a_Color);
     XMStoreFloat4x4(&m_Transform, XMMatrixScaling(15.0f, 15.0f, 15.0f));
+    setPosition(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 Triangle::~Triangle()
@@ -32,10 +33,11 @@ void Triangle::setPosition(CXMVECTOR a_Position)
     XMStoreFloat4x4(&m_Transform, transform);
 }
 
-void Triangle::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_MVP)
+void Triangle::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
     bind(a_Context);
-    m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&static_cast<XMMATRIX>(a_MVP)));
+    XMMATRIX modelViewProjection = XMLoadFloat4x4(&m_Transform) * a_ViewProjection;
+    m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&modelViewProjection));
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;
@@ -51,9 +53,9 @@ void Triangle::initialiseBuffers(ID3D11Device* a_Device)
 {
     std::array<Vertex, 3> vertices = 
     { 
-        Vertex(XMFLOAT3(1.0f, 0.5f, 0.0f), m_Color),
-        Vertex(XMFLOAT3(0.0f, 0.0f, 0.0f), m_Color),
-        Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), m_Color)
+        Vertex(XMFLOAT3(-0.5f, 0.0f, 0.0f), m_Color),
+        Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), m_Color),
+        Vertex(XMFLOAT3(0.5f, 0.0f, 0.0f), m_Color)
     };
 
     D3D11_BUFFER_DESC vertexBufferDescription
