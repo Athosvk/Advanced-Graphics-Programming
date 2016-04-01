@@ -76,7 +76,8 @@ float ComputeEffectiveIntensity(float a_Intensity)
         return 0.35f;
     }
     return 0.05f;
-}#endif
+}
+#endif
 
 //---------------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation

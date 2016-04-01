@@ -78,11 +78,6 @@ float4 PS(VertexOut pin, uniform int gLightCount) : SV_Target
 	// Normalize.
 	toEye /= distToEye;
 	
-	//
-	// Lighting.
-	//
-
-
 	// Start with a sum of zero. 
 	float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -109,41 +104,11 @@ float4 PS(VertexOut pin, uniform int gLightCount) : SV_Target
     return litColor;
 }
 
-VertexOut VertexOutline(VertexIn a_Input)
-{
-    VertexOut output = (VertexOut)0;
-
-    float4 transformedPosition = mul(float4(a_Input.PosL, 1.0f), gWorldViewProj);
-    float4 transformedNormal = mul(float4((a_Input.NormalL), 1.0f), gWorldViewProj);
-
-    output.PosH = transformedPosition + 1.2f * saturate(transformedNormal);
-    
-    return output;
-}
-
-float4 PixelOutline(VertexOut a_Input) : SV_Target
-{
-    return float4(1.0f, 0.0f, 0.0f, 1.0f);
-}
-
-RasterizerState CullFront
-{
-    CullMode = Front;
-    FillMode = WireFrame;
-};
-
-RasterizerState CullBack
-{
-    CullMode = Back;
-};
-
 technique11 Light1
 {
     pass P0
     {
-        SetRasterizerState(CullBack);
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
-		SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_5_0, PS(1) ) );
     }
 }
@@ -152,10 +117,8 @@ technique11 Light2
 {
     pass P0
     {
-        SetRasterizerState(CullBack);
-        SetVertexShader( CompileShader( vs_5_0, VS() ) );
-		SetGeometryShader( NULL );
-        SetPixelShader( CompileShader( ps_5_0, PS(2) ) );
+        SetVertexShader(CompileShader(vs_5_0, VS()));
+        SetPixelShader(CompileShader(ps_5_0, PS(2)));
     }
 }
 
@@ -163,9 +126,7 @@ technique11 Light3
 {
     pass P0
     {
-        SetRasterizerState(CullBack);
-        SetVertexShader( CompileShader( vs_5_0, VS() ) );
-		SetGeometryShader( NULL );
-        SetPixelShader( CompileShader( ps_5_0, PS(3) ) );
+        SetVertexShader(CompileShader(vs_5_0, VS()));
+        SetPixelShader(CompileShader(ps_5_0, PS(3)));
     }
 }
