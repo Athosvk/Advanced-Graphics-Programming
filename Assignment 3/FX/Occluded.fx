@@ -54,6 +54,22 @@ BlendState AdditiveBlend
     DestBlend = SRC_ALPHA;
 };
 
+BlendState MultiplicativeBlend
+{
+    AlphaToCoverageENable = FALSE;
+    BlendEnable[0] = TRUE;
+    DestBlend = SRC_COLOR;
+    SrcBlend = ZERO;
+};
+
+BlendState DoubleMultiplicativeBlend
+{
+    AlphaToCoverageENable = FALSE;
+    BlendEnable[0] = TRUE;
+    DestBlend = SRC_COLOR;
+    SrcBlend = DEST_COLOR;
+};
+
 BlendState NoBlend
 {
     BlendEnable[0] = FALSE;
@@ -82,7 +98,7 @@ technique11 ColorTech
     {
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
-        SetBlendState(AdditiveBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetBlendState(MultiplicativeBlend, float4(1, 1, 1, 1), 0xffffffff);
         SetDepthStencilState(TestMarkedArea, 1);
         SetRasterizerState(NoCull);
     }

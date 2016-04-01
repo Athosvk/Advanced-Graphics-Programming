@@ -26,9 +26,9 @@ Assignment3::Assignment3(HINSTANCE hInstance)
 	XMMATRIX I = XMMatrixIdentity();
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
-    auto position = XMVectorSet(-0.5f, 0.0f, 0.01f, 0.0f);
+    auto position = XMVectorSet(-0.5f, 0.1f, 0.0f, 0.0f);
     m_BlueTriangle.setPosition(position);
-    position = XMVectorSet(-0.3f, 0.0f, 0.02f, 0.0f);
+    position = XMVectorSet(-0.3f, 0.0f, 0.0f, 0.0f);
     m_OccludingTriangle.setPosition(position);
 }
 
