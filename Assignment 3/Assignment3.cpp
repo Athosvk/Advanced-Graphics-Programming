@@ -11,11 +11,11 @@
 #include "d3dApp.h"
 #include "d3dx11Effect.h"
 #include "MathHelper.h"
-#include "BoxDemo.h"
+#include "Assignment3.h"
 
-const float BoxApp::KeyProcessInterval = 0.4f;
+const float Assignment3::KeyProcessInterval = 0.4f;
 
-BoxApp::BoxApp(HINSTANCE hInstance)
+Assignment3::Assignment3(HINSTANCE hInstance)
 : D3DApp(hInstance),
   mInputLayout(0),
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
@@ -30,12 +30,12 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	XMStoreFloat4x4(&mProj, I);
 }
 
-BoxApp::~BoxApp()
+Assignment3::~Assignment3()
 {
 	ReleaseCOM(mInputLayout);
 }
 
-bool BoxApp::Init()
+bool Assignment3::Init()
 {
     if(!D3DApp::Init())
     {
@@ -57,7 +57,7 @@ bool BoxApp::Init()
 	return true;
 }
 
-void BoxApp::OnResize()
+void Assignment3::OnResize()
 {
 	D3DApp::OnResize();
 
@@ -66,7 +66,7 @@ void BoxApp::OnResize()
 	XMStoreFloat4x4(&mProj, P);
 }
 
-void BoxApp::UpdateScene(float dt)
+void Assignment3::UpdateScene(float dt)
 {
 	// Convert Spherical to Cartesian coordinates.
 	float x = mRadius*sinf(mPhi)*cosf(mTheta);
@@ -83,7 +83,7 @@ void BoxApp::UpdateScene(float dt)
     mKeyTimer += dt;
 }
 
-void BoxApp::DrawScene()
+void Assignment3::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -98,7 +98,7 @@ void BoxApp::DrawScene()
 	HR(mSwapChain->Present(0, 0));
 }
 
-void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
@@ -106,12 +106,12 @@ void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
 	SetCapture(mhMainWnd);
 }
 
-void BoxApp::OnMouseUp(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	ReleaseCapture();
 }
 
-void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
@@ -143,7 +143,7 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.y = y;
 }
 
-ID3DX11Effect* BoxApp::InitialiseShader(const std::wstring& a_FilePath)
+ID3DX11Effect* Assignment3::InitialiseShader(const std::wstring& a_FilePath)
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -178,7 +178,7 @@ ID3DX11Effect* BoxApp::InitialiseShader(const std::wstring& a_FilePath)
     return shader;
 }
 
-void BoxApp::BuildVertexLayout(ID3DX11Effect* a_ReferenceShader)
+void Assignment3::BuildVertexLayout(ID3DX11Effect* a_ReferenceShader)
 {
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =

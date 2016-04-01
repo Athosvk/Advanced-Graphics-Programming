@@ -1,6 +1,8 @@
+#include <Common/d3dApp.h>
+
 #include "Triangle.h"
 
-class BoxApp : public D3DApp
+class Assignment3 : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
@@ -22,8 +24,8 @@ private:
     Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.1f));
 
 public:
-    BoxApp(HINSTANCE hInstance);
-    ~BoxApp();
+    Assignment3(HINSTANCE hInstance);
+    ~Assignment3();
 
     bool Init();
     void OnResize();

@@ -170,7 +170,7 @@
     <ClCompile Include="..\Common\TextureMgr.cpp" />
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
-    <ClCompile Include="BoxDemo.cpp" />
+    <ClCompile Include="Assignment3.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
@@ -189,7 +189,7 @@
     <ClInclude Include="..\Common\Vertex.h" />
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
-    <ClInclude Include="BoxDemo.h" />
+    <ClInclude Include="Assignment3.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>
