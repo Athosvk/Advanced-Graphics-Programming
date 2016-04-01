@@ -26,7 +26,6 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
 }
@@ -89,14 +88,13 @@ void BoxApp::DrawScene()
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	XMMATRIX world = XMLoadFloat4x4(&mWorld);
 	XMMATRIX view  = XMLoadFloat4x4(&mView);
 	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX worldViewProj = world*view*proj;
+	XMMATRIX viewProj = view*proj;
 
-    m_RedTriangle.draw(md3dImmediateContext, worldViewProj);
-    m_BlueTriangle.draw(md3dImmediateContext, worldViewProj);
-    m_OccludingTriangle.draw(md3dImmediateContext, worldViewProj);
+    m_RedTriangle.draw(md3dImmediateContext, viewProj);
+    m_BlueTriangle.draw(md3dImmediateContext, viewProj);
+    m_OccludingTriangle.draw(md3dImmediateContext, viewProj);
 	HR(mSwapChain->Present(0, 0));
 }
 
