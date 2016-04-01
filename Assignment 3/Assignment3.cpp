@@ -86,7 +86,9 @@ void Assignment3::UpdateScene(float dt)
 
 void Assignment3::DrawScene()
 {
-	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
+    auto backgroundColor = XMVectorSet(0.0f, 0.6f, 0.0f, 1.0f);
+	md3dImmediateContext->
+        ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&backgroundColor));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	XMMATRIX view  = XMLoadFloat4x4(&mView);
