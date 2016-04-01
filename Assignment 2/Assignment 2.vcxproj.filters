@@ -57,7 +57,7 @@
     <ClCompile Include="Assignment2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Mesh.cpp">
+    <ClCompile Include="..\Common\Model.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,7 +104,7 @@
     <ClInclude Include="..\Common\Vertex.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Mesh.h">
+    <ClInclude Include="..\Common\Model.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

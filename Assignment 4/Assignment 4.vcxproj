@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;assimp.lib;d3dx11d.lib;D3DCompiler.lib;Effects11d.lib;dxerr.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;AGPEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;assimp.lib;d3dx11d.lib;D3DCompiler.lib;Effects11d.lib;dxerr.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>WinMainCRTStartup </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -164,7 +164,7 @@
     <ClCompile Include="..\Common\GeometryGenerator.cpp" />
     <ClCompile Include="..\Common\LightHelper.cpp" />
     <ClCompile Include="..\Common\MathHelper.cpp" />
-    <ClCompile Include="..\Common\Mesh.cpp" />
+    <ClCompile Include="..\Common\Model.cpp" />
     <ClCompile Include="..\Common\TextureMgr.cpp" />
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
@@ -181,7 +181,7 @@
     <ClInclude Include="..\Common\GeometryGenerator.h" />
     <ClInclude Include="..\Common\LightHelper.h" />
     <ClInclude Include="..\Common\MathHelper.h" />
-    <ClInclude Include="..\Common\Mesh.h" />
+    <ClInclude Include="..\Common\Model.h" />
     <ClInclude Include="..\Common\TextureMgr.h" />
     <ClInclude Include="..\Common\Vertex.h" />
     <ClInclude Include="..\Common\Waves.h" />

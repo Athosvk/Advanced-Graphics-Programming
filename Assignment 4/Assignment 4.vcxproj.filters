@@ -54,11 +54,11 @@
     <ClCompile Include="Assignmen4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Mesh.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Model.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,14 +101,14 @@
     <ClInclude Include="Assignmen4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Mesh.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\Common\Vertex.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Model.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
