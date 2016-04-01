@@ -141,12 +141,6 @@ technique11 Light1
 {
     pass P0
     {
-        SetRasterizerState(CullFront);
-        SetVertexShader(CompileShader(vs_5_0, VertexOutline()));
-        SetPixelShader(CompileShader(ps_5_0, PixelOutline()));
-    }
-    pass P1
-    {
         SetRasterizerState(CullBack);
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
 		SetGeometryShader( NULL );
@@ -158,12 +152,6 @@ technique11 Light2
 {
     pass P0
     {
-        SetRasterizerState(CullFront);
-        SetVertexShader(CompileShader(vs_5_0, VertexOutline()));
-        SetPixelShader(CompileShader(ps_5_0, PixelOutline()));
-    }
-    pass P1
-    {
         SetRasterizerState(CullBack);
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
 		SetGeometryShader( NULL );
@@ -174,12 +162,6 @@ technique11 Light2
 technique11 Light3
 {
     pass P0
-    {
-        SetRasterizerState(CullFront);
-        SetVertexShader(CompileShader(vs_5_0, VertexOutline()));
-        SetPixelShader(CompileShader(ps_5_0, PixelOutline()));
-    }
-    pass P1
     {
         SetRasterizerState(CullBack);
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
