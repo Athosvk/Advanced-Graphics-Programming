@@ -267,24 +267,24 @@ fxgroup
                 mov r0.xyz, r0.xyzx
                 mov r1.xyz, r1.xyzx
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx  // r0.w <- diffuseFactor
                 nop 
                 mov r0.w, r0.w
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -292,12 +292,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -313,9 +313,9 @@ fxgroup
                 nop 
                 mov r0.x, r0.x
                 
-                #line 153
+                #line 55
                 mov r0.y, l(256)  // r0.y <- MaxStepSize
-                mov r0.z, l(32)  // r0.z <- StepSize
+                mov r0.z, l(64)  // r0.z <- StepSize
                 mov r1.x, l(0.010000)  // r1.x <- Bias
                 itof r0.y, r0.y
                 mul r0.x, r0.y, r0.x
@@ -323,9 +323,9 @@ fxgroup
                 ftou r0.x, r0.x
                 udiv r0.x, null, r0.x, r0.z  // r0.x <- intensityStep
                 utof r0.x, r0.x
-                mul r0.x, r0.x, l(0.125000)  // r0.x <- <ComputeEffectiveIntensity return value>
+                mul r0.x, r0.x, l(0.250000)  // r0.x <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r0.x, r0.x  // r0.x <- specFactor
                 mul r0.yzw, r6.xxyz, r0.wwww
                 mul r0.yzw, r9.xxyz, r0.yyzw  // r0.y <- diffuse.x; r0.z <- diffuse.y; r0.w <- diffuse.z
@@ -577,24 +577,24 @@ fxgroup
                 mov r0.xyz, r0.xyzx
                 mov r1.xyz, r1.xyzx
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx  // r0.w <- diffuseFactor
                 nop 
                 mov r0.w, r0.w
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -602,12 +602,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -623,9 +623,9 @@ fxgroup
                 nop 
                 mov r2.w, r2.w  // r2.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r3.w, l(256)  // r3.w <- MaxStepSize; r3.w <- MaxStepSize
-                mov r4.w, l(32)  // r4.w <- StepSize; r4.w <- StepSize
+                mov r4.w, l(64)  // r4.w <- StepSize; r4.w <- StepSize
                 mov r5.w, l(0.010000)  // r5.w <- Bias; r5.w <- Bias
                 itof r3.w, r3.w
                 mul r2.w, r2.w, r3.w
@@ -633,9 +633,9 @@ fxgroup
                 ftou r2.w, r2.w
                 udiv r2.w, null, r2.w, r4.w  // r2.w <- intensityStep; r2.w <- intensityStep
                 utof r2.w, r2.w
-                mul r2.w, r2.w, l(0.125000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
+                mul r2.w, r2.w, l(0.250000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r2.w, r2.w  // r2.w <- specFactor
                 mul r6.xyz, r6.xyzx, r0.wwww
                 mul r6.xyz, r9.xyzx, r6.xyzx  // r6.x <- diffuse.x; r6.y <- diffuse.y; r6.z <- diffuse.z
@@ -664,24 +664,24 @@ fxgroup
                 mov r10.xyz, cb0[6].xyzx
                 mov r11.xyz, cb0[7].xyzx  // r11.x <- L.Direction.x; r11.y <- L.Direction.y; r11.z <- L.Direction.z
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx
                 nop 
                 mov r0.w, r0.w  // r0.w <- a_Intensity; r0.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize; r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize; r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize; r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias; r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -689,12 +689,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep; r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -710,9 +710,9 @@ fxgroup
                 nop 
                 mov r0.x, r0.x  // r0.x <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r0.y, l(256)  // r0.y <- MaxStepSize
-                mov r0.z, l(32)  // r0.z <- StepSize
+                mov r0.z, l(64)  // r0.z <- StepSize
                 mov r1.x, l(0.010000)  // r1.x <- Bias
                 itof r0.y, r0.y
                 mul r0.x, r0.y, r0.x
@@ -720,9 +720,9 @@ fxgroup
                 ftou r0.x, r0.x
                 udiv r0.x, null, r0.x, r0.z  // r0.x <- intensityStep
                 utof r0.x, r0.x
-                mul r0.x, r0.x, l(0.125000)  // r0.x <- <ComputeEffectiveIntensity return value>
+                mul r0.x, r0.x, l(0.250000)  // r0.x <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r0.x, r0.x  // r0.x <- specFactor
                 mul r0.yzw, r6.xxyz, r0.wwww
                 mul r0.yzw, r9.xxyz, r0.yyzw  // r0.y <- diffuse.x; r0.z <- diffuse.y; r0.w <- diffuse.z
@@ -974,24 +974,24 @@ fxgroup
                 mov r0.xyz, r0.xyzx
                 mov r1.xyz, r1.xyzx
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx  // r0.w <- diffuseFactor
                 nop 
                 mov r0.w, r0.w
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -999,12 +999,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -1020,9 +1020,9 @@ fxgroup
                 nop 
                 mov r2.w, r2.w  // r2.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r3.w, l(256)  // r3.w <- MaxStepSize; r3.w <- MaxStepSize
-                mov r4.w, l(32)  // r4.w <- StepSize; r4.w <- StepSize
+                mov r4.w, l(64)  // r4.w <- StepSize; r4.w <- StepSize
                 mov r5.w, l(0.010000)  // r5.w <- Bias; r5.w <- Bias
                 itof r3.w, r3.w
                 mul r2.w, r2.w, r3.w
@@ -1030,9 +1030,9 @@ fxgroup
                 ftou r2.w, r2.w
                 udiv r2.w, null, r2.w, r4.w  // r2.w <- intensityStep; r2.w <- intensityStep
                 utof r2.w, r2.w
-                mul r2.w, r2.w, l(0.125000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
+                mul r2.w, r2.w, l(0.250000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r2.w, r2.w  // r2.w <- specFactor
                 mul r6.xyz, r6.xyzx, r0.wwww
                 mul r6.xyz, r9.xyzx, r6.xyzx  // r6.x <- diffuse.x; r6.y <- diffuse.y; r6.z <- diffuse.z
@@ -1061,24 +1061,24 @@ fxgroup
                 mov r10.xyz, cb0[6].xyzx
                 mov r11.xyz, cb0[7].xyzx  // r11.x <- L.Direction.x; r11.y <- L.Direction.y; r11.z <- L.Direction.z
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx
                 nop 
                 mov r0.w, r0.w  // r0.w <- a_Intensity; r0.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize; r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize; r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize; r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias; r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -1086,12 +1086,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep; r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -1107,9 +1107,9 @@ fxgroup
                 nop 
                 mov r2.w, r2.w  // r2.w <- a_Intensity; r2.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r3.w, l(256)  // r3.w <- MaxStepSize; r3.w <- MaxStepSize
-                mov r4.w, l(32)  // r4.w <- StepSize; r4.w <- StepSize
+                mov r4.w, l(64)  // r4.w <- StepSize; r4.w <- StepSize
                 mov r5.w, l(0.010000)  // r5.w <- Bias; r5.w <- Bias
                 itof r3.w, r3.w
                 mul r2.w, r2.w, r3.w
@@ -1117,9 +1117,9 @@ fxgroup
                 ftou r2.w, r2.w
                 udiv r2.w, null, r2.w, r4.w  // r2.w <- intensityStep; r2.w <- intensityStep
                 utof r2.w, r2.w
-                mul r2.w, r2.w, l(0.125000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
+                mul r2.w, r2.w, l(0.250000)  // r2.w <- <ComputeEffectiveIntensity return value>; r2.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r2.w, r2.w  // r2.w <- specFactor
                 mul r6.xyz, r6.xyzx, r0.wwww
                 mul r6.xyz, r9.xyzx, r6.xyzx  // r6.x <- diffuse.x; r6.y <- diffuse.y; r6.z <- diffuse.z
@@ -1148,24 +1148,24 @@ fxgroup
                 mov r10.xyz, cb0[10].xyzx
                 mov r11.xyz, cb0[11].xyzx  // r11.x <- L.Direction.x; r11.y <- L.Direction.y; r11.z <- L.Direction.z
                 
-                #line 68 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
+                #line 75 "C:\Users\Athos\Documents\Visual Studio 2015\Projects\agp\LitSkull\FX\LightHelper.fx"
                 mov r12.xyz, l(0,0,0,0)  // r12.x <- diffuse.x; r12.y <- diffuse.y; r12.z <- diffuse.z
                 mov r13.xyz, l(0,0,0,0)  // r13.x <- spec.x; r13.y <- spec.y; r13.z <- spec.z
                 
-                #line 72
+                #line 79
                 mov r11.xyz, -r11.xyzx  // r11.x <- lightVec.x; r11.y <- lightVec.y; r11.z <- lightVec.z
                 
-                #line 75
+                #line 82
                 mul r5.xyz, r5.xyzx, r8.xyzx  // r5.x <- ambient.x; r5.y <- ambient.y; r5.z <- ambient.z
                 
-                #line 80
+                #line 87
                 dp3 r0.w, r11.xyzx, r0.xyzx
                 nop 
                 mov r0.w, r0.w  // r0.w <- a_Intensity; r0.w <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r1.w, l(256)  // r1.w <- MaxStepSize; r1.w <- MaxStepSize
-                mov r2.w, l(32)  // r2.w <- StepSize; r2.w <- StepSize
+                mov r2.w, l(64)  // r2.w <- StepSize; r2.w <- StepSize
                 mov r3.w, l(0.010000)  // r3.w <- Bias; r3.w <- Bias
                 itof r1.w, r1.w
                 mul r0.w, r0.w, r1.w
@@ -1173,12 +1173,12 @@ fxgroup
                 ftou r0.w, r0.w
                 udiv r0.w, null, r0.w, r2.w  // r0.w <- intensityStep; r0.w <- intensityStep
                 utof r0.w, r0.w
-                mul r0.w, r0.w, l(0.125000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
+                mul r0.w, r0.w, l(0.250000)  // r0.w <- <ComputeEffectiveIntensity return value>; r0.w <- <ComputeEffectiveIntensity return value>
                 
-                #line 82
+                #line 89
                 mov r0.w, r0.w  // r0.w <- diffuseFactor
                 
-                #line 86
+                #line 93
                 lt r1.w, l(0.000000), r0.w
                 mov r8.xyz, -r11.xyzx
                 dp3 r2.w, r8.xyzx, r0.xyzx
@@ -1194,9 +1194,9 @@ fxgroup
                 nop 
                 mov r0.x, r0.x  // r0.x <- a_Intensity
                 
-                #line 153
+                #line 55
                 mov r0.y, l(256)  // r0.y <- MaxStepSize
-                mov r0.z, l(32)  // r0.z <- StepSize
+                mov r0.z, l(64)  // r0.z <- StepSize
                 mov r1.x, l(0.010000)  // r1.x <- Bias
                 itof r0.y, r0.y
                 mul r0.x, r0.y, r0.x
@@ -1204,9 +1204,9 @@ fxgroup
                 ftou r0.x, r0.x
                 udiv r0.x, null, r0.x, r0.z  // r0.x <- intensityStep
                 utof r0.x, r0.x
-                mul r0.x, r0.x, l(0.125000)  // r0.x <- <ComputeEffectiveIntensity return value>
+                mul r0.x, r0.x, l(0.250000)  // r0.x <- <ComputeEffectiveIntensity return value>
                 
-                #line 90
+                #line 97
                 mov r0.x, r0.x  // r0.x <- specFactor
                 mul r0.yzw, r6.xxyz, r0.wwww
                 mul r0.yzw, r9.xxyz, r0.yyzw  // r0.y <- diffuse.x; r0.z <- diffuse.y; r0.w <- diffuse.z

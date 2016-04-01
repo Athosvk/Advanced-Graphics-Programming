@@ -50,8 +50,15 @@ struct Material
 	float4 Reflect;
 };
 
-float ComputeEffectiveIntensity(float a_Intensity);
+float ComputeEffectiveIntensity(float a_Intensity)
+{
+    const int MaxStepSize = 256;
+    const int StepSize = 64;
+    const float Bias = 0.1f;
 
+    uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / (StepSize);
+    return intensityStep * (float(StepSize) / MaxStepSize);
+}
 //---------------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a directional light.  We need to output the terms separately because
@@ -148,16 +155,6 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
 	spec    *= att;
 }
 
-float ComputeEffectiveIntensity(float a_Intensity)
-{
-    const int MaxStepSize = 256;
-    const int StepSize = 32;
-    const float Bias = 0.01f;
-
-    uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / (StepSize);
-    return intensityStep * (float(StepSize) / MaxStepSize);
-}
-
 //---------------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a spotlight.  We need to output the terms separately because
@@ -215,6 +212,3 @@ void ComputeSpotLight(Material mat, SpotLight L, float3 pos, float3 normal, floa
 	diffuse *= att;
 	spec    *= att;
 }
-
- 
- 
