@@ -18,7 +18,7 @@ private:
 
     Triangle m_RedTriangle = Triangle(1.0f, XMVectorSet(1.0f, 0.0f, 0.0f, 0.5f));
     Triangle m_BlueTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 1.0f, 0.5f));
-    Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.1f));
+    Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f));
 
 public:
     Assignment3(HINSTANCE hInstance);

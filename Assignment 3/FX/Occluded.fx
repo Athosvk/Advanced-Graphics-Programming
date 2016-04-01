@@ -28,15 +28,14 @@ VertexOut VS(VertexIn vin)
     VertexOut vout;
 
     vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
-    vout.Color = vin.Color;
     vout.UVCoordinates = vin.UVCoordinates;
-
+    vout.Color = vin.Color;
     return vout;
 }
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4(a_Input.Color);
+    return a_Input.Color;
 }
 
 BlendState AlphaBlend
@@ -61,6 +60,11 @@ DepthStencilState TestMarkedArea
     FrontFaceStencilFunc = EQUAL;
 };
 
+RasterizerState NoCull
+{
+    CullMode = NONE;
+};
+
 technique11 ColorTech
 {
     pass P0
@@ -68,13 +72,15 @@ technique11 ColorTech
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
         SetBlendState(AlphaBlend, float4(1, 1, 1, 1), 0xffffffff);
-        SetDepthStencilState(TestMarkedArea, 0);
+        SetDepthStencilState(TestMarkedArea, 1);
+        SetRasterizerState(NoCull);
     }
-    //pass P1
-    //{
-    //    SetVertexShader(CompileShader(vs_5_0, VS()));
-    //    SetPixelShader(CompileShader(ps_5_0, PS()));
-    //    SetBlendState(NoBlend, float4(1, 1, 1, 1), 0xffffffff);
-    //    SetDepthStencilState(TestMarkedArea, 0);
-    //}
+    pass P1
+    {
+        SetVertexShader(CompileShader(vs_5_0, VS()));
+        SetPixelShader(CompileShader(ps_5_0, PS()));
+        SetBlendState(NoBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetDepthStencilState(TestMarkedArea, 0);
+        SetRasterizerState(NoCull);
+    }
 }
