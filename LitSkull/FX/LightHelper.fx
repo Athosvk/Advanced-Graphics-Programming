@@ -50,15 +50,34 @@ struct Material
 	float4 Reflect;
 };
 
+#ifdef CUSTOM_STEP
 float ComputeEffectiveIntensity(float a_Intensity)
 {
     const int MaxStepSize = 256;
     const int StepSize = 64;
     const float Bias = 0.1f;
 
-    uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / (StepSize);
+    uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / StepSize;
     return intensityStep * (float(StepSize) / MaxStepSize);
 }
+#else
+float ComputeEffectiveIntensity(float a_Intensity)
+{
+    if(a_Intensity > 0.95f)
+    {
+        return 0.75f;
+    }
+    else if(a_Intensity > 0.5f)
+    {
+        return 0.7f;
+    }
+    else if(a_Intensity > 0.1f)
+    {
+        return 0.35f;
+    }
+    return 0.05f;
+}#endif
+
 //---------------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a directional light.  We need to output the terms separately because
