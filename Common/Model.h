@@ -7,7 +7,7 @@
 
 #include "Vertex.h"
 
-class Mesh
+class Model
 {
 private:
     std::vector<Vertex> m_Vertices;
@@ -16,8 +16,8 @@ private:
     ID3D11Buffer* m_IndexBuffer;
 
 public:
-    Mesh(const std::string& a_Filepath, ID3D11Device* a_Device);
-    ~Mesh();
+    Model(const std::string& a_Filepath, ID3D11Device* a_Device);
+    ~Model();
 
     void draw(ID3D11DeviceContext* a_Contex);
     void bind(ID3D11DeviceContext* a_Context);

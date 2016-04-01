@@ -11,13 +11,11 @@
 #include "d3dApp.h"
 #include "d3dx11Effect.h"
 #include "MathHelper.h"
-#include "BoxDemo.h"
+#include "Assignment3.h"
 
-const float BoxApp::KeyProcessInterval = 0.4f;
-
-BoxApp::BoxApp(HINSTANCE hInstance)
-: D3DApp(hInstance), mFX(0), mTech(0),
-  mfxWorldViewProj(0), mInputLayout(0), 
+Assignment3::Assignment3(HINSTANCE hInstance)
+: D3DApp(hInstance),
+  mInputLayout(0),
   mTheta(1.5f*MathHelper::Pi), mPhi(0.25f*MathHelper::Pi), mRadius(5.0f)
 {
 	mMainWndCaption = L"Box Demo";
@@ -26,36 +24,42 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 	mLastMousePos.y = 0;
 
 	XMMATRIX I = XMMatrixIdentity();
-	XMStoreFloat4x4(&mWorld, XMMatrixScalingFromVector(XMVectorSet(0.3f, 0.3f, 0.3f, 1.0f)));
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
-    mEnable4xMsaa = true;
+    auto position = XMVectorSet(-0.5f, 0.1f, 0.0f, 0.0f);
+    m_BlueTriangle.setPosition(position);
+    position = XMVectorSet(-0.3f, 0.0f, 0.0f, 0.0f);
+    m_OccludingTriangle.setPosition(position);
 }
 
-BoxApp::~BoxApp()
+Assignment3::~Assignment3()
 {
-	ReleaseCOM(mFX);
 	ReleaseCOM(mInputLayout);
-    ReleaseCOM(mWireframeState);
-    ReleaseCOM(mRegularState);
 }
 
-bool BoxApp::Init()
+bool Assignment3::Init()
 {
     if(!D3DApp::Init())
     {
         return false;
     }
 
-    CreateRasterizerStates();
-	BuildFX();
-	BuildVertexLayout();
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    m_Mesh = std::make_unique<Mesh>("Assets/Models/Zombie.fbx", md3dDevice);
+    m_BlueTriangle.initialiseBuffers(md3dDevice);
+    m_RedTriangle.initialiseBuffers(md3dDevice);
+    m_OccludingTriangle.initialiseBuffers(md3dDevice);
+
+    auto occludedShader = InitialiseShader(L"Occluded.fx");
+    m_BlueTriangle.setShader(occludedShader);
+    m_RedTriangle.setShader(occludedShader);
+
+    m_OccludingTriangle.setShader(InitialiseShader(L"OcclusionMark.fx"));
+    BuildVertexLayout(occludedShader);
+    md3dImmediateContext->IASetInputLayout(mInputLayout);
 	return true;
 }
 
-void BoxApp::OnResize()
+void Assignment3::OnResize()
 {
 	D3DApp::OnResize();
 
@@ -64,7 +68,7 @@ void BoxApp::OnResize()
 	XMStoreFloat4x4(&mProj, P);
 }
 
-void BoxApp::UpdateScene(float dt)
+void Assignment3::UpdateScene(float dt)
 {
 	// Convert Spherical to Cartesian coordinates.
 	float x = mRadius*sinf(mPhi)*cosf(mTheta);
@@ -78,45 +82,28 @@ void BoxApp::UpdateScene(float dt)
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
-
-    if(GetAsyncKeyState('1') & 0x8000 && mKeyTimer >= KeyProcessInterval)
-    {
-        mKeyTimer -= KeyProcessInterval;
-        mCurrentState = mCurrentState == mWireframeState ? mRegularState : mWireframeState;
-        md3dImmediateContext->RSSetState(mCurrentState);
-    }
-    mKeyTimer += dt;
 }
 
-void BoxApp::DrawScene()
+void Assignment3::DrawScene()
 {
-	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
+    auto backgroundColor = XMVectorSet(0.0f, 0.6f, 0.0f, 1.0f);
+	md3dImmediateContext->
+        ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&backgroundColor));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	md3dImmediateContext->IASetInputLayout(mInputLayout);
-    m_Mesh->bind(md3dImmediateContext);
-
-	// Set constants
-	XMMATRIX world = XMLoadFloat4x4(&mWorld);
 	XMMATRIX view  = XMLoadFloat4x4(&mView);
 	XMMATRIX proj  = XMLoadFloat4x4(&mProj);
-	XMMATRIX worldViewProj = world*view*proj;
+	XMMATRIX viewProj = view*proj;
 
-	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
-
-    D3DX11_TECHNIQUE_DESC techDesc;
-    mTech->GetDesc( &techDesc );
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-        
-        m_Mesh->draw(md3dImmediateContext);
-    }
-
+    md3dImmediateContext->OMSetRenderTargets(0, nullptr, mDepthStencilView);
+    m_OccludingTriangle.draw(md3dImmediateContext, viewProj);
+    md3dImmediateContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
+    m_RedTriangle.draw(md3dImmediateContext, viewProj);
+    m_BlueTriangle.draw(md3dImmediateContext, viewProj);
 	HR(mSwapChain->Present(0, 0));
 }
 
-void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseDown(WPARAM btnState, int x, int y)
 {
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
@@ -124,12 +111,12 @@ void BoxApp::OnMouseDown(WPARAM btnState, int x, int y)
 	SetCapture(mhMainWnd);
 }
 
-void BoxApp::OnMouseUp(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseUp(WPARAM btnState, int x, int y)
 {
 	ReleaseCapture();
 }
 
-void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
+void Assignment3::OnMouseMove(WPARAM btnState, int x, int y)
 {
 	if( (btnState & MK_LBUTTON) != 0 )
 	{
@@ -161,7 +148,7 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.y = y;
 }
 
-void BoxApp::BuildFX()
+ID3DX11Effect* Assignment3::InitialiseShader(const std::wstring& a_FilePath)
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -171,7 +158,8 @@ void BoxApp::BuildFX()
  
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
-	HRESULT hr = D3DX11CompileFromFile(L"FX/color.fx", 0, 0, 0, "fx_5_0", shaderFlags, 
+	HRESULT hr = D3DX11CompileFromFile(std::wstring(L"FX/" + a_FilePath).c_str(), 
+        0, 0, 0, "fx_5_0", shaderFlags, 
 		0, 0, &compiledShader, &compilationMsgs, 0);
 
 	// compilationMsgs can store errors or warnings.
@@ -186,18 +174,16 @@ void BoxApp::BuildFX()
 	{
 		DXTrace(__FILE__, (DWORD)__LINE__, hr, L"D3DX11CompileFromFile", true);
 	}
-
+    ID3DX11Effect* shader;
 	HR(D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 
-		0, md3dDevice, &mFX));
+		0, md3dDevice, &shader));
 
 	// Done with compiled shader.
 	ReleaseCOM(compiledShader);
-
-	mTech = mFX->GetTechniqueByName("ColorTech");
-	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+    return shader;
 }
 
-void BoxApp::BuildVertexLayout()
+void Assignment3::BuildVertexLayout(ID3DX11Effect* a_ReferenceShader)
 {
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -209,22 +195,7 @@ void BoxApp::BuildVertexLayout()
 
 	// Create the input layout
     D3DX11_PASS_DESC passDesc;
-    mTech->GetPassByIndex(0)->GetDesc(&passDesc);
+    a_ReferenceShader->GetTechniqueByIndex(0)->GetPassByIndex(0)->GetDesc(&passDesc);
 	HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature, 
 		passDesc.IAInputSignatureSize, &mInputLayout));
-}
-
-void BoxApp::CreateRasterizerStates()
-{
-    D3D11_RASTERIZER_DESC rasterizerDescription;
-    ZeroMemory(&rasterizerDescription, sizeof(D3D11_RASTERIZER_DESC));
-    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    rasterizerDescription.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
-    rasterizerDescription.FrontCounterClockwise = false;
-    rasterizerDescription.DepthClipEnable = true;
-    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mWireframeState));
-
-    rasterizerDescription.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    HR(md3dDevice->CreateRasterizerState(&rasterizerDescription, &mRegularState));
-    mCurrentState = mRegularState;
 }

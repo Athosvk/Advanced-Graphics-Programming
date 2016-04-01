@@ -36,15 +36,26 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4(a_Input.Color.xyz, 0.7f);
+    return a_Input.Color;
 }
 
-BlendState AlphaBlend
+DepthStencilState MarkOcclusion
 {
-    AlphaToCoverageEnable = FALSE;
-    BlendEnable[0] = TRUE;
-    SrcBlend = SRC_ALPHA;
-    DestBlend = INV_SRC_ALPHA;
+    StencilEnable = true;
+    DepthEnable = false;
+    FrontFaceStencilFail = KEEP;
+    FrontFaceStencilDepthFail = KEEP;
+    FrontFaceStencilPass = REPLACE;
+    FrontFaceStencilFunc = ALWAYS;
+    BackFaceStencilFail = KEEP;
+    BackFaceStencilDepthFail = KEEP;
+    BackFaceStencilPass = REPLACE;
+    BackFaceStencilFunc = ALWAYS;
+};
+
+RasterizerState NoCull
+{
+    CullMode = NONE;
 };
 
 technique11 ColorTech
@@ -53,6 +64,7 @@ technique11 ColorTech
     {
         SetVertexShader(CompileShader(vs_5_0, VS()));
         SetPixelShader(CompileShader(ps_5_0, PS()));
-        SetBlendState(AlphaBlend, float4(1, 1, 1, 1), 0xffffffff);
+        SetDepthStencilState(MarkOcclusion, 0x01);
+        SetRasterizerState(NoCull);
     }
 }
