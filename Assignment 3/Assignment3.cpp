@@ -13,8 +13,6 @@
 #include "MathHelper.h"
 #include "Assignment3.h"
 
-const float Assignment3::KeyProcessInterval = 0.4f;
-
 Assignment3::Assignment3(HINSTANCE hInstance)
 : D3DApp(hInstance),
   mInputLayout(0),
@@ -80,7 +78,6 @@ void Assignment3::UpdateScene(float dt)
 
 	XMMATRIX V = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, V);
-    mKeyTimer += dt;
 }
 
 void Assignment3::DrawScene()

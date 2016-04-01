@@ -5,8 +5,6 @@
 class Assignment3 : public D3DApp
 {
 private:
-    static const float KeyProcessInterval;
-
     ID3D11InputLayout* mInputLayout;
 
     XMFLOAT4X4 mView;
@@ -18,7 +16,6 @@ private:
 
     POINT mLastMousePos;
 
-    float mKeyTimer = 0.0f;
     Triangle m_RedTriangle = Triangle(1.0f, Colors::Red);
     Triangle m_BlueTriangle = Triangle(1.0f, Colors::Blue);
     Triangle m_OccludingTriangle = Triangle(1.0f, XMVectorSet(0.0f, 0.0f, 0.0f, 0.1f));
