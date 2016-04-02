@@ -5,7 +5,6 @@
 Triangle::Triangle(float a_Size, XMVECTOR a_Color)
 {
     XMStoreFloat4(&m_Color, a_Color);
-    XMStoreFloat4x4(&m_Transform, XMMatrixScaling(15.0f, 15.0f, 15.0f));
     setPosition(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
