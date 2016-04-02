@@ -26,6 +26,7 @@ void Quad::setShader(ID3DX11Effect* a_Shader)
 {
     m_Shader = a_Shader;
     m_ShaderMVP = a_Shader->GetVariableByName("gWorldViewProj")->AsMatrix();
+    m_ShaderTime = a_Shader->GetVariableByName("gTime")->AsScalar();
 }
 
 void Quad::setPosition(CXMVECTOR a_Position)
@@ -34,11 +35,17 @@ void Quad::setPosition(CXMVECTOR a_Position)
     XMStoreFloat4x4(&m_Transform, transform);
 }
 
+void Quad::update(float a_DeltaTime)
+{
+    m_TimePassed += a_DeltaTime;
+}
+
 void Quad::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
     bind(a_Context);
     XMMATRIX modelViewProjection = XMLoadFloat4x4(&m_Transform) * a_ViewProjection;
     m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&modelViewProjection));
+    m_ShaderTime->SetFloat(m_TimePassed);
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;

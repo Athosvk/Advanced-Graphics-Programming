@@ -73,6 +73,7 @@ void Assignment6::UpdateScene(float dt)
 
     XMMATRIX viewMatrix = XMMatrixLookAtLH(pos, target, up);
     XMStoreFloat4x4(&mView, viewMatrix);
+    m_Quad.update(dt);
 }
 
 void Assignment6::DrawScene()

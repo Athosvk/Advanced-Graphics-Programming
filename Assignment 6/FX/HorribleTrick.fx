@@ -7,6 +7,7 @@
 cbuffer cbPerObject
 {
 	float4x4 gWorldViewProj;
+    float gTime;
 };
 
 struct VertexIn
@@ -32,7 +33,7 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4(0.0f, 0.0f, 0.0f, 0.0f);
+    return float4((gTime / 5.0f) % 1.0f, 0.0f, 0.0f, 0.0f);
 }
 
 technique11 ColorTech
