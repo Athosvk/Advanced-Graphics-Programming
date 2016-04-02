@@ -1,5 +1,7 @@
 #include <Common/d3dApp.h>
 
+#include "Quad.h"
+
 class Assignment6 : public D3DApp
 {
 private:
@@ -13,6 +15,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
+    Quad m_Quad;
 
 public:
     Assignment6(HINSTANCE hInstance);

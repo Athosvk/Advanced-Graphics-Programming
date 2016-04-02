@@ -41,9 +41,11 @@ bool Assignment6::Init()
     }
 
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_Quad.initialiseBuffers(md3dDevice);
 
-    auto occludedShader = InitialiseShader(L"Occluded.fx");
-    BuildVertexLayout(occludedShader);
+    auto shader = InitialiseShader(L"HorribleTrick.fx");
+    m_Quad.setShader(shader);
+    BuildVertexLayout(shader);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
     return true;
 }
@@ -75,14 +77,13 @@ void Assignment6::UpdateScene(float dt)
 
 void Assignment6::DrawScene()
 {
-    auto backgroundColor = XMVectorSet(0.0f, 0.6f, 0.0f, 1.0f);
-    md3dImmediateContext->
-        ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&backgroundColor));
+    md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, 
+        reinterpret_cast<const float*>(&Colors::LightSteelBlue));
     md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-    XMMATRIX view = XMLoadFloat4x4(&mView);
-    XMMATRIX proj = XMLoadFloat4x4(&mProj);
-    XMMATRIX viewProj = view*proj;
+    XMMATRIX viewProj = XMLoadFloat4x4(&mView) * XMLoadFloat4x4(&mProj);
+
+    m_Quad.draw(md3dImmediateContext, viewProj);
 
     HR(mSwapChain->Present(0, 0));
 }
