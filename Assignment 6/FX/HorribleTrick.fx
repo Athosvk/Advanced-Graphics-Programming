@@ -19,8 +19,6 @@ struct VertexIn
 struct VertexOut
 {
 	float4 PosH  : SV_POSITION;
-    float4 Color : COLOR;
-    float2 UVCoordinates : UVCOORDINATES;
 };
 
 VertexOut VS(VertexIn vin)
@@ -28,15 +26,13 @@ VertexOut VS(VertexIn vin)
 	VertexOut vout;
 	
     vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
-    vout.Color = vin.Color;
-    vout.UVCoordinates = vin.UVCoordinates;
     
     return vout;
 }
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return a_Input.Color;
+    return float4(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 technique11 ColorTech
