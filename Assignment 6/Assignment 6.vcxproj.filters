@@ -51,10 +51,13 @@
     <ClCompile Include="..\Common\xnacollision.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="BoxDemo.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Assignment6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Quad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,13 +98,18 @@
     <ClInclude Include="..\Common\xnacollision.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="BoxDemo.h">
+    <ClInclude Include="Assignment6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\color.fx">
+    <FxCompile Include="FX\HorribleTrick.fx">
       <Filter>Effects</Filter>
-    </CustomBuild>
+    </FxCompile>
+    <FxCompile Include="FX\Flame.fx" />
+    <FxCompile Include="FX\SphereBowl.fx" />
   </ItemGroup>
 </Project>

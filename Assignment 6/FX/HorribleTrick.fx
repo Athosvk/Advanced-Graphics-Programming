@@ -7,6 +7,7 @@
 cbuffer cbPerObject
 {
 	float4x4 gWorldViewProj;
+    float gTime;
 };
 
 struct VertexIn
@@ -19,7 +20,6 @@ struct VertexIn
 struct VertexOut
 {
 	float4 PosH  : SV_POSITION;
-    float4 Color : COLOR;
     float2 UVCoordinates : UVCOORDINATES;
 };
 
@@ -28,7 +28,6 @@ VertexOut VS(VertexIn vin)
 	VertexOut vout;
 	
     vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
-    vout.Color = vin.Color;
     vout.UVCoordinates = vin.UVCoordinates;
     
     return vout;
@@ -36,7 +35,13 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return a_Input.Color;
+    const float RingWidth = 0.01f;
+    static const float PI = 3.14159265f;
+
+    float distanceFromCenter = length(a_Input.UVCoordinates - float2(0.5f, 0.5f));
+    float scaledTime = 5.0f * gTime;
+    float grayScale = cos(distanceFromCenter * 1.0f / RingWidth * PI - scaledTime);
+    return float4(grayScale, grayScale, grayScale, 1.0f);
 }
 
 technique11 ColorTech

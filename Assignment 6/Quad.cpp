@@ -1,20 +1,22 @@
 #include <array>
 
-#include "Triangle.h"
+#include <Vertex.h>
 
-Triangle::Triangle(float a_Size, XMVECTOR a_Color)
+#include "Quad.h"
+
+Quad::Quad()
 {
-    XMStoreFloat4(&m_Color, a_Color);
     setPosition(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
-Triangle::~Triangle()
+Quad::~Quad()
 {
+    ReleaseCOM(m_Shader);
     ReleaseCOM(m_IndexBuffer);
     ReleaseCOM(m_VertexBuffer);
 }
 
-void Triangle::bind(ID3D11DeviceContext* a_Context)
+void Quad::bind(ID3D11DeviceContext* a_Context)
 {
     auto vertexStride = sizeof(Vertex);
     UINT offset = 0;
@@ -22,23 +24,30 @@ void Triangle::bind(ID3D11DeviceContext* a_Context)
     a_Context->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 }
 
-void Triangle::setShader(ID3DX11Effect* a_Shader)
+void Quad::setShader(ID3DX11Effect* a_Shader)
 {
     m_Shader = a_Shader;
     m_ShaderMVP = a_Shader->GetVariableByName("gWorldViewProj")->AsMatrix();
+    m_ShaderTime = a_Shader->GetVariableByName("gTime")->AsScalar();
 }
 
-void Triangle::setPosition(CXMVECTOR a_Position)
+void Quad::setPosition(CXMVECTOR a_Position)
 {
     XMMATRIX transform = XMMatrixTranslationFromVector(a_Position);
     XMStoreFloat4x4(&m_Transform, transform);
 }
 
-void Triangle::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
+void Quad::update(float a_DeltaTime)
+{
+    m_TimePassed += a_DeltaTime;
+}
+
+void Quad::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
     bind(a_Context);
     XMMATRIX modelViewProjection = XMLoadFloat4x4(&m_Transform) * a_ViewProjection;
     m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&modelViewProjection));
+    m_ShaderTime->SetFloat(m_TimePassed);
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;
@@ -46,17 +55,23 @@ void Triangle::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
         technique->GetPassByIndex(p)->Apply(0, a_Context);
-        a_Context->Draw(3, 0);
+        a_Context->DrawIndexed(6, 0, 0);
     }
 }
 
-void Triangle::initialiseBuffers(ID3D11Device* a_Device)
+void Quad::initialiseBuffers(ID3D11Device* a_Device)
 {
-    std::array<Vertex, 3> vertices = 
-    { 
-        Vertex(XMFLOAT3(-0.5f, 0.0f, 0.0f), m_Color),
-        Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), m_Color),
-        Vertex(XMFLOAT3(0.5f, 0.0f, 0.0f), m_Color)
+    const float Size = 5.0f;
+    std::array<Vertex, 4> vertices =
+    {
+        Vertex(XMVectorSet(-Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero(),
+                XMVectorZero(), XMVectorZero()),
+        Vertex(XMVectorSet(-Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f))
     };
 
     D3D11_BUFFER_DESC vertexBufferDescription
@@ -70,9 +85,9 @@ void Triangle::initialiseBuffers(ID3D11Device* a_Device)
     vertexData.pSysMem = vertices.data();
     HR(a_Device->CreateBuffer(&vertexBufferDescription, &vertexData, &m_VertexBuffer));
 
-    std::array<UINT, 3> indices =
+    std::array<UINT, 6> indices =
     {
-        0u, 1u, 2u
+        0u, 1u, 2u, 0u, 2u, 3u
     };
 
     D3D11_BUFFER_DESC indexBufferDescription =

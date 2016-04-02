@@ -100,8 +100,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="FX\color.fx">
+    <FxCompile Include="FX\color.fx">
       <Filter>Effects</Filter>
-    </CustomBuild>
+    </FxCompile>
   </ItemGroup>
 </Project>
