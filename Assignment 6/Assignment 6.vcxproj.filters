@@ -109,5 +109,8 @@
     <FxCompile Include="FX\HorribleTrick.fx">
       <Filter>Effects</Filter>
     </FxCompile>
+    <FxCompile Include="FX\Flame.fx">
+      <Filter>Effects</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

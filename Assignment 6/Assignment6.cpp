@@ -43,7 +43,7 @@ bool Assignment6::Init()
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     m_Quad.initialiseBuffers(md3dDevice);
 
-    auto shader = InitialiseShader(L"HorribleTrick.fx");
+    auto shader = InitialiseShader(L"Flame.fx");
     m_Quad.setShader(shader);
     BuildVertexLayout(shader);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
