@@ -11,6 +11,8 @@ Triangle::Triangle(float a_Size, XMVECTOR a_Color)
 
 Triangle::~Triangle()
 {
+    ReleaseCOM(m_IndexBuffer);
+    ReleaseCOM(m_VertexBuffer);
 }
 
 void Triangle::bind(ID3D11DeviceContext* a_Context)
