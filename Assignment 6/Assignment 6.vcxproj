@@ -165,7 +165,7 @@
     <ClCompile Include="..\Common\TextureMgr.cpp" />
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
-    <ClCompile Include="BoxDemo.cpp" />
+    <ClCompile Include="Assignment6.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +181,7 @@
     <ClInclude Include="..\Common\TextureMgr.h" />
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
-    <ClInclude Include="BoxDemo.h" />
+    <ClInclude Include="Assignment6.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="FX\color.fx">
