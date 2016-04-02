@@ -12,6 +12,8 @@ Quad::Quad()
 Quad::~Quad()
 {
     ReleaseCOM(m_Shader);
+    ReleaseCOM(m_IndexBuffer);
+    ReleaseCOM(m_VertexBuffer);
 }
 
 void Quad::bind(ID3D11DeviceContext* a_Context)
