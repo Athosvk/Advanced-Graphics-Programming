@@ -62,10 +62,14 @@ void Quad::initialiseBuffers(ID3D11Device* a_Device)
     const float Size = 5.0f;
     std::array<Vertex, 4> vertices =
     {
-        Vertex(XMVectorSet(-Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero()),
-        Vertex(XMVectorSet(-Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero()),
-        Vertex(XMVectorSet(Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero()),
-        Vertex(XMVectorSet(Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero())
+        Vertex(XMVectorSet(-Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero(),
+                XMVectorZero(), XMVectorZero()),
+        Vertex(XMVectorSet(-Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(Size / 2, Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(Size / 2, -Size / 2, 0.0f, 0.0f), XMVectorZero(),
+            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f))
     };
 
     D3D11_BUFFER_DESC vertexBufferDescription

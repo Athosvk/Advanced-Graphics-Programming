@@ -20,6 +20,7 @@ struct VertexIn
 struct VertexOut
 {
 	float4 PosH  : SV_POSITION;
+    float2 UVCoordinates : UVCOORDINATES;
 };
 
 VertexOut VS(VertexIn vin)
@@ -27,13 +28,18 @@ VertexOut VS(VertexIn vin)
 	VertexOut vout;
 	
     vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
+    vout.UVCoordinates = vin.UVCoordinates;
     
     return vout;
 }
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return float4((gTime / 5.0f) % 1.0f, 0.0f, 0.0f, 0.0f);
+    float distanceFromCenter = length(a_Input.UVCoordinates - float2(0.5f, 0.5f));
+
+    float grayScale = 0.5f * cos(distanceFromCenter * 0.5f - gTime * 0.1f) + 0.5f;
+    grayScale = 0.5f * cos(distanceFromCenter * 0.5f * 800.0f - gTime * 25.0f) + 0.5f;
+    return float4(grayScale, grayScale, grayScale, 1.0f);
 }
 
 technique11 ColorTech
