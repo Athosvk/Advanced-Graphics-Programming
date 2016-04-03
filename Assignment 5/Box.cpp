@@ -12,6 +12,7 @@ Box::~Box()
 {
     ReleaseCOM(m_VertexBuffer);
     ReleaseCOM(m_DiffuseSRV);
+    ReleaseCOM(m_Shader);
 }
 
 void Box::initialise(ID3D11Device * a_Device)
