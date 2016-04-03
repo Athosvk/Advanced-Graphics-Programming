@@ -51,7 +51,8 @@ bool Assignment5::Init()
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
 
-    m_Box.setTransform(XMMatrixTranslation(0.0f, 0.0f, 2.0f));
+    m_Box.setTransform(XMMatrixRotationRollPitchYaw(22.2f, 45.0f, 45.0f) * 
+        XMMatrixTranslation(0.0f, 0.0f, 2.0f));
     return true;
 }
 
