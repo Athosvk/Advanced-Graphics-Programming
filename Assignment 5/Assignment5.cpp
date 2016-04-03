@@ -45,6 +45,7 @@ bool Assignment5::Init()
     m_Box.setShader(shader);
     BuildVertexLayout(shader);
     m_Box.constructVertexBuffer(md3dDevice);
+    m_Box.constructIndexBuffer(md3dDevice);
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
     return true;
