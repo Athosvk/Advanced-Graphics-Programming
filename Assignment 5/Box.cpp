@@ -15,6 +15,23 @@ Box::~Box()
 void Box::setShader(ID3DX11Effect* a_Shader)
 {
     m_Shader = a_Shader;
+    m_ShaderMVP = a_Shader->GetVariableByName("gWorldViewProj")->AsMatrix();
+}
+
+void Box::draw(ID3D11DeviceContext * a_Context)
+{
+    bind(a_Context);
+    XMMATRIX identity = XMMatrixIdentity();
+    m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&identity));
+
+    ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
+    D3DX11_TECHNIQUE_DESC techDesc;
+    technique->GetDesc(&techDesc);
+    for(UINT p = 0; p < techDesc.Passes; ++p)
+    {
+        technique->GetPassByIndex(p)->Apply(0, a_Context);
+        a_Context->Draw(36, 0);
+    }
 }
 
 void Box::constructVertexBuffer(ID3D11Device* a_Device)
@@ -113,7 +130,7 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
         sizeof(Vertex) * vertices.size(),
         D3D11_USAGE_IMMUTABLE,
         D3D11_BIND_VERTEX_BUFFER,
-        0, 0, 0,
+        0, 0, 0
     };
     D3D11_SUBRESOURCE_DATA vertexData;
     vertexData.pSysMem = vertices.data();

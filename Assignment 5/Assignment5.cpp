@@ -40,12 +40,12 @@ bool Assignment5::Init()
         return false;
     }
 
-    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    md3dImmediateContext->IASetInputLayout(mInputLayout);
-
     ID3DX11Effect* shader = InitialiseShader(L"Textured.fx");
     m_Box.setShader(shader);
     BuildVertexLayout(shader);
+    m_Box.constructVertexBuffer(md3dDevice);
+    md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    md3dImmediateContext->IASetInputLayout(mInputLayout);
     return true;
 }
 
@@ -84,6 +84,8 @@ void Assignment5::DrawScene()
     XMMATRIX view = XMLoadFloat4x4(&mView);
     XMMATRIX proj = XMLoadFloat4x4(&mProj);
     XMMATRIX viewProj = view*proj;
+
+    m_Box.draw(md3dImmediateContext);
     HR(mSwapChain->Present(0, 0));
 }
 
