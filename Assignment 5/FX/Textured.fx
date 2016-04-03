@@ -35,9 +35,18 @@ VertexOut VS(VertexIn vin)
     return vout;
 }
 
+SamplerState AnisotropicSampler
+{
+    Filter = ANISOTROPIC;
+    MaxAnisotropy = 4;
+
+    AddressU = WRAP;
+    AddressV = WRAP;
+};
+
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return a_Input.Color;
+    return gDiffuse.Sample(AnisotropicSampler, a_Input.UVCoordinates);
 }
 
 RasterizerState NoCull
