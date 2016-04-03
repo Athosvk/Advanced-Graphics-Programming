@@ -8,6 +8,7 @@ cbuffer cbPerObject
 {
 	float4x4 gWorldViewProj;
 };
+texture2D gDiffuse;
 
 struct VertexIn
 {
@@ -34,10 +35,24 @@ VertexOut VS(VertexIn vin)
     return vout;
 }
 
+SamplerState AnisotropicSampler
+{
+    Filter = ANISOTROPIC;
+    MaxAnisotropy = 4;
+
+    AddressU = WRAP;
+    AddressV = WRAP;
+};
+
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    return a_Input.Color;
+    return gDiffuse.Sample(AnisotropicSampler, a_Input.UVCoordinates);
 }
+
+RasterizerState NoCull
+{
+    CullMode = None;
+};
 
 technique11 ColorTech
 {
@@ -45,5 +60,6 @@ technique11 ColorTech
     {
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
         SetPixelShader( CompileShader( ps_5_0, PS() ) );
+        SetRasterizerState(NoCull);
     }
 }

@@ -171,8 +171,11 @@
     <ClCompile Include="..\Common\TextureMgr.cpp" />
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
-    <ClCompile Include="BoxDemo.cpp" />
+    <ClCompile Include="Assignment5.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Phone.cpp" />
+    <ClCompile Include="Quad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Camera.h" />
@@ -187,10 +190,13 @@
     <ClInclude Include="..\Common\TextureMgr.h" />
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
-    <ClInclude Include="BoxDemo.h" />
+    <ClInclude Include="Assignment5.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="Phone.h" />
+    <ClInclude Include="Quad.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="FX\color.fx">
+    <FxCompile Include="FX\Textured.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
