@@ -1,5 +1,7 @@
 #include <Common/d3dApp.h>
 
+#include "Box.h"
+
 class Assignment5 : public D3DApp
 {
 private:
@@ -13,6 +15,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
+    Box m_Box;
 
 public:
     Assignment5(HINSTANCE hInstance);

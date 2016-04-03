@@ -41,8 +41,11 @@ bool Assignment5::Init()
     }
 
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
     md3dImmediateContext->IASetInputLayout(mInputLayout);
+
+    ID3DX11Effect* shader = InitialiseShader(L"Textured.fx");
+    m_Box.setShader(shader);
+    BuildVertexLayout(shader);
     return true;
 }
 

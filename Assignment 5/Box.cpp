@@ -12,6 +12,11 @@ Box::~Box()
     ReleaseCOM(m_VertexBuffer);
 }
 
+void Box::setShader(ID3DX11Effect* a_Shader)
+{
+    m_Shader = a_Shader;
+}
+
 void Box::constructVertexBuffer(ID3D11Device* a_Device)
 {
     const auto Dimensions = XMFLOAT3(1.0f, 1.0f, 1.0f);

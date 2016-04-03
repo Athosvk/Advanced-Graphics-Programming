@@ -57,6 +57,9 @@
     <ClCompile Include="Assignment5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Camera.h">
@@ -96,6 +99,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Assignment5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

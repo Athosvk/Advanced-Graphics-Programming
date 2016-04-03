@@ -172,6 +172,7 @@
     <ClCompile Include="..\Common\Waves.cpp" />
     <ClCompile Include="..\Common\xnacollision.cpp" />
     <ClCompile Include="Assignment5.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,7 @@
     <ClInclude Include="..\Common\Waves.h" />
     <ClInclude Include="..\Common\xnacollision.h" />
     <ClInclude Include="Assignment5.h" />
+    <ClInclude Include="Box.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FX\Textured.fx">
