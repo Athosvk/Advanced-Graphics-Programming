@@ -18,11 +18,11 @@ void Box::setShader(ID3DX11Effect* a_Shader)
     m_ShaderMVP = a_Shader->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
-void Box::draw(ID3D11DeviceContext * a_Context)
+void Box::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
     bind(a_Context);
-    XMMATRIX identity = XMMatrixIdentity();
-    m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&identity));
+    XMMATRIX mvp = a_ViewProjection;
+    m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&mvp));
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;

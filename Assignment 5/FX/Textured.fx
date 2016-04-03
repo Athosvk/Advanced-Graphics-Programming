@@ -34,6 +34,11 @@ VertexOut VS(VertexIn vin)
     return vout;
 }
 
+RasterizerState NoCull
+{
+    CullMode = None;
+};
+
 float4 PS(VertexOut a_Input) : SV_Target
 {
     return a_Input.Color;
@@ -45,5 +50,6 @@ technique11 ColorTech
     {
         SetVertexShader( CompileShader( vs_5_0, VS() ) );
         SetPixelShader( CompileShader( ps_5_0, PS() ) );
+        SetRasterizerState(NoCull);
     }
 }

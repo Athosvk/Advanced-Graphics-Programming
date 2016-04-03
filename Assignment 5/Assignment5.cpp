@@ -85,7 +85,7 @@ void Assignment5::DrawScene()
     XMMATRIX proj = XMLoadFloat4x4(&mProj);
     XMMATRIX viewProj = view*proj;
 
-    m_Box.draw(md3dImmediateContext);
+    m_Box.draw(md3dImmediateContext, viewProj);
     HR(mSwapChain->Present(0, 0));
 }
 

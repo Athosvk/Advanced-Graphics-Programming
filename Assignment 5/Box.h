@@ -13,7 +13,7 @@ public:
     ~Box();
 
     void setShader(ID3DX11Effect* a_Shader);
-    void draw(ID3D11DeviceContext* a_Context);
+    void draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection);
     void constructVertexBuffer(ID3D11Device* a_Device);
 private:
     void bind(ID3D11DeviceContext* a_Context);
