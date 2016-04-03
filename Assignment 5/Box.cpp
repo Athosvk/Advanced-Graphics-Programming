@@ -5,17 +5,26 @@
 
 Box::Box()
 {
+
 }
 
 Box::~Box()
 {
     ReleaseCOM(m_VertexBuffer);
+    ReleaseCOM(m_DiffuseSRV);
+}
+
+void Box::initialise(ID3D11Device * a_Device)
+{
+    HR(D3DX11CreateShaderResourceViewFromFile(a_Device,
+        L"Assets/Textures/Dice.png", 0, 0, &m_DiffuseSRV, 0));
 }
 
 void Box::setShader(ID3DX11Effect* a_Shader)
 {
     m_Shader = a_Shader;
     m_ShaderMVP = a_Shader->GetVariableByName("gWorldViewProj")->AsMatrix();
+    m_ShaderDiffuse = a_Shader->GetVariableByName("gDiffuse")->AsShaderResource();
 }
 
 void Box::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
@@ -23,6 +32,7 @@ void Box::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
     bind(a_Context);
     XMMATRIX mvp = a_ViewProjection;
     m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&mvp));
+    m_ShaderDiffuse->SetResource(m_DiffuseSRV);
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;

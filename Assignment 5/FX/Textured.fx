@@ -8,6 +8,7 @@ cbuffer cbPerObject
 {
 	float4x4 gWorldViewProj;
 };
+texture2D gDiffuse;
 
 struct VertexIn
 {
@@ -34,15 +35,15 @@ VertexOut VS(VertexIn vin)
     return vout;
 }
 
-RasterizerState NoCull
-{
-    CullMode = None;
-};
-
 float4 PS(VertexOut a_Input) : SV_Target
 {
     return a_Input.Color;
 }
+
+RasterizerState NoCull
+{
+    CullMode = None;
+};
 
 technique11 ColorTech
 {

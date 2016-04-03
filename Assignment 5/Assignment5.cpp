@@ -40,6 +40,7 @@ bool Assignment5::Init()
         return false;
     }
 
+    m_Box.initialise(md3dDevice);
     ID3DX11Effect* shader = InitialiseShader(L"Textured.fx");
     m_Box.setShader(shader);
     BuildVertexLayout(shader);
