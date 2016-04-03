@@ -177,12 +177,13 @@ void Assignment5::BuildVertexLayout(ID3DX11Effect* a_ReferenceShader)
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "UVCOORDINATES", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "UVCOORDINATES", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
     // Create the input layout
     D3DX11_PASS_DESC passDesc;
     a_ReferenceShader->GetTechniqueByIndex(0)->GetPassByIndex(0)->GetDesc(&passDesc);
-    HR(md3dDevice->CreateInputLayout(vertexDesc, 3, passDesc.pIAInputSignature,
+    HR(md3dDevice->CreateInputLayout(vertexDesc, 4, passDesc.pIAInputSignature,
         passDesc.IAInputSignatureSize, &mInputLayout));
 }
