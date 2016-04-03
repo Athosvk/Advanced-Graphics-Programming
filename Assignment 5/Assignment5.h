@@ -1,22 +1,10 @@
-#include <memory>
-
-#include <Model.h>
+#include <Common/d3dApp.h>
 
 class Assignment5 : public D3DApp
 {
 private:
-    static const float KeyProcessInterval;
-
-    ID3DX11Effect* mFX;
-    ID3DX11EffectTechnique* mTech;
-    ID3DX11EffectMatrixVariable* mfxWorldViewProj;
-
     ID3D11InputLayout* mInputLayout;
-    ID3D11RasterizerState* mWireframeState;
-    ID3D11RasterizerState* mRegularState;
-    ID3D11RasterizerState* mCurrentState;
 
-    XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;
     XMFLOAT4X4 mProj;
 
@@ -25,9 +13,6 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-
-    float mKeyTimer = 0.0f;
-    std::unique_ptr<Model> m_Mesh = nullptr;
 
 public:
     Assignment5(HINSTANCE hInstance);
@@ -43,7 +28,6 @@ public:
     void OnMouseMove(WPARAM btnState, int x, int y);
 
 private:
-    void BuildFX();
-    void BuildVertexLayout();
-    void CreateRasterizerStates();
+    ID3DX11Effect* InitialiseShader(const std::wstring& a_FilePath);
+    void BuildVertexLayout(ID3DX11Effect* a_ReferenceShader);
 };

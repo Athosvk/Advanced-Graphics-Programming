@@ -100,7 +100,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="FX\color.fx">
+    <FxCompile Include="FX\Textured.fx">
       <Filter>Effects</Filter>
     </FxCompile>
   </ItemGroup>

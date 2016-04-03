@@ -190,7 +190,7 @@
     <ClInclude Include="Assignment5.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="FX\color.fx">
+    <FxCompile Include="FX\Textured.fx">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc /Fc /Od /T fx_5_0 /Fo "%(RelativeDir)\%(Filename).fxo" "%(FullPath)"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fxc compile for debug: %(FullPath)</Message>
