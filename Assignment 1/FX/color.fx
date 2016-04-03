@@ -80,7 +80,8 @@ struct DomainOutput
 };
 
 [domain("tri")]
-DomainOutput DS(Patch a_InputPatch, float3 a_UVW : SV_DomainLocation, const OutputPatch<HullOutput, 3> a_Triangle)
+DomainOutput DS(Patch a_InputPatch, float3 a_UVW : SV_DomainLocation, 
+    const OutputPatch<HullOutput, 3> a_Triangle)
 {
     DomainOutput output = (DomainOutput) 0;
     float3 vertexPosition = a_Triangle[0].Position * a_UVW.x + a_Triangle[1].Position * a_UVW.y +
@@ -94,7 +95,8 @@ DomainOutput DS(Patch a_InputPatch, float3 a_UVW : SV_DomainLocation, const Outp
     rotatedVertexPosition.z = vertexPosition.z * cosX + vertexPosition.x * sinZ;
 
     output.Position = mul(float4(rotatedVertexPosition, 1.0f), gWorldViewProj);
-    output.Color = a_Triangle[0].Color * a_UVW.x + a_Triangle[1].Color * a_UVW.y + a_Triangle[2].Color * a_UVW.z;
+    output.Color = a_Triangle[0].Color * a_UVW.x + a_Triangle[1].Color * 
+        a_UVW.y + a_Triangle[2].Color * a_UVW.z;
     return output;
 }
 

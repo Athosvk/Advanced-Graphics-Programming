@@ -35,12 +35,12 @@ VertexOut VS(VertexIn vin)
 
 float4 PS(VertexOut a_Input) : SV_Target
 {
-    const float RingWidth = 0.01f;
+    const float RingCount = 100;
     static const float PI = 3.14159265f;
 
     float distanceFromCenter = length(a_Input.UVCoordinates - float2(0.5f, 0.5f));
     float scaledTime = 5.0f * gTime;
-    float grayScale = cos(distanceFromCenter * 1.0f / RingWidth * PI - scaledTime);
+    float grayScale = 0.5f + 0.5f * cos(distanceFromCenter * RingCount * PI - scaledTime);
     return float4(grayScale, grayScale, grayScale, 1.0f);
 }
 

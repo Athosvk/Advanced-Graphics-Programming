@@ -3,9 +3,9 @@
 //
 // Basic effect that currently supports transformations, lighting, and texturing.
 //=============================================================================
+#define CUSTOM_STEP
 
 #include "LightHelper.fx"
- 
 cbuffer cbPerFrame
 {
 	DirectionalLight gDirLights[3];

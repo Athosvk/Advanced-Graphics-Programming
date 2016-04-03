@@ -29,7 +29,7 @@ VertexOut VS(VertexIn vin)
 
 //Source: https://www.shadertoy.com/view/Xd3SDM
 
-#define ZMAX 50.0
+#define ZMAX 100.0
 #define EP 0.01
 #define ITER 50
 
@@ -103,7 +103,7 @@ float softshadow(float3 ro, float3 rd)
             break;
         }
     }
-    return clamp(res, 0.0, 1.0);
+    return saturate(res);
 }
 
 float3 getNormal(float3 v) {

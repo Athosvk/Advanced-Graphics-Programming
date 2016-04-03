@@ -27,7 +27,7 @@ Assignment3::Assignment3(HINSTANCE hInstance)
 	XMStoreFloat4x4(&mView, I);
 	XMStoreFloat4x4(&mProj, I);
     auto position = XMVectorSet(-0.5f, 0.1f, 0.0f, 0.0f);
-    m_BlueTriangle.setPosition(position);
+    m_YellowTriangle.setPosition(position);
     position = XMVectorSet(-0.3f, 0.0f, 0.0f, 0.0f);
     m_OccludingTriangle.setPosition(position);
 }
@@ -45,13 +45,13 @@ bool Assignment3::Init()
     }
 
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_YellowTriangle.initialiseBuffers(md3dDevice);
     m_BlueTriangle.initialiseBuffers(md3dDevice);
-    m_RedTriangle.initialiseBuffers(md3dDevice);
     m_OccludingTriangle.initialiseBuffers(md3dDevice);
 
     auto occludedShader = InitialiseShader(L"Occluded.fx");
+    m_YellowTriangle.setShader(occludedShader);
     m_BlueTriangle.setShader(occludedShader);
-    m_RedTriangle.setShader(occludedShader);
 
     m_OccludingTriangle.setShader(InitialiseShader(L"OcclusionMark.fx"));
     BuildVertexLayout(occludedShader);
@@ -86,7 +86,7 @@ void Assignment3::UpdateScene(float dt)
 
 void Assignment3::DrawScene()
 {
-    auto backgroundColor = XMVectorSet(0.0f, 0.6f, 0.0f, 1.0f);
+    auto backgroundColor = XMVectorSet(0.5f, 0.5f, 0.5f, 0.0f);
 	md3dImmediateContext->
         ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&backgroundColor));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -98,8 +98,8 @@ void Assignment3::DrawScene()
     md3dImmediateContext->OMSetRenderTargets(0, nullptr, mDepthStencilView);
     m_OccludingTriangle.draw(md3dImmediateContext, viewProj);
     md3dImmediateContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
-    m_RedTriangle.draw(md3dImmediateContext, viewProj);
     m_BlueTriangle.draw(md3dImmediateContext, viewProj);
+    m_YellowTriangle.draw(md3dImmediateContext, viewProj);
 	HR(mSwapChain->Present(0, 0));
 }
 

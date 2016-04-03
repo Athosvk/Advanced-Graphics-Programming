@@ -53,12 +53,12 @@ struct Material
 #ifdef CUSTOM_STEP
 float ComputeEffectiveIntensity(float a_Intensity)
 {
-    const int MaxStepSize = 256;
-    const int StepSize = 64;
+    const int MaxStep = 256;
+    const int StepSize = 32;
     const float Bias = 0.1f;
 
-    uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / StepSize;
-    return intensityStep * (float(StepSize) / MaxStepSize);
+    uint intensityStep = uint(a_Intensity * MaxStep + Bias) / StepSize;
+    return intensityStep * (float(StepSize) / MaxStep);
 }
 #else
 float ComputeEffectiveIntensity(float a_Intensity)

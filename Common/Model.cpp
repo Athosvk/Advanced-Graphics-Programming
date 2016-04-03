@@ -49,11 +49,9 @@ XMFLOAT4 Model::toXMFloat4(aiColor4D a_Color)
 void Model::loadMeshdata(const std::string& a_Filepath)
 {
     Assimp::Importer importer;
-    const auto scene = importer.ReadFile(a_Filepath, aiPostProcessSteps::aiProcess_CalcTangentSpace |
+    const auto scene = importer.ReadFile(a_Filepath,
         aiPostProcessSteps::aiProcess_Triangulate |
-        aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
-        aiPostProcessSteps::aiProcess_SortByPType);
-    auto error = importer.GetErrorString();
+        aiPostProcessSteps::aiProcess_JoinIdenticalVertices);
     auto mesh = scene->mMeshes[0];
 
     m_Vertices.reserve(mesh->mNumVertices);
