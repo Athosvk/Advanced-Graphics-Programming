@@ -7,14 +7,20 @@ Box::Box(XMVECTOR a_Dimensions, const std::wstring& a_TexturePath)
     : m_TexturePath(a_TexturePath)
 {
     XMStoreFloat3(&m_Dimensions, a_Dimensions);
+    auto identity = XMMatrixIdentity();
+    XMStoreFloat4x4(&m_Transform, identity);
 }
 
 Box::~Box()
 {
     ReleaseCOM(m_VertexBuffer);
     ReleaseCOM(m_DiffuseSRV);
-    ReleaseCOM(m_Shader);
     ReleaseCOM(m_IndexBuffer);
+}
+
+void Box::setTransform(CXMMATRIX a_Transform)
+{
+    XMStoreFloat4x4(&m_Transform, a_Transform);
 }
 
 void Box::initialise(ID3D11Device* a_Device)
@@ -32,13 +38,14 @@ void Box::setShader(ID3DX11Effect* a_Shader)
 void Box::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
     bind(a_Context);
-    XMMATRIX mvp = a_ViewProjection;
+    XMMATRIX mvp = XMLoadFloat4x4(&m_Transform) * a_ViewProjection;
     m_ShaderMVP->SetMatrix(reinterpret_cast<float*>(&mvp));
     m_ShaderDiffuse->SetResource(m_DiffuseSRV);
 
     ID3DX11EffectTechnique* technique = m_Shader->GetTechniqueByIndex(0);
     D3DX11_TECHNIQUE_DESC techDesc;
     technique->GetDesc(&techDesc);
+
     for(UINT p = 0; p < techDesc.Passes; ++p)
     {
         technique->GetPassByIndex(p)->Apply(0, a_Context);
@@ -55,6 +62,12 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
         Vertex(XMVectorSet(-m_Dimensions.x / 2, m_Dimensions.y / 2, -m_Dimensions.z / 2, 0.0f), Colors::White),
         Vertex(XMVectorSet(m_Dimensions.x / 2, m_Dimensions.y / 2, -m_Dimensions.z / 2, 0.0f), Colors::White),
         Vertex(XMVectorSet(m_Dimensions.x / 2, -m_Dimensions.y / 2, -m_Dimensions.z / 2, 0.0f), Colors::White),
+
+        //Rear plane
+        Vertex(XMVectorSet(-m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-m_Dimensions.x / 2, m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(m_Dimensions.x / 2, m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
 
         //Left plane
         Vertex(XMVectorSet(-m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
@@ -79,12 +92,6 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
         Vertex(XMVectorSet(-m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
         Vertex(XMVectorSet(m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
         Vertex(XMVectorSet(m_Dimensions.x / 2, -m_Dimensions.y / 2, -m_Dimensions.z / 2, 0.0f), Colors::White),
-
-        //Rear plane
-        Vertex(XMVectorSet(-m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
-        Vertex(XMVectorSet(-m_Dimensions.x / 2, m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
-        Vertex(XMVectorSet(m_Dimensions.x / 2, m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
-        Vertex(XMVectorSet(m_Dimensions.x / 2, -m_Dimensions.y / 2, m_Dimensions.z / 2, 0.0f), Colors::White),
     };
 
     auto currentFace = 1u;
@@ -93,10 +100,10 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
     for(unsigned int i = 0; i < vertices.size(); )
     {
         const float CurrentFaceOffset = OffsetPerFace * currentFace;
-        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 0.0f);
         vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 1.0f);
-        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 1.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 0.0f);
         vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 0.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 1.0f);
         currentFace++;
     }
 

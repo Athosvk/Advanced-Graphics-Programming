@@ -1,6 +1,7 @@
 #include <Common/d3dApp.h>
 
 #include "Box.h"
+#include "Phone.h"
 
 class Assignment5 : public D3DApp
 {
@@ -16,6 +17,7 @@ private:
 
     POINT mLastMousePos;
     Box m_Box = Box(XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), L"Assets/Textures/Dice.png");
+    Phone m_Phone;
 
 public:
     Assignment5(HINSTANCE hInstance);

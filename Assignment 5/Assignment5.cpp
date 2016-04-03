@@ -43,11 +43,15 @@ bool Assignment5::Init()
     m_Box.initialise(md3dDevice);
     ID3DX11Effect* shader = InitialiseShader(L"Textured.fx");
     m_Box.setShader(shader);
+    m_Phone.setShader(shader);
     BuildVertexLayout(shader);
     m_Box.constructVertexBuffer(md3dDevice);
     m_Box.constructIndexBuffer(md3dDevice);
+    m_Phone.initialise(md3dDevice);
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
+
+    m_Box.setTransform(XMMatrixTranslation(0.0f, 0.0f, 2.0f));
     return true;
 }
 
@@ -88,6 +92,7 @@ void Assignment5::DrawScene()
     XMMATRIX viewProj = view*proj;
 
     m_Box.draw(md3dImmediateContext, viewProj);
+    m_Phone.draw(md3dImmediateContext, viewProj);
     HR(mSwapChain->Present(0, 0));
 }
 
