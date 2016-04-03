@@ -3,7 +3,8 @@
 #include "Box.h"
 #include "Vertex.h"
 
-Box::Box(XMVECTOR a_Dimensions)
+Box::Box(XMVECTOR a_Dimensions, const std::wstring& a_TexturePath)
+    : m_TexturePath(a_TexturePath)
 {
     XMStoreFloat3(&m_Dimensions, a_Dimensions);
 }
@@ -13,12 +14,12 @@ Box::~Box()
     ReleaseCOM(m_VertexBuffer);
     ReleaseCOM(m_DiffuseSRV);
     ReleaseCOM(m_Shader);
+    ReleaseCOM(m_IndexBuffer);
 }
 
-void Box::initialise(ID3D11Device * a_Device)
+void Box::initialise(ID3D11Device* a_Device)
 {
-    HR(D3DX11CreateShaderResourceViewFromFile(a_Device,
-        L"Assets/Textures/Dice.png", 0, 0, &m_DiffuseSRV, 0));
+    HR(D3DX11CreateShaderResourceViewFromFile(a_Device, m_TexturePath.c_str(), 0, 0, &m_DiffuseSRV, 0));
 }
 
 void Box::setShader(ID3DX11Effect* a_Shader)

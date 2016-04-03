@@ -15,7 +15,7 @@ private:
     float mRadius;
 
     POINT mLastMousePos;
-    Box m_Box = Box(XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f));
+    Box m_Box = Box(XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), L"Assets/Textures/Dice.png");
 
 public:
     Assignment5(HINSTANCE hInstance);

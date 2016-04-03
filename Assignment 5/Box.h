@@ -11,9 +11,10 @@ private:
     ID3DX11EffectShaderResourceVariable* m_ShaderDiffuse = nullptr;
     ID3D11ShaderResourceView* m_DiffuseSRV = nullptr;
     XMFLOAT3 m_Dimensions;
+    std::wstring m_TexturePath;
 
 public:
-    Box(XMVECTOR a_Dimensions);
+    Box(XMVECTOR a_Dimensions, const std::wstring& a_TexturePath);
     ~Box();
 
     void initialise(ID3D11Device* a_Device);
