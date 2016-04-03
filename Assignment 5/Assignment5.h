@@ -2,7 +2,7 @@
 
 #include <Model.h>
 
-class BoxApp : public D3DApp
+class Assignment5 : public D3DApp
 {
 private:
     static const float KeyProcessInterval;
@@ -30,8 +30,8 @@ private:
     std::unique_ptr<Model> m_Mesh = nullptr;
 
 public:
-    BoxApp(HINSTANCE hInstance);
-    ~BoxApp();
+    Assignment5(HINSTANCE hInstance);
+    ~Assignment5();
 
     bool Init();
     void OnResize();
