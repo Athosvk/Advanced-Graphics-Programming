@@ -52,89 +52,68 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
     std::array<Vertex, 36> vertices = 
     {
         //Front plane
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
 
         //Left plane
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
 
         //Right plane
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
 
         //Top plane
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
 
         //Bottom plane
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, -Dimensions.z / 2, 0.0f), Colors::White),
 
         //Rear plane
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorZero()),
-        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f)),
-        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White,
-            XMVectorZero(), XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f))
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(-Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White),
+        Vertex(XMVectorSet(Dimensions.x / 2, -Dimensions.y / 2, Dimensions.z / 2, 0.0f), Colors::White)
     };
+
+    auto currentFace = 1u;
+    const auto TotalFaces = 6u;
+    const auto OffsetPerFace = 1.0f / TotalFaces;
+    for(unsigned int i = 0; i < vertices.size(); )
+    {
+        const float CurrentFaceOffset = OffsetPerFace * currentFace;
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 0.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 1.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 1.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset - OffsetPerFace, 0.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 1.0f);
+        vertices[i++].UVCoordinates = XMFLOAT2(CurrentFaceOffset, 0.0f);
+        currentFace++;
+    }
 
     D3D11_BUFFER_DESC vertexBufferDescription
     {
