@@ -46,6 +46,12 @@ void Phone::setAsRenderTarget(ID3D11DeviceContext* a_Context, ID3D11DepthStencil
     m_RenderTarget.bind(a_Context, a_DepthStencilView);
 }
 
+void Phone::resizeScreen(XMFLOAT2 a_Dimensions, ID3D11Device* a_Device)
+{
+    m_RenderTarget = RenderTarget(a_Dimensions.x, a_Dimensions.y);
+    m_RenderTarget.initialise(a_Device);
+}
+
 XMMATRIX Phone::getCameraTransform() const
 {
     return XMLoadFloat4x4(&m_CameraTransform);

@@ -21,6 +21,7 @@ public:
     void draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection);
     void clearScreen(ID3D11DeviceContext* a_Context, CXMVECTOR a_ClearColor);
     void setAsRenderTarget(ID3D11DeviceContext* a_Context, ID3D11DepthStencilView* a_DepthStencilView);
+    void resizeScreen(XMFLOAT2 a_Dimensions, ID3D11Device* a_Device);
     XMMATRIX getCameraTransform() const;
 };
 
