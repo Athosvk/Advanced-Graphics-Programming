@@ -2,6 +2,7 @@
 
 Phone::Phone()
 {
+    m_Display.setPosition(XMVectorSet(0.0f, 0.0f, -0.051f, 0.0f));
 }
 
 Phone::~Phone()
@@ -27,6 +28,6 @@ void Phone::initialise(ID3D11Device* a_Device)
 
 void Phone::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
 {
-    //m_Box.draw(a_Context, a_ViewProjection);
+    m_Box.draw(a_Context, a_ViewProjection);
     m_Display.draw(a_Context, a_ViewProjection);
 }
