@@ -10,9 +10,10 @@ private:
     ID3DX11EffectMatrixVariable* m_ShaderMVP = nullptr;
     ID3DX11EffectShaderResourceVariable* m_ShaderDiffuse = nullptr;
     ID3D11ShaderResourceView* m_DiffuseSRV = nullptr;
+    XMFLOAT3 m_Dimensions;
 
 public:
-    Box();
+    Box(XMVECTOR a_Dimensions);
     ~Box();
 
     void initialise(ID3D11Device* a_Device);
