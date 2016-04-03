@@ -51,7 +51,8 @@ bool Assignment5::Init()
     md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     md3dImmediateContext->IASetInputLayout(mInputLayout);
 
-    m_Box.setTransform(XMMatrixTranslation(0.0f, 0.0f, 2.0f));
+    m_Box.setTransform(XMMatrixRotationRollPitchYaw(22.2f, 45.0f, 45.0f) * 
+        XMMatrixTranslation(0.0f, 0.0f, 2.0f));
     return true;
 }
 
@@ -62,7 +63,8 @@ void Assignment5::OnResize()
     // The window resized, so update the aspect ratio and recompute the projection matrix.
     XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f*MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
     XMStoreFloat4x4(&mProj, P);
-    m_Phone.resizeScreen(XMFLOAT2(mClientWidth, mClientHeight), md3dDevice);
+    m_Phone.resizeScreen(XMFLOAT2(static_cast<float>(mClientWidth), 
+        static_cast<float>(mClientHeight)), md3dDevice);
 }
 
 void Assignment5::UpdateScene(float dt)
