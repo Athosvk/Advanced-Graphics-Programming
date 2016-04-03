@@ -176,6 +176,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Phone.cpp" />
     <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\Camera.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Phone.h" />
     <ClInclude Include="Quad.h" />
+    <ClInclude Include="RenderTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FX\Textured.fx">

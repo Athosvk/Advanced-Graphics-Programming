@@ -21,6 +21,15 @@ void Quad::setPosition(CXMVECTOR a_Position)
     XMStoreFloat3(&m_Position, a_Position);
 }
 
+void Quad::setTexture(ID3D11ShaderResourceView* a_Texture)
+{
+    if(m_DiffuseSRV)
+    {
+        ReleaseCOM(m_DiffuseSRV);
+    }
+    m_DiffuseSRV = a_Texture;
+}
+
 void Quad::initialise(ID3D11Device* a_Device)
 {
     HR(D3DX11CreateShaderResourceViewFromFile(a_Device, m_TexturePath.c_str(), 0, 0, &m_DiffuseSRV, 0));
@@ -84,6 +93,8 @@ void Quad::draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection)
     {
         technique->GetPassByIndex(p)->Apply(0, a_Context);
         a_Context->DrawIndexed(6, 0, 0);
+        m_ShaderDiffuse->SetResource(nullptr);
+        technique->GetPassByIndex(p)->Apply(0, a_Context);
     }
 }
 

@@ -26,6 +26,7 @@ public:
     bool Init();
     void OnResize();
     void UpdateScene(float dt);
+    void drawToDisplay();
     void DrawScene();
 
     void OnMouseDown(WPARAM btnState, int x, int y);

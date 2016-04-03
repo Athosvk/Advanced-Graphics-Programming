@@ -80,11 +80,28 @@ void Assignment5::UpdateScene(float dt)
     XMStoreFloat4x4(&mView, V);
 }
 
+void Assignment5::drawToDisplay()
+{
+    m_Phone.setAsRenderTarget(md3dImmediateContext, mDepthStencilView);
+    m_Phone.clearScreen(md3dImmediateContext, Colors::LightSteelBlue);
+
+    XMMATRIX view = m_Phone.getCameraTransform();
+    XMMATRIX proj = XMLoadFloat4x4(&mProj);
+    XMMATRIX viewProj = view * proj;
+
+    m_Box.draw(md3dImmediateContext, viewProj);
+    md3dImmediateContext->RSSetViewports(1, &mScreenViewport);
+    md3dImmediateContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
+}
+
 void Assignment5::DrawScene()
 {
-    auto backgroundColor = XMVectorSet(0.5f, 0.5f, 0.5f, 0.0f);
-    md3dImmediateContext->
-        ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&backgroundColor));
+    XMFLOAT4 backgroundColor;
+    XMStoreFloat4(&backgroundColor, Colors::LightSteelBlue);
+    md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, 
+        reinterpret_cast<float*>(&backgroundColor));
+    md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    drawToDisplay();
     md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     XMMATRIX view = XMLoadFloat4x4(&mView);

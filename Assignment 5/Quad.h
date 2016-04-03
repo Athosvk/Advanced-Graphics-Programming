@@ -19,6 +19,7 @@ public:
     ~Quad();
 
     void setPosition(CXMVECTOR a_Position);
+    void setTexture(ID3D11ShaderResourceView* a_Texture);
     void initialise(ID3D11Device* a_Device);
     void initialiseBuffers(ID3D11Device* a_Device);
     void draw(ID3D11DeviceContext* a_Context, CXMMATRIX a_ViewProjection);
