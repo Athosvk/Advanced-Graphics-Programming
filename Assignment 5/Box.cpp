@@ -119,3 +119,10 @@ void Box::constructVertexBuffer(ID3D11Device* a_Device)
     vertexData.pSysMem = vertices.data();
     HR(a_Device->CreateBuffer(&vertexBufferDescription, &vertexData, &m_VertexBuffer));
 }
+
+void Box::bind(ID3D11DeviceContext * a_Context)
+{
+    auto vertexStride = sizeof(Vertex);
+    UINT offset = 0;
+    a_Context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &vertexStride, &offset);
+}
