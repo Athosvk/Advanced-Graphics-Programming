@@ -44,6 +44,10 @@ Patch ConstantHS(InputPatch<VertexOut, 3> a_InputPatch, uint a_PatchID : SV_Prim
     Patch patch = (Patch)0;
 
     [unroll]
+	/*
+		The default is a tesselation factor of 64, which may cause the program to crash
+		for non-supporting hardware. Lower this value if the application crashes immediately
+	*/
     for(int i = 0; i < 3; i++)
     {
         patch.EdgeFactors[i] = 64;
@@ -63,6 +67,10 @@ struct HullOutput
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("ConstantHS")]
+/*
+	The default is a tesselation factor of 64, which may cause the program to crash
+	for non-supporting hardware. Lower this value if the application crashes immediately
+*/
 [maxtessfactor(64.0f)]
 HullOutput HS(InputPatch<VertexOut, 3> a_InputPatch, uint a_ControlPointID : SV_OutputControlPointID, 
     uint a_PatchID : SV_PrimitiveID)
