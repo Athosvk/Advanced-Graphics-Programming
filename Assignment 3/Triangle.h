@@ -77,5 +77,5 @@ private:
 	/// Binds the buffers of this triangle to the specified context, so they can be used for rendering
 	/// </summary>
 	/// <param name="a_Context">The context to bind the buffers to </param>
-	void bind(ID3D11DeviceContext* a_Context);
+	void bind(ID3D11DeviceContext* a_Context) const;
 };

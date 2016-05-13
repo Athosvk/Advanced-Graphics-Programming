@@ -15,7 +15,6 @@ RenderTarget::~RenderTarget()
 {
     ReleaseCOM(m_ShaderView);
     ReleaseCOM(m_TargetTexture);
-    //ReleaseCOM(m_View);
 }
 
 void RenderTarget::initialise(ID3D11Device* a_Device)
@@ -29,7 +28,7 @@ void RenderTarget::initialise(ID3D11Device* a_Device)
     HR(a_Device->CreateShaderResourceView(m_TargetTexture, &shaderResourceView, &m_ShaderView));
 }
 
-void RenderTarget::bind(ID3D11DeviceContext* a_Context, ID3D11DepthStencilView* a_DepthStencilView)
+void RenderTarget::bind(ID3D11DeviceContext* a_Context, ID3D11DepthStencilView* a_DepthStencilView) const
 {
     a_Context->RSSetViewports(1, &m_ViewPort);
     a_Context->OMSetRenderTargets(1, &m_View, a_DepthStencilView);
@@ -40,7 +39,7 @@ ID3D11ShaderResourceView* RenderTarget::getResourceView() const
     return m_ShaderView;
 }
 
-void RenderTarget::clear(ID3D11DeviceContext* a_Context, CXMVECTOR a_Color)
+void RenderTarget::clear(ID3D11DeviceContext* a_Context, CXMVECTOR a_Color) const
 {
     XMFLOAT4 color;
     XMStoreFloat4(&color, a_Color);

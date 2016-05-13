@@ -15,9 +15,15 @@ private:
     float mPhi;
     float mRadius;
 
-    POINT mLastMousePos;
-    Box m_Box = Box(XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), L"Assets/Textures/Dice.png");
-    Phone m_Phone;
+    POINT mLastMousePos;	
+	/// <summary>
+	/// The dice in the scene that is to be 'recorded' by the phone's camera
+	/// </summary>
+	Box m_Box = Box(XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), L"Assets/Textures/Dice.png");	
+	/// <summary>
+	/// The phone recording the contents of the scene through it's camera
+	/// </summary>
+	Phone m_Phone;
 
 public:
     Assignment5(HINSTANCE hInstance);
@@ -26,14 +32,23 @@ public:
     bool Init();
     void OnResize();
     void UpdateScene(float dt);
-    void drawToDisplay();
+	
+	/// <summary>
+	/// Draws the scene to the display of the phone
+	/// </summary>
+	void drawToDisplay();
     void DrawScene();
 
     void OnMouseDown(WPARAM btnState, int x, int y);
     void OnMouseUp(WPARAM btnState, int x, int y);
     void OnMouseMove(WPARAM btnState, int x, int y);
 
-private:
-    ID3DX11Effect* InitialiseShader(const std::wstring& a_FilePath);
+private:	
+	/// <summary>
+	/// Initialises/creates the shader at the given file path, to be used for rendering
+	/// </summary>
+	/// <param name="a_FilePath">The path to the shader file </param>
+	/// <returns> The handle to the shader </returns>
+	ID3DX11Effect* InitialiseShader(const std::wstring& a_FilePath);
     void BuildVertexLayout(ID3DX11Effect* a_ReferenceShader);
 };

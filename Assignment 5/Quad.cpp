@@ -105,7 +105,7 @@ void Quad::setShader(ID3DX11Effect* a_Shader)
     m_ShaderDiffuse = a_Shader->GetVariableByName("gDiffuse")->AsShaderResource();
 }
 
-void Quad::bind(ID3D11DeviceContext* a_Context)
+void Quad::bind(ID3D11DeviceContext* a_Context) const
 {
     auto vertexStride = sizeof(Vertex);
     UINT offset = 0;
