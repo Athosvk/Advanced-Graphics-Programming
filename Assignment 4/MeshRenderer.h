@@ -3,6 +3,9 @@
 #include <memory>
 #include <Model.h>
 
+/// <summary>
+/// Represents a simple combination of a mesh/model and a material
+/// </summary>
 class MeshRenderer
 {
 public:

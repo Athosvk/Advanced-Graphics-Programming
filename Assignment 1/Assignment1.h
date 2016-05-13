@@ -45,8 +45,10 @@ private:
 	/// The n-prism rendered
 	/// </summary>
 	Prism mPrism = Prism(3, 3.0f, XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
-
-    float mKeyTimer = 0.0f;
+	/// <summary>
+	/// The elapsed time in seconds since a key has been pressed
+	/// </summary>
+	float mKeyTimer = 0.0f;
 
 public:
     Assignment1(HINSTANCE hInstance);
