@@ -14,7 +14,7 @@ Triangle::~Triangle()
     ReleaseCOM(m_VertexBuffer);
 }
 
-void Triangle::bind(ID3D11DeviceContext* a_Context)
+void Triangle::bind(ID3D11DeviceContext* a_Context) const
 {
     auto vertexStride = sizeof(Vertex);
     UINT offset = 0;

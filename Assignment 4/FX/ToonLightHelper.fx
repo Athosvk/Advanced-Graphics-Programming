@@ -151,8 +151,11 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
 float ComputeEffectiveIntensity(float a_Intensity)
 {
 #ifdef VARIABLE_BANDING
+	//Used to base the amount of banding levels on, MaxStepSize divided by StepSize is the amount of
+	//banding levels
     const int MaxStepSize = 256;
     const int StepSize = 32;
+	//Used so that we do not skip the maximum intensity of 1.0
     const float Bias = 0.01f;
 
     uint intensityStep = uint(a_Intensity * MaxStepSize + Bias) / (StepSize);

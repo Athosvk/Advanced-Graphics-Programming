@@ -16,7 +16,7 @@ Quad::~Quad()
     ReleaseCOM(m_VertexBuffer);
 }
 
-void Quad::bind(ID3D11DeviceContext* a_Context)
+void Quad::bind(ID3D11DeviceContext* a_Context) const
 {
     auto vertexStride = sizeof(Vertex);
     UINT offset = 0;

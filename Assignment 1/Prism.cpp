@@ -2,6 +2,7 @@
 
 const unsigned Prism::MinimumSlices = 3;
 const unsigned Prism::MaximumSlices = 360;
+const float Prism::DeltaRotation = 30.0f;
 
 Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
     : mHeight(aHeight),
@@ -10,7 +11,7 @@ Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
     XMStoreFloat3(&mPosition, aPosition);
     if(aSlices >= MinimumSlices && aSlices <= MaximumSlices)
     {
-        Construct();
+        construct();
     }
     else
     {
@@ -21,15 +22,15 @@ Prism::Prism(unsigned aSlices, float aHeight, FXMVECTOR aPosition)
 void Prism::update(float a_DeltaTime)
 {
     mSliceRotation = XMConvertToRadians(MathHelper::PingPong(mTotalRotation, 0.0f, 90.0f));
-    mTotalRotation += mDeltaRotation * a_DeltaTime;
+    mTotalRotation += DeltaRotation * a_DeltaTime;
 }
 
-std::vector<Vertex>& Prism::getVertices()
+const std::vector<Vertex>& Prism::getVertices() const
 {
     return mVertices;
 }
 
-std::vector<UINT>& Prism::getIndices()
+const std::vector<UINT>& Prism::getIndices() const
 {
     return mIndices;
 }
@@ -64,14 +65,14 @@ unsigned Prism::getMaxVertexCount()
     return MaximumSlices * 2 + 2;
 }
 
-void Prism::Construct()
+void Prism::construct()
 {
-    ConstructBase(mHeight / 2, 1.0f, Colors::Black);
-    ConstructBase(-mHeight / 2, -1.0f, Colors::Green);
-    ConstructSides();
+    constructBase(mHeight / 2, 1.0f, Colors::Black);
+    constructBase(-mHeight / 2, -1.0f, Colors::Green);
+    constructSides();
 }
 
-void Prism::ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
+void Prism::constructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
 {
     const auto BaseIndex = mVertices.size();
     const auto RotationDelta = XM_2PI / mSlices;
@@ -93,6 +94,7 @@ void Prism::ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
     for(auto i = 0u; i < mSlices; i++)
     {
         mIndices.push_back(CenterIndex);
+		//Correct the winding order of the indices based on the normal of the base
         if(aYNormal < 0.0f)
         {
             mIndices.push_back(BaseIndex + i);
@@ -106,13 +108,27 @@ void Prism::ConstructBase(float aYPosition, float aYNormal, CXMVECTOR aColor)
     }
 }
 
-void Prism::ConstructSides()
+void Prism::constructSides()
 {
     const auto IndicesPerSlice = 3;
     const auto IndicesPerBase = mSlices * IndicesPerSlice;
     for(auto i = 0u; i < mSlices; i++)
     {
         const auto Offset = IndicesPerSlice * i;
+		//Gather the indices from the base and re-use them for the sides
+		/*
+			Quad layout, based on order of push backs:
+
+			1/5 ---- 2
+			|      / |
+			|     /  |
+			|    /	 |
+			|   /	 |
+			|  /	 |
+			| /		 |
+			|/		 |
+			4 ------ 3/6
+		*/
         mIndices.push_back(mIndices[2 + IndicesPerBase + Offset]);
         mIndices.push_back(mIndices[1 + IndicesPerBase + Offset]);
         mIndices.push_back(mIndices[2 + Offset]);

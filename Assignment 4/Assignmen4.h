@@ -20,9 +20,19 @@ private:
     ID3DX11EffectVariable* mfxMaterial;
 
     ID3D11InputLayout* mInputLayout;
-    ID3D11RasterizerState* mWireframeState;
-    ID3D11RasterizerState* mRegularState;
-    ID3D11RasterizerState* mCurrentState;
+	ID3D11InputLayout* mInputLayout;
+	/// <summary>
+	/// The stored WireFrame rasterizer state, so we can switch to it at run-time
+	/// </summary>
+	ID3D11RasterizerState* mWireframeState;
+	/// <summary>
+	/// The stored Regular rasterizer state, so we can switch to it at run-time
+	/// </summary>
+	ID3D11RasterizerState* mRegularState;
+	/// <summary>
+	/// The current rasterizerstate, which can be either equal to mWireFrameState or mRegularState
+	/// </summary>
+	ID3D11RasterizerState* mCurrentState;
 
     XMFLOAT4X4 mWorld;
     XMFLOAT4X4 mView;
@@ -30,11 +40,23 @@ private:
     XMFLOAT3 mEyePosW;
 
     POINT mLastMousePos;
-
-    float mKeyTimer = 0.0f;
-    MeshRenderer m_MeshRenderer;
-    SpotLight m_SpotLight;
-    Camera m_Camera;
+	
+	/// <summary>
+	/// The elapsed time in seconds since a key has been pressed
+	/// </summary>
+	float mKeyTimer = 0.0f;
+	/// <summary>
+	/// The mesh renderer used to store the material along with the model
+	/// </summary>
+	MeshRenderer m_MeshRenderer;
+	/// <summary>
+	/// The spot light emmitted by the camera to show the lighting effects
+	/// </summary>
+	SpotLight m_SpotLight;
+	/// <summary>
+	/// The camera used to move around in the world
+	/// </summary>
+	Camera m_Camera;
 
 public:
     Assignmen4(HINSTANCE hInstance);
@@ -53,5 +75,8 @@ public:
 private:
     void BuildFX();
     void BuildVertexLayout();
+	/// <summary>
+	/// Creates the rasterizer states to allow switching between wireframe and regular drawing
+	/// </summary>
     void CreateRasterizerStates();
 };

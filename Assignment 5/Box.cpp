@@ -149,7 +149,7 @@ void Box::constructIndexBuffer(ID3D11Device* a_Device)
     HR(a_Device->CreateBuffer(&indexBufferDescription, &indexData, &m_IndexBuffer));
 }
 
-void Box::bind(ID3D11DeviceContext * a_Context)
+void Box::bind(ID3D11DeviceContext * a_Context) const
 {
     auto vertexStride = sizeof(Vertex);
     UINT offset = 0;
