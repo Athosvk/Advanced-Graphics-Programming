@@ -84,6 +84,7 @@ DomainOutput DS(Patch a_InputPatch, float3 a_UVW : SV_DomainLocation,
     const OutputPatch<HullOutput, 3> a_Triangle)
 {
     DomainOutput output = (DomainOutput) 0;
+	//Manually interpolate the vertex position over the triangle layout
     float3 vertexPosition = a_Triangle[0].Position * a_UVW.x + a_Triangle[1].Position * a_UVW.y +
         a_Triangle[2].Position * a_UVW.z;
     
